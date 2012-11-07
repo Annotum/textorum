@@ -1,0 +1,16 @@
+{
+	"name": "textorum",
+	"version": "0.1.0",
+	"dependencies": {},
+	"devDependencies": {
+		"requirejs": "",
+		"coffee-script": "",
+		"coffeelint": "",
+
+		"uglify-js": "",
+		"wrench": "",
+		"colors": "",
+		"docco": ""
+	},
+	"private": true
+}
