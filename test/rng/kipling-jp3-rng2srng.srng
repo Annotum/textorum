@@ -1,0 +1,4321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+  <start>
+    <choice>
+      <ref name="element1" />
+      <ref name="element2" />
+    </choice>
+  </start>
+  <define name="element1">
+    <element>
+      <name ns="">article</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">article-type</name>
+                    <text />
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="http://www.w3.org/XML/1998/namespace">
+                    lang</name>
+                    <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                    type="NMTOKEN" />
+                  </attribute>
+                </choice>
+              </group>
+              <ref name="element3" />
+            </group>
+            <ref name="element4" />
+          </group>
+          <choice>
+            <empty />
+            <ref name="element5" />
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <ref name="element6" />
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element2">
+    <element>
+      <name ns="">hr</name>
+      <empty />
+    </element>
+  </define>
+  <define name="element3">
+    <element>
+      <name ns="">front</name>
+      <group>
+        <ref name="element7" />
+        <ref name="element8" />
+      </group>
+    </element>
+  </define>
+  <define name="element4">
+    <element>
+      <name ns="">body</name>
+      <group>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <ref name="element9" />
+                            <ref name="element10" />
+                          </choice>
+                          <ref name="element11" />
+                        </choice>
+                        <ref name="element12" />
+                      </choice>
+                      <ref name="element13" />
+                    </choice>
+                    <ref name="element14" />
+                  </choice>
+                  <ref name="element15" />
+                </choice>
+                <ref name="element16" />
+              </choice>
+              <ref name="element17" />
+            </choice>
+          </oneOrMore>
+        </choice>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <ref name="element18" />
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element5">
+    <element>
+      <name ns="">back</name>
+      <group>
+        <group>
+          <group>
+            <choice>
+              <empty />
+              <ref name="element19" />
+            </choice>
+            <choice>
+              <empty />
+              <ref name="element20" />
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <oneOrMore>
+              <ref name="element21" />
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <ref name="element18" />
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element6">
+    <element>
+      <name ns="">response</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">response-type</name>
+                  <text />
+                </attribute>
+              </choice>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">id</name>
+                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                  type="ID" />
+                </attribute>
+              </choice>
+            </group>
+            <ref name="element22" />
+          </group>
+          <ref name="element4" />
+        </group>
+        <choice>
+          <empty />
+          <ref name="element5" />
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element7">
+    <element>
+      <name ns="">journal-meta</name>
+      <group>
+        <group>
+          <group>
+            <oneOrMore>
+              <ref name="element23" />
+            </oneOrMore>
+            <choice>
+              <empty />
+              <oneOrMore>
+                <ref name="element24" />
+              </oneOrMore>
+            </choice>
+          </group>
+          <oneOrMore>
+            <ref name="element25" />
+          </oneOrMore>
+        </group>
+        <choice>
+          <empty />
+          <ref name="element26" />
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element8">
+    <element>
+      <name ns="">article-meta</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <group>
+                      <group>
+                        <group>
+                          <group>
+                            <group>
+                              <group>
+                                <group>
+                                  <group>
+                                    <choice>
+                                      <empty />
+                                      <oneOrMore>
+                                        <ref name="element27" />
+                                      </oneOrMore>
+                                    </choice>
+                                    <choice>
+                                      <empty />
+                                      <ref name="element28" />
+                                    </choice>
+                                  </group>
+                                  <ref name="element29" />
+                                </group>
+                                <ref name="element30" />
+                              </group>
+                              <oneOrMore>
+                                <ref name="element31" />
+                              </oneOrMore>
+                            </group>
+                            <choice>
+                              <empty />
+                              <ref name="element32" />
+                            </choice>
+                          </group>
+                          <choice>
+                            <empty />
+                            <ref name="element33" />
+                          </choice>
+                        </group>
+                        <choice>
+                          <empty />
+                          <oneOrMore>
+                            <ref name="element34" />
+                          </oneOrMore>
+                        </choice>
+                      </group>
+                      <choice>
+                        <empty />
+                        <ref name="element35" />
+                      </choice>
+                    </group>
+                    <choice>
+                      <empty />
+                      <ref name="element36" />
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty />
+                    <ref name="element37" />
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <ref name="element38" />
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <oneOrMore>
+                  <ref name="element39" />
+                </oneOrMore>
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <ref name="element40" />
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <oneOrMore>
+              <ref name="element41" />
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <ref name="element42" />
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element9">
+    <element>
+      <name ns="">fig</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">id</name>
+                      <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                      type="ID" />
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">position</name>
+                      <choice>
+                        <choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">anchor</value>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">float</value>
+                        </choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">margin</value>
+                      </choice>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">fig-type</name>
+                    <text />
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <ref name="element43" />
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <ref name="element44" />
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <oneOrMore>
+              <choice>
+                <ref name="element10" />
+                <ref name="element11" />
+              </choice>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <ref name="element37" />
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element10">
+    <element>
+      <name ns="">media</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <choice>
+                      <empty />
+                      <attribute>
+                        <name ns="">mimetype</name>
+                        <text />
+                      </attribute>
+                    </choice>
+                    <choice>
+                      <empty />
+                      <attribute>
+                        <name ns="">mime-subtype</name>
+                        <text />
+                      </attribute>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="http://www.w3.org/1999/xlink">
+                      type</name>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">simple</value>
+                    </attribute>
+                  </choice>
+                </group>
+                <attribute>
+                  <name ns="http://www.w3.org/1999/xlink">
+                  href</name>
+                  <text />
+                </attribute>
+              </group>
+              <choice>
+                <empty />
+                <ref name="element45" />
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <ref name="element46" />
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <oneOrMore>
+              <ref name="element47" />
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <ref name="element37" />
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element11">
+    <element>
+      <name ns="">preformat</name>
+      <text />
+    </element>
+  </define>
+  <define name="element12">
+    <element>
+      <name ns="">supplementary-material</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">id</name>
+                      <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                      type="ID" />
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">position</name>
+                      <choice>
+                        <choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">anchor</value>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">float</value>
+                        </choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">margin</value>
+                      </choice>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">content-type</name>
+                    <text />
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <ref name="element43" />
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <ref name="element44" />
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <oneOrMore>
+              <choice>
+                <ref name="element10" />
+                <ref name="element11" />
+              </choice>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <ref name="element37" />
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element13">
+    <element>
+      <name ns="">table-wrap</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">id</name>
+                      <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                      type="ID" />
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">position</name>
+                      <choice>
+                        <choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">anchor</value>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">float</value>
+                        </choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">margin</value>
+                      </choice>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <ref name="element43" />
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <ref name="element44" />
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <oneOrMore>
+                <choice>
+                  <ref name="element10" />
+                  <ref name="element48" />
+                </choice>
+              </oneOrMore>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <ref name="element49" />
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <ref name="element37" />
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element14">
+    <element>
+      <name ns="">disp-formula</name>
+      <group>
+        <group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="">id</name>
+              <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+              type="ID" />
+            </attribute>
+          </choice>
+          <choice>
+            <empty />
+            <ref name="element43" />
+          </choice>
+        </group>
+        <ref name="element50" />
+      </group>
+    </element>
+  </define>
+  <define name="element15">
+    <element>
+      <name ns="">p</name>
+      <group>
+        <choice>
+          <empty />
+          <attribute>
+            <name ns="">id</name>
+            <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+            type="ID" />
+          </attribute>
+        </choice>
+        <oneOrMore>
+          <choice>
+            <choice>
+              <choice>
+                <text />
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <choice>
+                                  <ref name="element51" />
+                                  <ref name="element52" />
+                                </choice>
+                                <ref name="element53" />
+                              </choice>
+                              <ref name="element54" />
+                            </choice>
+                            <ref name="element55" />
+                          </choice>
+                          <ref name="element56" />
+                        </choice>
+                        <ref name="element57" />
+                      </choice>
+                      <ref name="element58" />
+                    </choice>
+                    <ref name="element59" />
+                  </choice>
+                  <ref name="element60" />
+                </choice>
+              </choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <ref name="element16" />
+                            <ref name="element14" />
+                          </choice>
+                          <ref name="element17" />
+                        </choice>
+                        <ref name="element9" />
+                      </choice>
+                      <ref name="element13" />
+                    </choice>
+                    <ref name="element11" />
+                  </choice>
+                  <ref name="element10" />
+                </choice>
+                <ref name="element12" />
+              </choice>
+            </choice>
+            <ref name="element61" />
+          </choice>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element16">
+    <element>
+      <name ns="">list</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">id</name>
+                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                  type="ID" />
+                </attribute>
+              </choice>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">list-type</name>
+                  <text />
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <ref name="element43" />
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <ref name="element62" />
+          </choice>
+        </group>
+        <oneOrMore>
+          <ref name="element63" />
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element17">
+    <element>
+      <name ns="">disp-quote</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">id</name>
+                    <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                    type="ID" />
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty />
+                  <ref name="element43" />
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <ref name="element62" />
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <oneOrMore>
+                <ref name="element15" />
+              </oneOrMore>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <ref name="element64" />
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <ref name="element37" />
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element18">
+    <element>
+      <name ns="">sec</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">id</name>
+                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                  type="ID" />
+                </attribute>
+              </choice>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">sec-type</name>
+                  <text />
+                </attribute>
+              </choice>
+            </group>
+            <ref name="element62" />
+          </group>
+          <choice>
+            <empty />
+            <oneOrMore>
+              <choice>
+                <ref name="element15" />
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <ref name="element16" />
+                              <ref name="element14" />
+                            </choice>
+                            <ref name="element17" />
+                          </choice>
+                          <ref name="element9" />
+                        </choice>
+                        <ref name="element13" />
+                      </choice>
+                      <ref name="element11" />
+                    </choice>
+                    <ref name="element10" />
+                  </choice>
+                  <ref name="element12" />
+                </choice>
+              </choice>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <ref name="element18" />
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element19">
+    <element>
+      <name ns="">ack</name>
+      <group>
+        <group>
+          <choice>
+            <empty />
+            <ref name="element62" />
+          </choice>
+          <choice>
+            <empty />
+            <oneOrMore>
+              <ref name="element15" />
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <ref name="element18" />
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element20">
+    <element>
+      <name ns="">app-group</name>
+      <group>
+        <choice>
+          <empty />
+          <ref name="element62" />
+        </choice>
+        <oneOrMore>
+          <ref name="element65" />
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element21">
+    <element>
+      <name ns="">ref-list</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">id</name>
+                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                  type="ID" />
+                </attribute>
+              </choice>
+              <choice>
+                <empty />
+                <ref name="element43" />
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <ref name="element62" />
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <oneOrMore>
+              <ref name="element15" />
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <ref name="element66" />
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element22">
+    <element>
+      <name ns="">front-stub</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <group>
+                      <group>
+                        <choice>
+                          <empty />
+                          <oneOrMore>
+                            <ref name="element27" />
+                          </oneOrMore>
+                        </choice>
+                        <choice>
+                          <empty />
+                          <ref name="element29" />
+                        </choice>
+                      </group>
+                      <ref name="element30" />
+                    </group>
+                    <choice>
+                      <empty />
+                      <oneOrMore>
+                        <ref name="element31" />
+                      </oneOrMore>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty />
+                    <ref name="element35" />
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <ref name="element36" />
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <ref name="element37" />
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <ref name="element40" />
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <oneOrMore>
+              <ref name="element41" />
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <ref name="element42" />
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element23">
+    <element>
+      <name ns="">journal-id</name>
+      <group>
+        <choice>
+          <empty />
+          <attribute>
+            <name ns="">journal-id-type</name>
+            <text />
+          </attribute>
+        </choice>
+        <text />
+      </group>
+    </element>
+  </define>
+  <define name="element24">
+    <element>
+      <name ns="">journal-title-group</name>
+      <choice>
+        <empty />
+        <oneOrMore>
+          <ref name="element67" />
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="element25">
+    <element>
+      <name ns="">issn</name>
+      <group>
+        <choice>
+          <empty />
+          <attribute>
+            <name ns="">pub-type</name>
+            <text />
+          </attribute>
+        </choice>
+        <text />
+      </group>
+    </element>
+  </define>
+  <define name="element26">
+    <element>
+      <name ns="">publisher</name>
+      <group>
+        <ref name="element68" />
+        <choice>
+          <empty />
+          <ref name="element69" />
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element27">
+    <element>
+      <name ns="">article-id</name>
+      <group>
+        <choice>
+          <empty />
+          <attribute>
+            <name ns="">pub-id-type</name>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <choice>
+                                  <value datatypeLibrary=""
+                                  type="token" ns="TODO">
+                                  art-access-id</value>
+                                  <value datatypeLibrary=""
+                                  type="token" ns="TODO">
+                                  coden</value>
+                                </choice>
+                                <value datatypeLibrary=""
+                                type="token" ns="TODO">doaj</value>
+                              </choice>
+                              <value datatypeLibrary=""
+                              type="token" ns="TODO">doi</value>
+                            </choice>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">manuscript</value>
+                          </choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">medline</value>
+                        </choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">other</value>
+                      </choice>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">pii</value>
+                    </choice>
+                    <value datatypeLibrary="" type="token"
+                    ns="TODO">pmcid</value>
+                  </choice>
+                  <value datatypeLibrary="" type="token" ns="TODO">
+                  pmid</value>
+                </choice>
+                <value datatypeLibrary="" type="token" ns="TODO">
+                publisher-id</value>
+              </choice>
+              <value datatypeLibrary="" type="token" ns="TODO">
+              sici</value>
+            </choice>
+          </attribute>
+        </choice>
+        <text />
+      </group>
+    </element>
+  </define>
+  <define name="element28">
+    <element>
+      <name ns="">article-categories</name>
+      <oneOrMore>
+        <ref name="element70" />
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element29">
+    <element>
+      <name ns="">title-group</name>
+      <group>
+        <ref name="element71" />
+        <choice>
+          <empty />
+          <oneOrMore>
+            <ref name="element72" />
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element30">
+    <element>
+      <name ns="">contrib-group</name>
+      <group>
+        <oneOrMore>
+          <ref name="element73" />
+        </oneOrMore>
+        <choice>
+          <empty />
+          <ref name="element74" />
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element31">
+    <element>
+      <name ns="">pub-date</name>
+      <group>
+        <group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="">pub-type</name>
+              <text />
+            </attribute>
+          </choice>
+          <choice>
+            <group>
+              <choice>
+                <empty />
+                <ref name="element75" />
+              </choice>
+              <choice>
+                <empty />
+                <ref name="element76" />
+              </choice>
+            </group>
+            <ref name="element77" />
+          </choice>
+        </group>
+        <ref name="element78" />
+      </group>
+    </element>
+  </define>
+  <define name="element32">
+    <element>
+      <name ns="">volume</name>
+      <text />
+    </element>
+  </define>
+  <define name="element33">
+    <element>
+      <name ns="">issue</name>
+      <text />
+    </element>
+  </define>
+  <define name="element34">
+    <element>
+      <name ns="">issue-title</name>
+      <text />
+    </element>
+  </define>
+  <define name="element35">
+    <element>
+      <name ns="">elocation-id</name>
+      <text />
+    </element>
+  </define>
+  <define name="element36">
+    <element>
+      <name ns="">history</name>
+      <oneOrMore>
+        <ref name="element79" />
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element37">
+    <element>
+      <name ns="">permissions</name>
+      <group>
+        <group>
+          <group>
+            <choice>
+              <empty />
+              <oneOrMore>
+                <ref name="element80" />
+              </oneOrMore>
+            </choice>
+            <choice>
+              <empty />
+              <oneOrMore>
+                <ref name="element81" />
+              </oneOrMore>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <oneOrMore>
+              <ref name="element82" />
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <ref name="element83" />
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element38">
+    <element>
+      <name ns="">self-uri</name>
+      <group>
+        <choice>
+          <empty />
+          <attribute>
+            <name ns="">content-type</name>
+            <value datatypeLibrary="" type="string" ns="TODO">
+            citation-string</value>
+          </attribute>
+        </choice>
+        <text />
+      </group>
+    </element>
+  </define>
+  <define name="element39">
+    <element>
+      <name ns="">related-article</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <group>
+                      <group>
+                        <group>
+                          <group>
+                            <choice>
+                              <empty />
+                              <attribute>
+                                <name ns="">id</name>
+                                <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                                type="ID" />
+                              </attribute>
+                            </choice>
+                            <attribute>
+                              <name ns="">
+                              related-article-type</name>
+                              <text />
+                            </attribute>
+                          </group>
+                          <choice>
+                            <empty />
+                            <attribute>
+                              <name ns="">ext-link-type</name>
+                              <text />
+                            </attribute>
+                          </choice>
+                        </group>
+                        <choice>
+                          <empty />
+                          <attribute>
+                            <name ns="">vol</name>
+                            <text />
+                          </attribute>
+                        </choice>
+                      </group>
+                      <choice>
+                        <empty />
+                        <attribute>
+                          <name ns="">page</name>
+                          <text />
+                        </attribute>
+                      </choice>
+                    </group>
+                    <choice>
+                      <empty />
+                      <attribute>
+                        <name ns="">issue</name>
+                        <text />
+                      </attribute>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">elocation-id</name>
+                      <text />
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">journal-id</name>
+                    <text />
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">journal-id-type</name>
+                  <text />
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="http://www.w3.org/1999/xlink">type</name>
+                <value datatypeLibrary="" type="token" ns="TODO">
+                simple</value>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="http://www.w3.org/1999/xlink">href</name>
+              <text />
+            </attribute>
+          </choice>
+        </group>
+        <text />
+      </group>
+    </element>
+  </define>
+  <define name="element40">
+    <element>
+      <name ns="">abstract</name>
+      <group>
+        <group>
+          <choice>
+            <empty />
+            <ref name="element62" />
+          </choice>
+          <choice>
+            <empty />
+            <oneOrMore>
+              <ref name="element15" />
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <ref name="element18" />
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element41">
+    <element>
+      <name ns="">kwd-group</name>
+      <group>
+        <choice>
+          <empty />
+          <attribute>
+            <name ns="">kwd-group-type</name>
+            <text />
+          </attribute>
+        </choice>
+        <oneOrMore>
+          <ref name="element84" />
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element42">
+    <element>
+      <name ns="">funding-group</name>
+      <group>
+        <group>
+          <choice>
+            <empty />
+            <oneOrMore>
+              <ref name="element85" />
+            </oneOrMore>
+          </choice>
+          <choice>
+            <empty />
+            <oneOrMore>
+              <ref name="element86" />
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <ref name="element87" />
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element43">
+    <element>
+      <name ns="">label</name>
+      <text />
+    </element>
+  </define>
+  <define name="element44">
+    <element>
+      <name ns="">caption</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">id</name>
+                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                  type="ID" />
+                </attribute>
+              </choice>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">content-type</name>
+                  <text />
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="">style</name>
+                <text />
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <ref name="element62" />
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <ref name="element15" />
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element45">
+    <element>
+      <name ns="">alt-text</name>
+      <text />
+    </element>
+  </define>
+  <define name="element46">
+    <element>
+      <name ns="">long-desc</name>
+      <text />
+    </element>
+  </define>
+  <define name="element47">
+    <element>
+      <name ns="">uri</name>
+      <group>
+        <group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="http://www.w3.org/1999/xlink">type</name>
+              <value datatypeLibrary="" type="token" ns="TODO">
+              simple</value>
+            </attribute>
+          </choice>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="http://www.w3.org/1999/xlink">href</name>
+              <text />
+            </attribute>
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <attribute>
+            <name ns="">content-type</name>
+            <text />
+          </attribute>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element48">
+    <element>
+      <name ns="">table</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <group>
+                      <group>
+                        <group>
+                          <group>
+                            <choice>
+                              <empty />
+                              <attribute>
+                                <name ns="">id</name>
+                                <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                                type="ID" />
+                              </attribute>
+                            </choice>
+                            <choice>
+                              <empty />
+                              <attribute>
+                                <name ns="">content-type</name>
+                                <text />
+                              </attribute>
+                            </choice>
+                          </group>
+                          <choice>
+                            <empty />
+                            <attribute>
+                              <name ns="">style</name>
+                              <text />
+                            </attribute>
+                          </choice>
+                        </group>
+                        <choice>
+                          <empty />
+                          <attribute>
+                            <name ns="">summary</name>
+                            <data datatypeLibrary=""
+                            type="string" />
+                          </attribute>
+                        </choice>
+                      </group>
+                      <choice>
+                        <empty />
+                        <attribute>
+                          <name ns="">width</name>
+                          <data datatypeLibrary="" type="string" />
+                        </attribute>
+                      </choice>
+                    </group>
+                    <choice>
+                      <empty />
+                      <attribute>
+                        <name ns="">border</name>
+                        <data datatypeLibrary="" type="string" />
+                      </attribute>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">frame</name>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <choice>
+                                  <choice>
+                                    <choice>
+                                      <value datatypeLibrary=""
+                                      type="token" ns="TODO">
+                                      void</value>
+                                      <value datatypeLibrary=""
+                                      type="token" ns="TODO">
+                                      above</value>
+                                    </choice>
+                                    <value datatypeLibrary=""
+                                    type="token" ns="TODO">
+                                    below</value>
+                                  </choice>
+                                  <value datatypeLibrary=""
+                                  type="token" ns="TODO">
+                                  hsides</value>
+                                </choice>
+                                <value datatypeLibrary=""
+                                type="token" ns="TODO">lhs</value>
+                              </choice>
+                              <value datatypeLibrary=""
+                              type="token" ns="TODO">rhs</value>
+                            </choice>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">vsides</value>
+                          </choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">box</value>
+                        </choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">border</value>
+                      </choice>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">rules</name>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">none</value>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">groups</value>
+                          </choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">rows</value>
+                        </choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">cols</value>
+                      </choice>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">all</value>
+                    </choice>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">cellspacing</name>
+                  <data datatypeLibrary="" type="string" />
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="">cellpadding</name>
+                <data datatypeLibrary="" type="string" />
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="">bgcolor</name>
+              <data datatypeLibrary="" type="string" />
+            </attribute>
+          </choice>
+        </group>
+        <group>
+          <choice>
+            <choice>
+              <empty />
+              <oneOrMore>
+                <ref name="element88" />
+              </oneOrMore>
+            </choice>
+            <choice>
+              <empty />
+              <oneOrMore>
+                <ref name="element89" />
+              </oneOrMore>
+            </choice>
+          </choice>
+          <choice>
+            <group>
+              <group>
+                <choice>
+                  <empty />
+                  <ref name="element90" />
+                </choice>
+                <choice>
+                  <empty />
+                  <ref name="element91" />
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <oneOrMore>
+                  <ref name="element92" />
+                </oneOrMore>
+              </choice>
+            </group>
+            <oneOrMore>
+              <ref name="element93" />
+            </oneOrMore>
+          </choice>
+        </group>
+      </group>
+    </element>
+  </define>
+  <define name="element49">
+    <element>
+      <name ns="">table-wrap-foot</name>
+      <oneOrMore>
+        <ref name="element15" />
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element50">
+    <element>
+      <name ns="">tex-math</name>
+      <group>
+        <choice>
+          <empty />
+          <attribute>
+            <name ns="">id</name>
+            <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+            type="ID" />
+          </attribute>
+        </choice>
+        <text />
+      </group>
+    </element>
+  </define>
+  <define name="element51">
+    <element>
+      <name ns="">bold</name>
+      <oneOrMore>
+        <choice>
+          <choice>
+            <text />
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <ref name="element51" />
+                              <ref name="element52" />
+                            </choice>
+                            <ref name="element53" />
+                          </choice>
+                          <ref name="element54" />
+                        </choice>
+                        <ref name="element55" />
+                      </choice>
+                      <ref name="element56" />
+                    </choice>
+                    <ref name="element57" />
+                  </choice>
+                  <ref name="element58" />
+                </choice>
+                <ref name="element59" />
+              </choice>
+              <ref name="element60" />
+            </choice>
+          </choice>
+          <ref name="element61" />
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element52">
+    <element>
+      <name ns="">italic</name>
+      <oneOrMore>
+        <choice>
+          <choice>
+            <text />
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <ref name="element51" />
+                              <ref name="element52" />
+                            </choice>
+                            <ref name="element53" />
+                          </choice>
+                          <ref name="element54" />
+                        </choice>
+                        <ref name="element55" />
+                      </choice>
+                      <ref name="element56" />
+                    </choice>
+                    <ref name="element57" />
+                  </choice>
+                  <ref name="element58" />
+                </choice>
+                <ref name="element59" />
+              </choice>
+              <ref name="element60" />
+            </choice>
+          </choice>
+          <ref name="element61" />
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element53">
+    <element>
+      <name ns="">monospace</name>
+      <oneOrMore>
+        <choice>
+          <choice>
+            <text />
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <ref name="element51" />
+                              <ref name="element52" />
+                            </choice>
+                            <ref name="element53" />
+                          </choice>
+                          <ref name="element54" />
+                        </choice>
+                        <ref name="element55" />
+                      </choice>
+                      <ref name="element56" />
+                    </choice>
+                    <ref name="element57" />
+                  </choice>
+                  <ref name="element58" />
+                </choice>
+                <ref name="element59" />
+              </choice>
+              <ref name="element60" />
+            </choice>
+          </choice>
+          <ref name="element61" />
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element54">
+    <element>
+      <name ns="">underline</name>
+      <oneOrMore>
+        <choice>
+          <choice>
+            <text />
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <ref name="element51" />
+                              <ref name="element52" />
+                            </choice>
+                            <ref name="element53" />
+                          </choice>
+                          <ref name="element54" />
+                        </choice>
+                        <ref name="element55" />
+                      </choice>
+                      <ref name="element56" />
+                    </choice>
+                    <ref name="element57" />
+                  </choice>
+                  <ref name="element58" />
+                </choice>
+                <ref name="element59" />
+              </choice>
+              <ref name="element60" />
+            </choice>
+          </choice>
+          <ref name="element61" />
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element55">
+    <element>
+      <name ns="">sup</name>
+      <oneOrMore>
+        <choice>
+          <choice>
+            <text />
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <ref name="element51" />
+                              <ref name="element52" />
+                            </choice>
+                            <ref name="element53" />
+                          </choice>
+                          <ref name="element54" />
+                        </choice>
+                        <ref name="element55" />
+                      </choice>
+                      <ref name="element56" />
+                    </choice>
+                    <ref name="element57" />
+                  </choice>
+                  <ref name="element58" />
+                </choice>
+                <ref name="element59" />
+              </choice>
+              <ref name="element60" />
+            </choice>
+          </choice>
+          <ref name="element61" />
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element56">
+    <element>
+      <name ns="">sub</name>
+      <oneOrMore>
+        <choice>
+          <choice>
+            <text />
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <ref name="element51" />
+                              <ref name="element52" />
+                            </choice>
+                            <ref name="element53" />
+                          </choice>
+                          <ref name="element54" />
+                        </choice>
+                        <ref name="element55" />
+                      </choice>
+                      <ref name="element56" />
+                    </choice>
+                    <ref name="element57" />
+                  </choice>
+                  <ref name="element58" />
+                </choice>
+                <ref name="element59" />
+              </choice>
+              <ref name="element60" />
+            </choice>
+          </choice>
+          <ref name="element61" />
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element57">
+    <element>
+      <name ns="">named-content</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">id</name>
+                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                  type="ID" />
+                </attribute>
+              </choice>
+              <attribute>
+                <name ns="">content-type</name>
+                <text />
+              </attribute>
+            </group>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="http://www.w3.org/1999/xlink">type</name>
+                <value datatypeLibrary="" type="token" ns="TODO">
+                simple</value>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="http://www.w3.org/1999/xlink">href</name>
+              <text />
+            </attribute>
+          </choice>
+        </group>
+        <oneOrMore>
+          <choice>
+            <choice>
+              <text />
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <ref name="element51" />
+                                <ref name="element52" />
+                              </choice>
+                              <ref name="element53" />
+                            </choice>
+                            <ref name="element54" />
+                          </choice>
+                          <ref name="element55" />
+                        </choice>
+                        <ref name="element56" />
+                      </choice>
+                      <ref name="element57" />
+                    </choice>
+                    <ref name="element58" />
+                  </choice>
+                  <ref name="element59" />
+                </choice>
+                <ref name="element60" />
+              </choice>
+            </choice>
+            <ref name="element61" />
+          </choice>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element58">
+    <element>
+      <name ns="">ext-link</name>
+      <group>
+        <group>
+          <group>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="">ext-link-type</name>
+                <text />
+              </attribute>
+            </choice>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="http://www.w3.org/1999/xlink">type</name>
+                <value datatypeLibrary="" type="token" ns="TODO">
+                simple</value>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="http://www.w3.org/1999/xlink">href</name>
+              <text />
+            </attribute>
+          </choice>
+        </group>
+        <text />
+      </group>
+    </element>
+  </define>
+  <define name="element59">
+    <element>
+      <name ns="">inline-graphic</name>
+      <group>
+        <group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="http://www.w3.org/1999/xlink">type</name>
+              <value datatypeLibrary="" type="token" ns="TODO">
+              simple</value>
+            </attribute>
+          </choice>
+          <attribute>
+            <name ns="http://www.w3.org/1999/xlink">href</name>
+            <text />
+          </attribute>
+        </group>
+        <choice>
+          <empty />
+          <ref name="element45" />
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element60">
+    <element>
+      <name ns="">inline-formula</name>
+      <ref name="element50" />
+    </element>
+  </define>
+  <define name="element61">
+    <element>
+      <name ns="">xref</name>
+      <group>
+        <group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="">ref-type</name>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">app</value>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">bibr</value>
+                          </choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">disp-formula</value>
+                        </choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">fig</value>
+                      </choice>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">list</value>
+                    </choice>
+                    <value datatypeLibrary="" type="token"
+                    ns="TODO">sec</value>
+                  </choice>
+                  <value datatypeLibrary="" type="token" ns="TODO">
+                  supplementary-material</value>
+                </choice>
+                <value datatypeLibrary="" type="token" ns="TODO">
+                table</value>
+              </choice>
+            </attribute>
+          </choice>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="">rid</name>
+              <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+              type="IDREFS" />
+            </attribute>
+          </choice>
+        </group>
+        <text />
+      </group>
+    </element>
+  </define>
+  <define name="element62">
+    <element>
+      <name ns="">title</name>
+      <oneOrMore>
+        <choice>
+          <text />
+          <choice>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <ref name="element51" />
+                            <ref name="element52" />
+                          </choice>
+                          <ref name="element53" />
+                        </choice>
+                        <ref name="element54" />
+                      </choice>
+                      <ref name="element55" />
+                    </choice>
+                    <ref name="element56" />
+                  </choice>
+                  <ref name="element57" />
+                </choice>
+                <ref name="element58" />
+              </choice>
+              <ref name="element59" />
+            </choice>
+            <ref name="element60" />
+          </choice>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element63">
+    <element>
+      <name ns="">list-item</name>
+      <group>
+        <choice>
+          <empty />
+          <attribute>
+            <name ns="">id</name>
+            <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+            type="ID" />
+          </attribute>
+        </choice>
+        <oneOrMore>
+          <choice>
+            <ref name="element15" />
+            <ref name="element16" />
+          </choice>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element64">
+    <element>
+      <name ns="">attrib</name>
+      <text />
+    </element>
+  </define>
+  <define name="element65">
+    <element>
+      <name ns="">app</name>
+      <group>
+        <group>
+          <group>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="">id</name>
+                <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                type="ID" />
+              </attribute>
+            </choice>
+            <ref name="element62" />
+          </group>
+          <choice>
+            <empty />
+            <oneOrMore>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <ref name="element9" />
+                              <ref name="element10" />
+                            </choice>
+                            <ref name="element11" />
+                          </choice>
+                          <ref name="element12" />
+                        </choice>
+                        <ref name="element13" />
+                      </choice>
+                      <ref name="element14" />
+                    </choice>
+                    <ref name="element15" />
+                  </choice>
+                  <ref name="element16" />
+                </choice>
+                <ref name="element17" />
+              </choice>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <ref name="element18" />
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element66">
+    <element>
+      <name ns="">ref</name>
+      <group>
+        <group>
+          <group>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="">id</name>
+                <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                type="ID" />
+              </attribute>
+            </choice>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="">content-type</name>
+                <text />
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <ref name="element43" />
+          </choice>
+        </group>
+        <oneOrMore>
+          <choice>
+            <ref name="element94" />
+            <ref name="element95" />
+          </choice>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element67">
+    <element>
+      <name ns="">journal-title</name>
+      <text />
+    </element>
+  </define>
+  <define name="element68">
+    <element>
+      <name ns="">publisher-name</name>
+      <text />
+    </element>
+  </define>
+  <define name="element69">
+    <element>
+      <name ns="">publisher-loc</name>
+      <text />
+    </element>
+  </define>
+  <define name="element70">
+    <element>
+      <name ns="">subj-group</name>
+      <group>
+        <group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="">subj-group-type</name>
+              <text />
+            </attribute>
+          </choice>
+          <oneOrMore>
+            <ref name="element96" />
+          </oneOrMore>
+        </group>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <ref name="element70" />
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element71">
+    <element>
+      <name ns="">article-title</name>
+      <oneOrMore>
+        <choice>
+          <text />
+          <choice>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <ref name="element51" />
+                    <ref name="element52" />
+                  </choice>
+                  <ref name="element53" />
+                </choice>
+                <ref name="element54" />
+              </choice>
+              <ref name="element55" />
+            </choice>
+            <ref name="element56" />
+          </choice>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element72">
+    <element>
+      <name ns="">subtitle</name>
+      <oneOrMore>
+        <choice>
+          <text />
+          <choice>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <ref name="element51" />
+                    <ref name="element52" />
+                  </choice>
+                  <ref name="element53" />
+                </choice>
+                <ref name="element54" />
+              </choice>
+              <ref name="element55" />
+            </choice>
+            <ref name="element56" />
+          </choice>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element73">
+    <element>
+      <name ns="">contrib</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">contrib-type</name>
+                      <text />
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">corresp</name>
+                      <choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">no</value>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">yes</value>
+                      </choice>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">equal-contrib</name>
+                    <choice>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">no</value>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">yes</value>
+                    </choice>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <ref name="element97" />
+                <ref name="element98" />
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <oneOrMore>
+                <ref name="element99" />
+              </oneOrMore>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <ref name="element100" />
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <choice>
+              <choice>
+                <ref name="element101" />
+                <ref name="element102" />
+              </choice>
+              <ref name="element58" />
+            </choice>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element74">
+    <element>
+      <name ns="">author-comment</name>
+      <oneOrMore>
+        <ref name="element15" />
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element75">
+    <element>
+      <name ns="">day</name>
+      <text />
+    </element>
+  </define>
+  <define name="element76">
+    <element>
+      <name ns="">month</name>
+      <text />
+    </element>
+  </define>
+  <define name="element77">
+    <element>
+      <name ns="">season</name>
+      <text />
+    </element>
+  </define>
+  <define name="element78">
+    <element>
+      <name ns="">year</name>
+      <text />
+    </element>
+  </define>
+  <define name="element79">
+    <element>
+      <name ns="">date</name>
+      <group>
+        <group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="">date-type</name>
+              <text />
+            </attribute>
+          </choice>
+          <choice>
+            <group>
+              <choice>
+                <empty />
+                <ref name="element75" />
+              </choice>
+              <choice>
+                <empty />
+                <ref name="element76" />
+              </choice>
+            </group>
+            <ref name="element77" />
+          </choice>
+        </group>
+        <ref name="element78" />
+      </group>
+    </element>
+  </define>
+  <define name="element80">
+    <element>
+      <name ns="">copyright-statement</name>
+      <oneOrMore>
+        <choice>
+          <text />
+          <choice>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <ref name="element51" />
+                    <ref name="element52" />
+                  </choice>
+                  <ref name="element53" />
+                </choice>
+                <ref name="element54" />
+              </choice>
+              <ref name="element55" />
+            </choice>
+            <ref name="element56" />
+          </choice>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element81">
+    <element>
+      <name ns="">copyright-year</name>
+      <text />
+    </element>
+  </define>
+  <define name="element82">
+    <element>
+      <name ns="">copyright-holder</name>
+      <oneOrMore>
+        <choice>
+          <choice>
+            <text />
+            <ref name="element55" />
+          </choice>
+          <ref name="element56" />
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element83">
+    <element>
+      <name ns="">license</name>
+      <group>
+        <group>
+          <group>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="">license-type</name>
+                <text />
+              </attribute>
+            </choice>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="http://www.w3.org/1999/xlink">type</name>
+                <value datatypeLibrary="" type="token" ns="TODO">
+                simple</value>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="http://www.w3.org/1999/xlink">href</name>
+              <text />
+            </attribute>
+          </choice>
+        </group>
+        <oneOrMore>
+          <ref name="element103" />
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element84">
+    <element>
+      <name ns="">kwd</name>
+      <oneOrMore>
+        <choice>
+          <text />
+          <choice>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <ref name="element51" />
+                    <ref name="element52" />
+                  </choice>
+                  <ref name="element53" />
+                </choice>
+                <ref name="element54" />
+              </choice>
+              <ref name="element55" />
+            </choice>
+            <ref name="element56" />
+          </choice>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element85">
+    <element>
+      <name ns="">award-group</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <group>
+                      <choice>
+                        <empty />
+                        <attribute>
+                          <name ns="">id</name>
+                          <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                          type="ID" />
+                        </attribute>
+                      </choice>
+                      <choice>
+                        <empty />
+                        <attribute>
+                          <name ns="">rid</name>
+                          <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                          type="IDREFS" />
+                        </attribute>
+                      </choice>
+                    </group>
+                    <choice>
+                      <empty />
+                      <attribute>
+                        <name ns="">award-type</name>
+                        <text />
+                      </attribute>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="http://www.w3.org/1999/xlink">
+                      type</name>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">simple</value>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="http://www.w3.org/1999/xlink">
+                    href</name>
+                    <text />
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <oneOrMore>
+                  <ref name="element104" />
+                </oneOrMore>
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <oneOrMore>
+                <ref name="element105" />
+              </oneOrMore>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <oneOrMore>
+              <ref name="element106" />
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <ref name="element107" />
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element86">
+    <element>
+      <name ns="">funding-statement</name>
+      <group>
+        <choice>
+          <empty />
+          <attribute>
+            <name ns="">rid</name>
+            <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+            type="IDREFS" />
+          </attribute>
+        </choice>
+        <oneOrMore>
+          <choice>
+            <text />
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <ref name="element51" />
+                      <ref name="element52" />
+                    </choice>
+                    <ref name="element53" />
+                  </choice>
+                  <ref name="element54" />
+                </choice>
+                <ref name="element55" />
+              </choice>
+              <ref name="element56" />
+            </choice>
+          </choice>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element87">
+    <element>
+      <name ns="">open-access</name>
+      <oneOrMore>
+        <ref name="element15" />
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element88">
+    <element>
+      <name ns="">col</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">id</name>
+                      <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                      type="ID" />
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">content-type</name>
+                      <text />
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">style</name>
+                    <text />
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">span</name>
+                  <data datatypeLibrary="" type="string" />
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="">width</name>
+                <data datatypeLibrary="" type="string" />
+              </attribute>
+            </choice>
+          </group>
+          <group>
+            <group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">align</name>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">left</value>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">center</value>
+                        </choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">right</value>
+                      </choice>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">justify</value>
+                    </choice>
+                    <value datatypeLibrary="" type="token"
+                    ns="TODO">char</value>
+                  </choice>
+                </attribute>
+              </choice>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">char</name>
+                  <data datatypeLibrary="" type="string" />
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="">charoff</name>
+                <data datatypeLibrary="" type="string" />
+              </attribute>
+            </choice>
+          </group>
+        </group>
+        <choice>
+          <empty />
+          <attribute>
+            <name ns="">valign</name>
+            <choice>
+              <choice>
+                <choice>
+                  <value datatypeLibrary="" type="token" ns="TODO">
+                  top</value>
+                  <value datatypeLibrary="" type="token" ns="TODO">
+                  middle</value>
+                </choice>
+                <value datatypeLibrary="" type="token" ns="TODO">
+                bottom</value>
+              </choice>
+              <value datatypeLibrary="" type="token" ns="TODO">
+              baseline</value>
+            </choice>
+          </attribute>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element89">
+    <element>
+      <name ns="">colgroup</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <choice>
+                      <empty />
+                      <attribute>
+                        <name ns="">id</name>
+                        <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                        type="ID" />
+                      </attribute>
+                    </choice>
+                    <choice>
+                      <empty />
+                      <attribute>
+                        <name ns="">content-type</name>
+                        <text />
+                      </attribute>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">style</name>
+                      <text />
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">span</name>
+                    <data datatypeLibrary="" type="string" />
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">width</name>
+                  <data datatypeLibrary="" type="string" />
+                </attribute>
+              </choice>
+            </group>
+            <group>
+              <group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">align</name>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">left</value>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">center</value>
+                          </choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">right</value>
+                        </choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">justify</value>
+                      </choice>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">char</value>
+                    </choice>
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">char</name>
+                    <data datatypeLibrary="" type="string" />
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">charoff</name>
+                  <data datatypeLibrary="" type="string" />
+                </attribute>
+              </choice>
+            </group>
+          </group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="">valign</name>
+              <choice>
+                <choice>
+                  <choice>
+                    <value datatypeLibrary="" type="token"
+                    ns="TODO">top</value>
+                    <value datatypeLibrary="" type="token"
+                    ns="TODO">middle</value>
+                  </choice>
+                  <value datatypeLibrary="" type="token" ns="TODO">
+                  bottom</value>
+                </choice>
+                <value datatypeLibrary="" type="token" ns="TODO">
+                baseline</value>
+              </choice>
+            </attribute>
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <oneOrMore>
+            <ref name="element88" />
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element90">
+    <element>
+      <name ns="">thead</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">id</name>
+                    <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                    type="ID" />
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">content-type</name>
+                    <text />
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">style</name>
+                  <text />
+                </attribute>
+              </choice>
+            </group>
+            <group>
+              <group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">align</name>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">left</value>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">center</value>
+                          </choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">right</value>
+                        </choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">justify</value>
+                      </choice>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">char</value>
+                    </choice>
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">char</name>
+                    <data datatypeLibrary="" type="string" />
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">charoff</name>
+                  <data datatypeLibrary="" type="string" />
+                </attribute>
+              </choice>
+            </group>
+          </group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="">valign</name>
+              <choice>
+                <choice>
+                  <choice>
+                    <value datatypeLibrary="" type="token"
+                    ns="TODO">top</value>
+                    <value datatypeLibrary="" type="token"
+                    ns="TODO">middle</value>
+                  </choice>
+                  <value datatypeLibrary="" type="token" ns="TODO">
+                  bottom</value>
+                </choice>
+                <value datatypeLibrary="" type="token" ns="TODO">
+                baseline</value>
+              </choice>
+            </attribute>
+          </choice>
+        </group>
+        <oneOrMore>
+          <ref name="element93" />
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element91">
+    <element>
+      <name ns="">tfoot</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">id</name>
+                    <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                    type="ID" />
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">content-type</name>
+                    <text />
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">style</name>
+                  <text />
+                </attribute>
+              </choice>
+            </group>
+            <group>
+              <group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">align</name>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">left</value>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">center</value>
+                          </choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">right</value>
+                        </choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">justify</value>
+                      </choice>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">char</value>
+                    </choice>
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">char</name>
+                    <data datatypeLibrary="" type="string" />
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">charoff</name>
+                  <data datatypeLibrary="" type="string" />
+                </attribute>
+              </choice>
+            </group>
+          </group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="">valign</name>
+              <choice>
+                <choice>
+                  <choice>
+                    <value datatypeLibrary="" type="token"
+                    ns="TODO">top</value>
+                    <value datatypeLibrary="" type="token"
+                    ns="TODO">middle</value>
+                  </choice>
+                  <value datatypeLibrary="" type="token" ns="TODO">
+                  bottom</value>
+                </choice>
+                <value datatypeLibrary="" type="token" ns="TODO">
+                baseline</value>
+              </choice>
+            </attribute>
+          </choice>
+        </group>
+        <oneOrMore>
+          <ref name="element93" />
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element92">
+    <element>
+      <name ns="">tbody</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">id</name>
+                    <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                    type="ID" />
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">content-type</name>
+                    <text />
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">style</name>
+                  <text />
+                </attribute>
+              </choice>
+            </group>
+            <group>
+              <group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">align</name>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">left</value>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">center</value>
+                          </choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">right</value>
+                        </choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">justify</value>
+                      </choice>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">char</value>
+                    </choice>
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">char</name>
+                    <data datatypeLibrary="" type="string" />
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">charoff</name>
+                  <data datatypeLibrary="" type="string" />
+                </attribute>
+              </choice>
+            </group>
+          </group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="">valign</name>
+              <choice>
+                <choice>
+                  <choice>
+                    <value datatypeLibrary="" type="token"
+                    ns="TODO">top</value>
+                    <value datatypeLibrary="" type="token"
+                    ns="TODO">middle</value>
+                  </choice>
+                  <value datatypeLibrary="" type="token" ns="TODO">
+                  bottom</value>
+                </choice>
+                <value datatypeLibrary="" type="token" ns="TODO">
+                baseline</value>
+              </choice>
+            </attribute>
+          </choice>
+        </group>
+        <oneOrMore>
+          <ref name="element93" />
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element93">
+    <element>
+      <name ns="">tr</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">id</name>
+                      <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                      type="ID" />
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">content-type</name>
+                      <text />
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">style</name>
+                    <text />
+                  </attribute>
+                </choice>
+              </group>
+              <group>
+                <group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">align</name>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <value datatypeLibrary=""
+                              type="token" ns="TODO">left</value>
+                              <value datatypeLibrary=""
+                              type="token" ns="TODO">center</value>
+                            </choice>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">right</value>
+                          </choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">justify</value>
+                        </choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">char</value>
+                      </choice>
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">char</name>
+                      <data datatypeLibrary="" type="string" />
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">charoff</name>
+                    <data datatypeLibrary="" type="string" />
+                  </attribute>
+                </choice>
+              </group>
+            </group>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="">valign</name>
+                <choice>
+                  <choice>
+                    <choice>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">top</value>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">middle</value>
+                    </choice>
+                    <value datatypeLibrary="" type="token"
+                    ns="TODO">bottom</value>
+                  </choice>
+                  <value datatypeLibrary="" type="token" ns="TODO">
+                  baseline</value>
+                </choice>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="">bgcolor</name>
+              <data datatypeLibrary="" type="string" />
+            </attribute>
+          </choice>
+        </group>
+        <oneOrMore>
+          <choice>
+            <ref name="element108" />
+            <ref name="element109" />
+          </choice>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element94">
+    <element>
+      <name ns="">mixed-citation</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">id</name>
+                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                  type="ID" />
+                </attribute>
+              </choice>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">publication-type</name>
+                  <text />
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="">publisher-type</name>
+                <text />
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="">publication-format</name>
+              <text />
+            </attribute>
+          </choice>
+        </group>
+        <oneOrMore>
+          <choice>
+            <choice>
+              <text />
+              <ref name="element110" />
+            </choice>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <ref name="element51" />
+                              <ref name="element52" />
+                            </choice>
+                            <ref name="element53" />
+                          </choice>
+                          <ref name="element54" />
+                        </choice>
+                        <ref name="element55" />
+                      </choice>
+                      <ref name="element56" />
+                    </choice>
+                    <ref name="element57" />
+                  </choice>
+                  <ref name="element58" />
+                </choice>
+                <ref name="element59" />
+              </choice>
+              <ref name="element60" />
+            </choice>
+          </choice>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element95">
+    <element>
+      <name ns="">note</name>
+      <oneOrMore>
+        <ref name="element15" />
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element96">
+    <element>
+      <name ns="">subject</name>
+      <oneOrMore>
+        <choice>
+          <text />
+          <choice>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <ref name="element51" />
+                    <ref name="element52" />
+                  </choice>
+                  <ref name="element53" />
+                </choice>
+                <ref name="element54" />
+              </choice>
+              <ref name="element55" />
+            </choice>
+            <ref name="element56" />
+          </choice>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element97">
+    <element>
+      <name ns="">collab</name>
+      <group>
+        <choice>
+          <empty />
+          <attribute>
+            <name ns="">collab-type</name>
+            <text />
+          </attribute>
+        </choice>
+        <oneOrMore>
+          <choice>
+            <text />
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <ref name="element51" />
+                      <ref name="element52" />
+                    </choice>
+                    <ref name="element53" />
+                  </choice>
+                  <ref name="element54" />
+                </choice>
+                <ref name="element55" />
+              </choice>
+              <ref name="element56" />
+            </choice>
+          </choice>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element98">
+    <element>
+      <name ns="">name</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">content-type</name>
+                    <text />
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">name-style</name>
+                    <choice>
+                      <choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">western</value>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">eastern</value>
+                      </choice>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">islensk</value>
+                    </choice>
+                  </attribute>
+                </choice>
+              </group>
+              <ref name="element111" />
+            </group>
+            <choice>
+              <empty />
+              <ref name="element112" />
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <ref name="element113" />
+          </choice>
+        </group>
+        <choice>
+          <empty />
+          <ref name="element114" />
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="element99">
+    <element>
+      <name ns="">degrees</name>
+      <text />
+    </element>
+  </define>
+  <define name="element100">
+    <element>
+      <name ns="">email</name>
+      <text />
+    </element>
+  </define>
+  <define name="element101">
+    <element>
+      <name ns="">aff</name>
+      <oneOrMore>
+        <choice>
+          <text />
+          <choice>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <ref name="element51" />
+                            <ref name="element52" />
+                          </choice>
+                          <ref name="element53" />
+                        </choice>
+                        <ref name="element54" />
+                      </choice>
+                      <ref name="element55" />
+                    </choice>
+                    <ref name="element56" />
+                  </choice>
+                  <ref name="element57" />
+                </choice>
+                <ref name="element58" />
+              </choice>
+              <ref name="element59" />
+            </choice>
+            <ref name="element60" />
+          </choice>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element102">
+    <element>
+      <name ns="">bio</name>
+      <oneOrMore>
+        <ref name="element15" />
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element103">
+    <element>
+      <name ns="">license-p</name>
+      <oneOrMore>
+        <choice>
+          <choice>
+            <text />
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <ref name="element51" />
+                              <ref name="element52" />
+                            </choice>
+                            <ref name="element53" />
+                          </choice>
+                          <ref name="element54" />
+                        </choice>
+                        <ref name="element55" />
+                      </choice>
+                      <ref name="element56" />
+                    </choice>
+                    <ref name="element57" />
+                  </choice>
+                  <ref name="element58" />
+                </choice>
+                <ref name="element59" />
+              </choice>
+              <ref name="element60" />
+            </choice>
+          </choice>
+          <ref name="element61" />
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element104">
+    <element>
+      <name ns="">funding-source</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">id</name>
+                      <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                      type="ID" />
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">rid</name>
+                      <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                      type="IDREFS" />
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">source-type</name>
+                    <text />
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty />
+                <attribute>
+                  <name ns="">country</name>
+                  <text />
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="http://www.w3.org/1999/xlink">type</name>
+                <value datatypeLibrary="" type="token" ns="TODO">
+                simple</value>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="http://www.w3.org/1999/xlink">href</name>
+              <text />
+            </attribute>
+          </choice>
+        </group>
+        <text />
+      </group>
+    </element>
+  </define>
+  <define name="element105">
+    <element>
+      <name ns="">award-id</name>
+      <group>
+        <choice>
+          <empty />
+          <attribute>
+            <name ns="">rid</name>
+            <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+            type="IDREFS" />
+          </attribute>
+        </choice>
+        <text />
+      </group>
+    </element>
+  </define>
+  <define name="element106">
+    <element>
+      <name ns="">principal-award-recipient</name>
+      <text />
+    </element>
+  </define>
+  <define name="element107">
+    <element>
+      <name ns="">principal-investigator</name>
+      <text />
+    </element>
+  </define>
+  <define name="element108">
+    <element>
+      <name ns="">th</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <group>
+                      <group>
+                        <group>
+                          <group>
+                            <group>
+                              <choice>
+                                <empty />
+                                <attribute>
+                                  <name ns="">id</name>
+                                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                                  type="ID" />
+                                </attribute>
+                              </choice>
+                              <choice>
+                                <empty />
+                                <attribute>
+                                  <name ns="">content-type</name>
+                                  <text />
+                                </attribute>
+                              </choice>
+                            </group>
+                            <choice>
+                              <empty />
+                              <attribute>
+                                <name ns="">style</name>
+                                <text />
+                              </attribute>
+                            </choice>
+                          </group>
+                          <choice>
+                            <empty />
+                            <attribute>
+                              <name ns="">abbr</name>
+                              <data datatypeLibrary=""
+                              type="string" />
+                            </attribute>
+                          </choice>
+                        </group>
+                        <choice>
+                          <empty />
+                          <attribute>
+                            <name ns="">axis</name>
+                            <text />
+                          </attribute>
+                        </choice>
+                      </group>
+                      <choice>
+                        <empty />
+                        <attribute>
+                          <name ns="">headers</name>
+                          <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                          type="IDREFS" />
+                        </attribute>
+                      </choice>
+                    </group>
+                    <choice>
+                      <empty />
+                      <attribute>
+                        <name ns="">scope</name>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <value datatypeLibrary=""
+                              type="token" ns="TODO">row</value>
+                              <value datatypeLibrary=""
+                              type="token" ns="TODO">col</value>
+                            </choice>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">rowgroup</value>
+                          </choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">colgroup</value>
+                        </choice>
+                      </attribute>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">rowspan</name>
+                      <data datatypeLibrary="" type="string" />
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">colspan</name>
+                    <data datatypeLibrary="" type="string" />
+                  </attribute>
+                </choice>
+              </group>
+              <group>
+                <group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">align</name>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <value datatypeLibrary=""
+                              type="token" ns="TODO">left</value>
+                              <value datatypeLibrary=""
+                              type="token" ns="TODO">center</value>
+                            </choice>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">right</value>
+                          </choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">justify</value>
+                        </choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">char</value>
+                      </choice>
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">char</name>
+                      <data datatypeLibrary="" type="string" />
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">charoff</name>
+                    <data datatypeLibrary="" type="string" />
+                  </attribute>
+                </choice>
+              </group>
+            </group>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="">valign</name>
+                <choice>
+                  <choice>
+                    <choice>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">top</value>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">middle</value>
+                    </choice>
+                    <value datatypeLibrary="" type="token"
+                    ns="TODO">bottom</value>
+                  </choice>
+                  <value datatypeLibrary="" type="token" ns="TODO">
+                  baseline</value>
+                </choice>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="">bgcolor</name>
+              <data datatypeLibrary="" type="string" />
+            </attribute>
+          </choice>
+        </group>
+        <oneOrMore>
+          <choice>
+            <choice>
+              <choice>
+                <text />
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <choice>
+                                  <ref name="element51" />
+                                  <ref name="element52" />
+                                </choice>
+                                <ref name="element53" />
+                              </choice>
+                              <ref name="element54" />
+                            </choice>
+                            <ref name="element55" />
+                          </choice>
+                          <ref name="element56" />
+                        </choice>
+                        <ref name="element57" />
+                      </choice>
+                      <ref name="element58" />
+                    </choice>
+                    <ref name="element59" />
+                  </choice>
+                  <ref name="element60" />
+                </choice>
+              </choice>
+              <ref name="element61" />
+            </choice>
+            <ref name="element115" />
+          </choice>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element109">
+    <element>
+      <name ns="">td</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <group>
+                      <group>
+                        <group>
+                          <group>
+                            <group>
+                              <choice>
+                                <empty />
+                                <attribute>
+                                  <name ns="">id</name>
+                                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                                  type="ID" />
+                                </attribute>
+                              </choice>
+                              <choice>
+                                <empty />
+                                <attribute>
+                                  <name ns="">content-type</name>
+                                  <text />
+                                </attribute>
+                              </choice>
+                            </group>
+                            <choice>
+                              <empty />
+                              <attribute>
+                                <name ns="">style</name>
+                                <text />
+                              </attribute>
+                            </choice>
+                          </group>
+                          <choice>
+                            <empty />
+                            <attribute>
+                              <name ns="">abbr</name>
+                              <data datatypeLibrary=""
+                              type="string" />
+                            </attribute>
+                          </choice>
+                        </group>
+                        <choice>
+                          <empty />
+                          <attribute>
+                            <name ns="">axis</name>
+                            <text />
+                          </attribute>
+                        </choice>
+                      </group>
+                      <choice>
+                        <empty />
+                        <attribute>
+                          <name ns="">headers</name>
+                          <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+                          type="IDREFS" />
+                        </attribute>
+                      </choice>
+                    </group>
+                    <choice>
+                      <empty />
+                      <attribute>
+                        <name ns="">scope</name>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <value datatypeLibrary=""
+                              type="token" ns="TODO">row</value>
+                              <value datatypeLibrary=""
+                              type="token" ns="TODO">col</value>
+                            </choice>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">rowgroup</value>
+                          </choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">colgroup</value>
+                        </choice>
+                      </attribute>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">rowspan</name>
+                      <data datatypeLibrary="" type="string" />
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">colspan</name>
+                    <data datatypeLibrary="" type="string" />
+                  </attribute>
+                </choice>
+              </group>
+              <group>
+                <group>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">align</name>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <value datatypeLibrary=""
+                              type="token" ns="TODO">left</value>
+                              <value datatypeLibrary=""
+                              type="token" ns="TODO">center</value>
+                            </choice>
+                            <value datatypeLibrary="" type="token"
+                            ns="TODO">right</value>
+                          </choice>
+                          <value datatypeLibrary="" type="token"
+                          ns="TODO">justify</value>
+                        </choice>
+                        <value datatypeLibrary="" type="token"
+                        ns="TODO">char</value>
+                      </choice>
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty />
+                    <attribute>
+                      <name ns="">char</name>
+                      <data datatypeLibrary="" type="string" />
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty />
+                  <attribute>
+                    <name ns="">charoff</name>
+                    <data datatypeLibrary="" type="string" />
+                  </attribute>
+                </choice>
+              </group>
+            </group>
+            <choice>
+              <empty />
+              <attribute>
+                <name ns="">valign</name>
+                <choice>
+                  <choice>
+                    <choice>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">top</value>
+                      <value datatypeLibrary="" type="token"
+                      ns="TODO">middle</value>
+                    </choice>
+                    <value datatypeLibrary="" type="token"
+                    ns="TODO">bottom</value>
+                  </choice>
+                  <value datatypeLibrary="" type="token" ns="TODO">
+                  baseline</value>
+                </choice>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty />
+            <attribute>
+              <name ns="">bgcolor</name>
+              <data datatypeLibrary="" type="string" />
+            </attribute>
+          </choice>
+        </group>
+        <oneOrMore>
+          <choice>
+            <choice>
+              <choice>
+                <text />
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <choice>
+                                  <ref name="element51" />
+                                  <ref name="element52" />
+                                </choice>
+                                <ref name="element53" />
+                              </choice>
+                              <ref name="element54" />
+                            </choice>
+                            <ref name="element55" />
+                          </choice>
+                          <ref name="element56" />
+                        </choice>
+                        <ref name="element57" />
+                      </choice>
+                      <ref name="element58" />
+                    </choice>
+                    <ref name="element59" />
+                  </choice>
+                  <ref name="element60" />
+                </choice>
+              </choice>
+              <ref name="element61" />
+            </choice>
+            <ref name="element115" />
+          </choice>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="element110">
+    <element>
+      <name ns="">pub-id</name>
+      <group>
+        <attribute>
+          <name ns="">pub-id-type</name>
+          <text />
+        </attribute>
+        <text />
+      </group>
+    </element>
+  </define>
+  <define name="element111">
+    <element>
+      <name ns="">surname</name>
+      <text />
+    </element>
+  </define>
+  <define name="element112">
+    <element>
+      <name ns="">given-names</name>
+      <text />
+    </element>
+  </define>
+  <define name="element113">
+    <element>
+      <name ns="">prefix</name>
+      <text />
+    </element>
+  </define>
+  <define name="element114">
+    <element>
+      <name ns="">suffix</name>
+      <group>
+        <choice>
+          <empty />
+          <attribute>
+            <name ns="">content-type</name>
+            <text />
+          </attribute>
+        </choice>
+        <text />
+      </group>
+    </element>
+  </define>
+  <define name="element115">
+    <element>
+      <name ns="">break</name>
+      <empty />
+    </element>
+  </define>
+</grammar>

@@ -9,9 +9,11 @@ page.onConsoleMessage = (msg) ->
     obj = JSON.parse msg.substr 9
     phantom.exit 0 if obj.name is 'done'
 
+  else
+    #console.debug msg
   return
 
-  page.open "test/index.html", (status) ->
+page.open "test/index.html", (status) ->
   if status isnt "success"
     window.console.error "Could not open page"
     phantom.exit 1
@@ -20,8 +22,10 @@ page.onConsoleMessage = (msg) ->
   # Set up listeners to QUnit events
   page.evaluate ->
     # Hook into QUnit events
+    window.QUnit or= {}
     ['log', 'testStart', 'testDone', 'moduleStart', 'moduleDone', 'begin', 'done'].forEach (ev) ->
-      window.QUnit[ev] (res) -> window.phantomLog ev, res
+      window.QUnit[ev] = (res) -> window.phantomLog ev, res
+    window.phantomjs = true
 
 # Runs before page loads
 page.onInitialized = ->
