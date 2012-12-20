@@ -29,7 +29,19 @@ define (require) ->
         }, true
 
     onLoad = ->
-      CKEDITOR.addCss('div:hover:before { display: inline; content: "[" attr(data-xmlel) "] "; font-size: 80%;   }');
+      addCss = """
+        div:before {
+          display: inline;
+          content: "[" attr(data-xmlel) "] ";
+          font-size: 75%;
+          background-color: #444444;
+          color: #cccccc;
+          margin-right: 4px;
+          padding: 2px;
+        }
+        """
+      CKEDITOR.addCss(addCss)
+
     init = (editor) ->
       # TODO: Move rules for a given schema into an external config file.
       editor.dataProcessor.dataFilter.addRules {
