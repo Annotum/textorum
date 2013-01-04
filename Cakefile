@@ -65,8 +65,8 @@ task 'dist', 'Compiles and minifies JavaScript file for production use', ->
     console.log "CoffeeScript Compiled".green
     invoke 'size'
 
-task 'watch', 'Automatically recompile CoffeeScript files to JavaScript', ->
-  console.log "Watching coffee files for changes, press Control-C to quit".yellow
+task 'watch', 'Automatically recompile CoffeeScript files to JavaScript, SASS to CSS', ->
+  console.log "Watching coffee and sass files for changes, press Control-C to quit".yellow
   srcWatcher  = exec "coffee --compile --watch --output #{paths.libDir} #{paths.srcDir}"
   srcWatcher.stderr.on 'data', (data) -> console.error stripEndline(data).red
   srcWatcher.stdout.on 'data', (data) ->
@@ -88,6 +88,39 @@ task 'watch', 'Automatically recompile CoffeeScript files to JavaScript', ->
       process.stdout.write data.green
     else
       process.stderr.write data.red
+  sassWriter = (data) ->
+    if !data
+      return false
+    if /^>>>/.test data
+      return false
+    data = data.replace /^\s*/, ' - '
+    if /^\s*-\serror\s/.test data
+      err = data.match /(.*)\s+\((Line \d+: .*)\)/
+      process.stdout.write "#{err[1].red}\n     #{err[2].red}\n"
+    else
+      process.stdout.write data.green
+  sassWriterCallback = (error, stdout, stderr) ->
+    if stdout
+      sassWriter stdout
+    if stderr
+      sassWriter stderr
+  exec "sass --update #{paths.srcDir}:#{paths.libDir}", sassWriterCallback
+  sassWatcher = exec "sass --watch #{paths.srcDir}:#{paths.libDir}"
+  sassWatcher.stderr.on 'data', stdErrorStreamer()
+  sassWatcher.stdout.on 'data', sassWriter
+  try
+    kexec = require('kexec')
+    console.log "Watching Cakefile for changes".yellow
+    fs.watchFile path.join(process.cwd, "Cakefile"), (curr, prev) ->
+      if +curr.mtime isnt +prev.mtime
+        console.log "Cakefile changed, restarting watch"
+        sassWatcher.kill()
+        testWatcher.kill()
+        srcWatcher.kill() 
+        kexec "cake watch"
+  catch ex
+    console.log "no kexec, not watching Cakefile".yellow
+
 
 task 'lint', 'Check CoffeeScript for lint', ->
   console.log "Checking *.coffee for lint".yellow

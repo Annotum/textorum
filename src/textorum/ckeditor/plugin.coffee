@@ -21,6 +21,8 @@
 
 define (require) ->
   CKEDITOR = require('ckeditor')
+  xslt = require('./xslt')
+  pluginCss = require('text!./plugin.css')
   plugin = () ->
     beforeInit = (editor) ->
       CKEDITOR.tools.extend editor.config, {
@@ -29,18 +31,7 @@ define (require) ->
         }, true
 
     onLoad = ->
-      addCss = """
-        div:before {
-          display: inline;
-          content: "[" attr(data-xmlel) "] ";
-          font-size: 75%;
-          background-color: #444444;
-          color: #cccccc;
-          margin-right: 4px;
-          padding: 2px;
-        }
-        """
-      CKEDITOR.addCss(addCss)
+      CKEDITOR.addCss(pluginCss)
 
     init = (editor) ->
       # TODO: Move rules for a given schema into an external config file.
@@ -70,6 +61,12 @@ define (require) ->
             return null
           }
         }, 2
+      dblClickHandler = (evt) ->
+        jQuery(evt.data.element.$).children().toggle()
+
+        # console.log(evt)
+
+      editor.on('doubleclick', dblClickHandler)
 
     afterInit = (editor) ->
       editor._.elementsPath?.filters?.push (element, name) ->
@@ -79,7 +76,7 @@ define (require) ->
         element.getAttribute('data-xmlel') or null
 
     CKEDITOR.plugins.add 'textorum', {
-      requires: 'entities'
+      requires: 'entities,ajax'
       onLoad: onLoad
       beforeInit: beforeInit
       init: init

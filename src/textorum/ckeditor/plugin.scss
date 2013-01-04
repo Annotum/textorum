@@ -1,0 +1,96 @@
+$base: #d9fff7;
+$dark: #544e6e;
+$mid: #808cb0;
+$light: #abd1d9;
+$highlight: #ddf556;
+
+$defaultback: #444444;
+$defaultfront: #cccccc;
+
+div[data-xmlel]:before {
+  display: inline;
+  content: "[" attr(data-xmlel) "] ";
+  font-size: 75%;
+  background-color: $defaultback;
+  color: $defaultfront;
+  margin-right: 4px;
+  padding: 2px;
+}
+div[data-xmlel="front"] {
+  background-color: $light;
+  padding: .5em;
+}
+div[data-xmlel="front"]:before {
+  content: "[Frontmatter]";
+  background-color: $dark;
+  color: $base;
+}
+div[data-xmlel="journal-meta"] {
+  background-color: $mid;
+  border: 1px solid $dark;
+  padding: 2px;
+}
+div[data-xmlel="journal-meta"]:before {
+  display: block;
+  content: "Journal Meta:"
+}
+div[data-xmlel="journal-id"] {
+  display: inline;
+  font-size: 75%;
+  border: 1px dotted $highlight;
+}
+div[data-xmlel="journal-id"]:before {
+  font-size: inherit;
+  background-color: inherit;
+  color: inherit;
+  content: "JID: ";
+}
+div[data-xmlel="journal-title"] {
+  display: inline;
+  font-size: 110%;
+  font-weight: bold;
+  border: 1px dotted $highlight;
+}
+div[data-xmlel="journal-title-group"]:before, div[data-xmlel="journal-title"]:before {
+  content: "";
+  background-color: inherit;
+  margin-right: 0px;
+}
+div[data-xmlel="journal-title"]:before {
+ padding: inherit;
+}
+div[data-xmlel="issn"] {
+  font-size: 75%;
+  display: inline;
+  border: 1px dotted $highlight;
+}
+div[data-xmlel="issn"]:before {
+  font-size: inherit;
+  content: "ISSN:";
+  background-color: inherit;
+  color: inherit;
+  display: inline;
+}
+
+div[data-xmlel="publisher"]:before {
+  background-color: inherit;
+  font-size: inherit;
+  color: inherit;
+  content: "Published:";
+}
+div[data-xmlel^="publisher-"]:before {
+  background-color: inherit;
+  color: inherit;
+  font-size: inherit;
+  content: "";
+}
+div[data-xmlel^="publisher-"] {
+  display: inline;
+  border: 1px dotted $highlight;
+}
+div[data-xmlel="publisher-name"]:before {
+  content: "by";
+}
+div[data-xmlel="publisher-loc"]:before {
+  content: "at";
+}

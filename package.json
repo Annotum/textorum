@@ -1,8 +1,8 @@
 {
 	"name": "textorum",
 	"version": "0.1.0",
-	"dependencies": {},
-	"devDependencies": {
+	"devDependencies": {},
+	"dependencies": {
 		"requirejs": "",
 		"coffee-script": "",
 		"coffeelint": "",
@@ -11,6 +11,9 @@
 		"wrench": "",
 		"colors": "",
 		"docco": ""
+	},
+	"optionalDependencies": {
+		"kexec": ""
 	},
 	"private": true
 }
