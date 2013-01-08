@@ -15,5 +15,8 @@
 	"optionalDependencies": {
 		"kexec": ""
 	},
+	"scripts": {
+		"watch": "cake watch"
+	},
 	"private": true
 }
