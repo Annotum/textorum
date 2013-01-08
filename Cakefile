@@ -117,7 +117,7 @@ task 'watch', 'Automatically recompile CoffeeScript files to JavaScript, SASS to
         sassWatcher.kill()
         testWatcher.kill()
         srcWatcher.kill() 
-        kexec "cake watch"
+        kexec "npm run-script watch"
   catch ex
     console.log "no kexec, not watching Cakefile".yellow
 
