@@ -13,6 +13,7 @@
     <p>
       <textarea id='editor1' name='editor1'>
         <?php
+
         #echo(htmlspecialchars(file_get_contents('../schematron-play/good-kipling-cke.xml')));
         ?>
       </textarea>
@@ -21,7 +22,13 @@
       <!-- <input type="submit" value="Submit" /> -->
     </p>
   </form>
-  Data file: <input type="text" id="datafile" name="datafile" value="/textorum/test/xml/good-kipling.xml"/> <input type="button" name="loaddata" id="loaddata" value="load"/>
+  <ul>
+    <li>/ncbi-updates/from-client/PMC2780816kipling.xml</li>
+    <li>/ncbi-updates/from-client/PMC3153123kipling.xml</li>
+    <li>/ncbi-updates/from-client/PMC3256938kipling.xml</li>
+    <li>test/xml/short-kipling.xml</li>
+  </ul>
+  Data file: <input type="text" id="datafile" name="datafile" value="test/xml/short-kipling.xml"/> <input type="button" name="loaddata" id="loaddata" value="load"/>
   <br/>
   <input type="button" name="savedata" id="savedata" value="save"/>
   <script>
