@@ -18,3 +18,21 @@ Advanced, validating, text editing component. Part of the Annotum project.
 - `dist/` - Production-compiled output
 - `Cakefile` - cake (coffeescript make) automation
 - `package.json` - dependencies, `npm install` to install
+
+## Installation Instructions
+
+brew install node
+
+_from the textorum dir:_
+
+npm install
+bundle install
+
+git clone --depth=1 https://github.com/ckeditor/ckeditor-dev.git
+
+cd ckeditor-dev; dev/builder/build.sh
+
+cd ..
+
+npm run-script watch
+
