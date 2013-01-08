@@ -29,7 +29,7 @@ define (require) ->
   processor = new XSLTProcessor()
   xmlhttp = new XMLHttpRequest()
 
-  xmlhttp.open("GET", "/textorum/xsl/xml2cke.xsl", false)
+  xmlhttp.open("GET", "xsl/xml2cke.xsl", false)
   xmlhttp.send('')
 
   xslDoc = xmlhttp.responseXML
@@ -39,7 +39,7 @@ define (require) ->
 
   xmlhttp = new XMLHttpRequest()
 
-  xmlhttp.open("GET", "/textorum/xsl/cke2xml.xsl", false)
+  xmlhttp.open("GET", "xsl/cke2xml.xsl", false)
   xmlhttp.send('')
 
   xslDoc = xmlhttp.responseXML
