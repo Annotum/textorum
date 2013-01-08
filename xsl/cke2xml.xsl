@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
     <xsl:output method="xml" encoding="UTF-8" doctype-public="article"
-        doctype-system="http://dtd.nlm.nih.gov/ncbi/kipling/kipling-jp3.dtd" indent="yes"/>
+        doctype-system="http://dtd.nlm.nih.gov/ncbi/kipling/kipling-jp3.dtd" indent="yes"
+        omit-xml-declaration="no" standalone="yes"/>
     <xsl:template match="*">
         <xsl:choose>
             <xsl:when test="boolean(@data-xmlel)">
