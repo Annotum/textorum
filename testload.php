@@ -36,12 +36,15 @@
     baseUrl: "lib",
 		// urlArgs: "bust=" + "18", 
 		urlArgs: (new Date()).getTime(),
-     shim: {
-      'ckeditor': {
-        exports: 'CKEDITOR'
-      }
-     },
-     paths: { ckeditor: '/ckeditor-dev/dev/builder/release/ckeditor/ckeditor' }
+		shim: {
+			'ckeditor': {
+				exports: 'CKEDITOR'
+			}
+		},
+		paths: { 
+			"text": "../vendor/text",
+			ckeditor: '/ckeditor-dev/dev/builder/release/ckeditor/ckeditor' 
+		}
    });
   require( ["textorum/ckeditor/plugin", "textorum/ckeditor/testload"], function() {
     CKEDITOR.replace('editor1', 
