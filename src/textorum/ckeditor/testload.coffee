@@ -89,5 +89,8 @@ define (require) ->
   
   $('#loaddata').on('click', loadDataHandler)
   $('#savedata').on('click', saveDataHandler)
+  $('.filenames').on 'click', 'li', (e) ->
+    $('#datafile').val($(e.target).text())
+    $('#loaddata').click()
   
   

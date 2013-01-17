@@ -22,13 +22,13 @@
       <!-- <input type="submit" value="Submit" /> -->
     </p>
   </form>
-  <ul>
+  <ul class="filenames">
     <li>/ncbi-updates/from-client/PMC2780816kipling.xml</li>
     <li>/ncbi-updates/from-client/PMC3153123kipling.xml</li>
     <li>/ncbi-updates/from-client/PMC3256938kipling.xml</li>
     <li>test/xml/short-kipling.xml</li>
   </ul>
-  Data file: <input type="text" id="datafile" name="datafile" value="test/xml/short-kipling.xml"/> <input type="button" name="loaddata" id="loaddata" value="load"/>
+  Data file: <input type="text" id="datafile" name="datafile" value="/ncbi-updates/from-client/PMC2780816kipling.xml"/> <input type="button" name="loaddata" id="loaddata" value="load"/>
   <br/>
   <input type="button" name="savedata" id="savedata" value="save"/>
   <script>
@@ -51,6 +51,8 @@
     { 
      extraPlugins: 'textorum,showblocks,fakeobjects,devtools'
     }); 
+    CKEDITOR.on('instanceReady', function() { jQuery('#loaddata').click() });
+
   });
   </script>
 </body>
