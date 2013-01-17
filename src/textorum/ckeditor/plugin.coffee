@@ -27,7 +27,12 @@ define (require) ->
     beforeInit = (editor) ->
       CKEDITOR.tools.extend editor.config, {
         enterMode: CKEDITOR.ENTER_DIV
-        fillEmptyBlocks: false
+        fillEmptyBlocks: false,
+        basicEntities: false,
+        entities_latin: false,
+        entities_greek: false,
+        entities: true,
+        entities_additional: 'gt,lt,amp'
         }, true
 
     onLoad = ->
@@ -72,7 +77,7 @@ define (require) ->
       editor._.elementsPath?.filters?.push (element, name) ->
         # Hide elementsPath breadcrumbs for non-schema elements
         if name is 'body' or !element.getAttribute('data-xmlel')
-          return false
+          return "[" + name + "]"
         element.getAttribute('data-xmlel') or null
 
     CKEDITOR.plugins.add 'textorum', {
