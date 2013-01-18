@@ -28,29 +28,29 @@
     <li>/ncbi-updates/from-client/PMC3256938kipling.xml</li>
     <li>test/xml/short-kipling.xml</li>
   </ul>
-  Data file: <input type="text" id="datafile" name="datafile" value="/ncbi-updates/from-client/PMC2780816kipling.xml"/> <input type="button" name="loaddata" id="loaddata" value="load"/>
+  Data file: <input type="text" id="datafile" name="datafile" value="/ncbi-updates/from-client/PMC3153123kipling.xml"/> <input type="button" name="loaddata" id="loaddata" value="load"/>
   <br/>
   <input type="button" name="savedata" id="savedata" value="save"/>
   <script>
   require.config({
     baseUrl: "lib",
-		// urlArgs: "bust=" + "18", 
+		// urlArgs: "bust=" + "18",
 		urlArgs: (new Date()).getTime(),
 		shim: {
 			'ckeditor': {
 				exports: 'CKEDITOR'
 			}
 		},
-		paths: { 
+		paths: {
 			"text": "../vendor/text",
-			ckeditor: '/ckeditor-dev/dev/builder/release/ckeditor/ckeditor' 
+			ckeditor: '/ckeditor-dev/dev/builder/release/ckeditor/ckeditor'
 		}
    });
   require( ["textorum/ckeditor/plugin", "textorum/ckeditor/testload"], function() {
-    CKEDITOR.replace('editor1', 
-    { 
+    CKEDITOR.replace('editor1',
+    {
      extraPlugins: 'textorum,showblocks,fakeobjects,devtools'
-    }); 
+    });
     CKEDITOR.on('instanceReady', function() { jQuery('#loaddata').click() });
 
   });
