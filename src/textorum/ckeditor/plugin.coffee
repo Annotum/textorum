@@ -61,6 +61,11 @@ define (require) ->
                     element.name = 'ul'
                 when 'list-item'
                   element.name = 'li'
+                when 'td'
+                  element.name = 'td'
+                when 'table' then element.name = 'table'
+                when 'tbody' then element.name = 'tbody'
+                when 'tr' then element.name = 'tr'
                 else
                   element.name = 'div'
             return null
