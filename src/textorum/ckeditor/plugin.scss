@@ -6,6 +6,10 @@ $highlight: #ddf556;
 $defaultback: #444444;
 $defaultfront: #cccccc;
 
+div[data-xmlel] {
+	margin: 3px 0;
+}
+
 div[data-xmlel]:before {
 	display: inline;
 	content: "[" attr(data-xmlel) "] ";
@@ -28,14 +32,16 @@ div[data-xmlel="front"]:before {
 div[data-xmlel="journal-meta"] {
 	background-color: $mid;
 	border: 1px solid $defaultback;
-	padding: 2px;
 }
 div[data-xmlel="journal-meta"]:before {
+	content: "Journal Meta:";
 	display: block;
-	content: "Journal Meta:"
+	margin: 5px 0;
+	padding: 2px 5px;
 }
 div[data-xmlel="journal-id"] {
-	display: inline;
+	// using imporant to override inline style
+	display: inline-block !important;
 	font-size: 75%;
 	border: 1px dotted $highlight;
 }
@@ -60,9 +66,10 @@ div[data-xmlel="journal-title"]:before {
 	padding: inherit;
 }
 div[data-xmlel="issn"] {
-	font-size: 75%;
-	display: inline;
 	border: 1px dotted $highlight;
+	// using important to override inline style
+	display: inline-block !important;
+	font-size: 75%;
 }
 div[data-xmlel="issn"]:before {
 	font-size: inherit;
@@ -94,17 +101,62 @@ div[data-xmlel="publisher-name"]:before {
 div[data-xmlel="publisher-loc"]:before {
 	content: "at";
 }
+div[data-xmlel="article-meta"] {
+	background-color: $mid;
+	border: 1px solid $defaultback;
+}
+div[data-xmlel="article-meta"]:before {
+	display: block;
+	content: "Article Meta:";
+	padding: 2px 5px;
+}
+
+	div[data-xmlel="article-id"] {
+		// using !important to override inline style
+		display: inline-block !important;
+		font-size: 75%;
+	}
+
+	div[data-xmlel="article-id"]:before {
+		background: none;
+		color: #333;
+		content: "Article ID:";
+		font-size: 100%;
+	}
 
 // BODY CONTENT
+
+div[data-xmlel="article"]:before,
+div[data-xmlel="front"]:before,
+div[data-xmlel="body"]:before,
+div[data-xmlel="sec"]:before {
+	background: #999;
+	color: $light;
+}
 
 div[data-xmlel="xref"] {
 	color: $dark;
 	display: inline;
 }
 
+div[data-xmlel="xref"]:before,
+div[data-xmlel="p"]:before,
+div[data-xmlel="title"]:before {
+	content:'';
+	padding: 0;
+}
+
 div[data-xmlel="title"] {
 	background: $mid;
 	color: $defaultback;
+}
+
+div[data-xmlel="p"] {
+	margin-bottom: 10px;
+}
+
+div[data-xmlel="sec"] {
+	margin-bottom: 20px;
 }
 
 // Footer References
@@ -113,6 +165,6 @@ div[data-xmlel="ref"] {
 	div[data-xmlel="label"],
 	div[data-xmlel="mixed-citation"],
 	div[data-xmlel="pub-id"] {
-		display: inline;
+		display: inline-block;
 	}
 }
