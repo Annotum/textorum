@@ -118,7 +118,6 @@ define (require) ->
 
     init = (editor) ->
       updateDTD()
-
       # TODO: Move rules for a given schema into an external config file.
       editor.dataProcessor.dataFilter.addRules {
         elements: {
@@ -155,12 +154,14 @@ define (require) ->
                 else
                   element.name = originalElementName
 
+            # Record element mappings for updating the CKE DOM
             if element.name isnt originalElementName
               element.attributes['data-xmlel'] = originalElementName
               addElementMapping originalElementName, element.name
             return null
           }
         }, 2
+
       editor.dataProcessor.htmlFilter.addRules {
         elements: {
           $: (element) ->
