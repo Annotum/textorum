@@ -136,9 +136,6 @@ define (require) ->
               when 'underline' then element.name = 'u'
               when 'sup', 'sub'
                 element.name = originalElementName
-              # Inline elements
-              when 'formats', 'named-content', 'ext-link', 'inline-graphic', 'inline-formula'
-                element.name = 'span'
               # List elements
               when 'list'
                 if element.attributes['list-type'] is 'order'

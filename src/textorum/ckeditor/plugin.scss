@@ -126,6 +126,14 @@ article-meta:before {
 
 // BODY CONTENT
 
+// inline elements
+
+formats, named-content, ext-link, inline-graphic, inline-formula {
+	display: inline;
+}
+
+// Other stuff
+
 cke-article:before,
 front:before,
 cke-body:before,
