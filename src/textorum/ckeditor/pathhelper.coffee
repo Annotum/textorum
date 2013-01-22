@@ -48,7 +48,6 @@ define (require) ->
   pathItemTpl = CKEDITOR.addTemplate("pathItem", "<a" + " id=\"{id}\"" + " href=\"{jsTitle}\"" + " tabindex=\"-1\"" + " class=\"cke_path_item\"" + " title=\"{label}\"" + ((if (CKEDITOR.env.gecko and CKEDITOR.env.version < 10900) then " onfocus=\"event.preventBubble();\"" else "")) + extra + " hidefocus=\"true\" " + " onkeydown=\"return CKEDITOR.tools.callFunction({keyDownFn},'{index}', event );\"" + " onclick=\"CKEDITOR.tools.callFunction({clickFn},'{index}', event); return false;\"" + " role=\"button\" aria-label=\"{label}\">" + "{text}" + "</a>")
   CKEDITOR.plugins.add "txtElementsPath",
     init: (editor) ->
-      console.log "here i am"
       # Elements path isn't available in inline mode.
       
       # Register the ui element to the focus manager.
@@ -63,6 +62,46 @@ define (require) ->
           range.select()
         else
           editor.getSelection().selectElement element
+
+      onClickHanlder = CKEDITOR.tools.addFunction(onClick)
+
+      onClickEditHandler = CKEDITOR.tools.addFunction((elementIndex, ev) ->
+        element = editor._.txtElementsPath.list[elementIndex]
+        if !element
+          return
+        editor.focus()
+        elementName = filterName(element, findName(element))
+        attributes = CKEDITOR.textorum.schema.defs[elementName]?.attr
+        if CKEDITOR.tools.isEmpty attributes
+          window.alert "whoops, no attributes for #{elementName}"
+          return
+        attNames = []
+        for own attName, v of attributes
+          attNames.push attName
+        attributeName = window.prompt "Enter an attribute name.  Attributes for #{elementName}: " + attNames.join(", ")
+        if not attributeName in attNames
+          window.alert "whoops, #{attributeName} not a valid attribute for #{elementName}"
+          return
+        attributeValue = window.prompt "Enter a value for #{attributeName}.  Previous value: " + element.getAttribute(attributeName)
+        if attributeValue isnt null
+          if attributeValue
+            element.setAttribute attributeName, attributeValue
+            window.alert "set #{elementName} #{attributeName} to #{attributeValue}"
+            return
+          else
+            element.removeAttribute attributeName
+            window.alert "removed #{elementName}'s #{attributeName}"
+            return
+        else
+          window.alert "no change to #{elementName}'s #{attributeName}"
+        return
+        if element.equals(editor.editable())
+          range = editor.createRange()
+          range.selectNodeContents element
+          range.select()
+        else
+          editor.getSelection().selectElement element
+      )
       # LEFT-ARROW
       # TAB
       # RIGHT-ARROW
@@ -93,7 +132,7 @@ define (require) ->
         element = editor.ui.space(spaceName)
         element and editor.focusManager.add(element, 1)
 
-      onClickHanlder = CKEDITOR.tools.addFunction(onClick)
+      
       onKeyDownHandler = CKEDITOR.tools.addFunction((elementIndex, ev) ->
         idBase = editor._.txtElementsPath.idBase
         element = undefined
@@ -123,7 +162,7 @@ define (require) ->
         realIndex = elementIndex.substr(elementIndex.indexOf('-') + 1)
         insertType = elementIndex.substr(0, elementIndex.indexOf('-'))
         element = editor._.txtElementsPath.list[realIndex]
-        console.log "addElementHandler", element, elementIndex, realIndex, insertType, ev
+        # console.log "addElementHandler", element, elementIndex, realIndex, insertType, ev
         if !element
           return
         editor.focus()
@@ -164,8 +203,8 @@ define (require) ->
               insertable.appendTo(element)
             else
               console.log "can't insert #{insertType}", elementIndex, ev
-          console.log range = new CKEDITOR.dom.range( editor.document )
-          console.log range.moveToPosition(insertable, CKEDITOR.POSITION_BEFORE_END)
+          range = new CKEDITOR.dom.range( editor.document )
+          range.moveToPosition(insertable, CKEDITOR.POSITION_BEFORE_END)
           insertable.scrollIntoView()
           editor.focus()
           range = editor.createRange()
@@ -214,7 +253,7 @@ define (require) ->
           name = findName(element)
           elementParent = element.getParent()
           parentName = filterName(elementParent, findName(elementParent))
-          console.log "parent", parentName
+          # console.log "parent", parentName
           ret = filterName(element, name)
           if ret is false
             ignore = 1
@@ -272,10 +311,10 @@ define (require) ->
               id: idBase + "close" + index
               label: label
               text: "/" + name
-              jsTitle: "javascript:void('" + name + "')"
+              jsTitle: "javascript:void('edit-" + name + "')"
               index: index
               keyDownFn: onKeyDownHandler
-              clickFn: onClickHanlder
+              clickFn: onClickEditHandler
             )
             html.push closeitem
 
