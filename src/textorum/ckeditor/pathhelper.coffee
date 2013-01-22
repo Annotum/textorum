@@ -132,8 +132,26 @@ define (require) ->
           range.selectNodeContents element
           range.select()
         else
+          switch insertType
+            when 'inside'
+              target = element
+            else
+              target = element.getParent()
+          targetName = filterName(target, findName(target))
+          contains = CKEDITOR.textorum.schema.defs[targetName]?.contains
+          if CKEDITOR.tools.isEmpty(contains)
+            window.alert "Whoops, #{targetName} can't actually contain anything"
+            return
+          targetContains = []
+          for contained, v of contains
+            targetContains.push contained
+          domElement = prompt("Enter an element name: " + targetContains.join(", "))
+          if not domElement in targetContains
+            window.alert "Whoops, #{domElement} not in " + targetContains.join(", ")
+            return
           editor.fire( 'saveSnapshot' )
-          insertable = new CKEDITOR.dom.element('div', editor.document)
+          insertable = new CKEDITOR.dom.element(domElement, editor.document)
+          insertable.setAttribute 'data-xmlel', domElement
           dummy = editor.document.createText( '\u00A0' );
           dummy.appendTo( insertable );
           switch insertType
@@ -145,8 +163,8 @@ define (require) ->
               insertable.appendTo(element)
             else
               console.log "can't insert #{insertType}", elementIndex, ev
-          range = new CKEDITOR.dom.range( editor.document )
-          range.moveToPosition(insertable, CKEDITOR.POSITION_AFTER_START)
+          console.log range = new CKEDITOR.dom.range( editor.document )
+          console.log range.moveToPosition(insertable, CKEDITOR.POSITION_BEFORE_END)
           editor.getSelection().selectRanges([range])
           insertable.scrollIntoView()
           editor.fire( 'saveSnapshot' )
