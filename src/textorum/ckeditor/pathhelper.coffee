@@ -150,8 +150,9 @@ define (require) ->
             window.alert "Whoops, #{domElement} not in " + targetContains.join(", ")
             return
           editor.fire( 'saveSnapshot' )
-          insertable = new CKEDITOR.dom.element(domElement, editor.document)
-          insertable.setAttribute 'data-xmlel', domElement
+
+          domHtml = editor.dataProcessor.toHtml '<' + domElement + ' data-xmlel="' + domElement + '"></' + domElement + '>'
+          insertable = CKEDITOR.dom.element.createFromHtml(domHtml, editor.document)
           dummy = editor.document.createText( '\u00A0' );
           dummy.appendTo( insertable );
           switch insertType
@@ -165,8 +166,11 @@ define (require) ->
               console.log "can't insert #{insertType}", elementIndex, ev
           console.log range = new CKEDITOR.dom.range( editor.document )
           console.log range.moveToPosition(insertable, CKEDITOR.POSITION_BEFORE_END)
-          editor.getSelection().selectRanges([range])
           insertable.scrollIntoView()
+          editor.focus()
+          range = editor.createRange()
+          range.selectNodeContents insertable
+          range.select()
           editor.fire( 'saveSnapshot' )
       )
 
