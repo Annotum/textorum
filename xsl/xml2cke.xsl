@@ -5,6 +5,9 @@
         <xsl:variable name="oldElement">
             <xsl:value-of select="local-name(.)"/>
         </xsl:variable>
+        <xsl:variable name="oldElementFull">
+            <xsl:value-of select="name(.)"/>
+        </xsl:variable>
         <xsl:variable name="newElement">
             <xsl:choose>
                 <xsl:when test="local-name(.) = 'journal-meta'">
@@ -18,6 +21,11 @@
         <xsl:element name="{$newElement}">
             <xsl:copy-of select="namespace::*"/>
             <xsl:copy-of select="@*"/>
+            <xsl:if test="$oldElementFull != $oldElement">
+                <xsl:attribute name="data-nsbk">
+                    <xsl:value-of select="$oldElementFull"></xsl:value-of>
+                </xsl:attribute>
+            </xsl:if>
             <xsl:if test="boolean(@class)">
                 <xsl:attribute name="data-clsbk">
                     <xsl:value-of select="@class"/>
