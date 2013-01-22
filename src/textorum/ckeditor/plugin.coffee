@@ -23,6 +23,7 @@ define (require) ->
   CKEDITOR = require('ckeditor')
   xslt = require('./xslt')
   pluginCss = require('text!./plugin.css')
+  pathHelper = require('./pathhelper')
 
   originalDTD = {}
 
@@ -53,9 +54,11 @@ define (require) ->
         entities_latin: false,
         entities_greek: false,
         entities: true,
+        magicline_putEverywhere: true,
         ignoreEmptyParagraph: true,
-        entities_additional: 'gt,lt,amp'
+        entities_additional: 'gt,lt,amp',
         }, true
+      updateDTD()
 
     onLoad = ->
       CKEDITOR.addCss(pluginCss)
@@ -70,6 +73,8 @@ define (require) ->
       CKEDITOR.tools.extend CKEDITOR.dtd[containingElement], elementContains
 
     updateDTD = ->
+      # Extend (for now - eventually replace?) the CKEDITOR dtd definition with
+      # new elements and new containment rules pulled from the schema in question.
       originalDTD = {}
       for own k, v of CKEDITOR.dtd
         originalDTD[k] = v
@@ -77,21 +82,18 @@ define (require) ->
       for element, details of schema.defs
         elementContains = {}
         for own containedElement, v of details.contains
-          if containedElement is 'body'
-            elementContains['cke-body'] = 1
           elementContains[containedElement] = 1
           containedBy[containedElement] ||= {}
           containedBy[containedElement][element] = 1
         if details.$
-          elementContains['#'] = 1
-        else
           elementContains['#'] = 1
         output = {}
         output[element] = elementContains
         CKEDITOR.tools.extend CKEDITOR.dtd, output
         CKEDITOR.tools.extend CKEDITOR.dtd[element], elementContains
         if details.$
-          CKEDITOR.tools.extend CKEDITOR.dtd['$editable'][element] = 1
+          CKEDITOR.dtd['$editable'][element] = 1
+          CKEDITOR.dtd['$block'][element] = 1
 
       schema.containedBy = containedBy
       CKEDITOR.dtd.$inline = {}
@@ -103,6 +105,11 @@ define (require) ->
       schema.elementMappings[originalElementName] ||= {}
       schema.elementMappings[originalElementName][newElementName] = 1
 
+      for own k, v of CKEDITOR.dtd
+        if k[0] isnt '$'
+          continue
+        if CKEDITOR.dtd[k][originalElementName]
+          CKEDITOR.dtd[k][newElementName] = 1
       updateDTDContainsMappings originalElementName
 
 
@@ -117,7 +124,6 @@ define (require) ->
                 CKEDITOR.dtd[mappedContainingElement] = CKEDITOR.dtd[containingElement]
 
     init = (editor) ->
-      updateDTD()
       # TODO: Move rules for a given schema into an external config file.
       editor.dataProcessor.dataFilter.addRules {
         elements: {
@@ -177,14 +183,16 @@ define (require) ->
       editor.on('doubleclick', dblClickHandler)
 
     afterInit = (editor) ->
-      editor._.elementsPath?.filters?.push (element, name) ->
+      editor._.txtElementsPath?.filters?.push (element, name) ->
         # Hide elementsPath breadcrumbs for non-schema elements
-        if name is 'body' or !element.getAttribute('data-xmlel')
+        if name is 'body'
+          return false
+        if !element.getAttribute('data-xmlel')
           return "[" + name + "]"
         element.getAttribute('data-xmlel') or null
 
     CKEDITOR.plugins.add 'textorum', {
-      requires: 'entities,ajax'
+      requires: 'entities,ajax,txtElementsPath'
       onLoad: onLoad
       beforeInit: beforeInit
       init: init

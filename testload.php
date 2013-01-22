@@ -49,7 +49,9 @@
   require( ["textorum/ckeditor/plugin", "textorum/ckeditor/testload"], function() {
     CKEDITOR.replace('editor1',
     {
-     extraPlugins: 'textorum,showblocks,fakeobjects,devtools'
+     extraPlugins: 'textorum,showblocks,fakeobjects,devtools',
+     removePlugins: 'elementspath'
+
     });
     CKEDITOR.on('instanceReady', function() { jQuery('#loaddata').click() });
 

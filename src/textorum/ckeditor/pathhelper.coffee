@@ -1,0 +1,277 @@
+# pathhelper.coffee - Display a list of elements with insertion buttons
+#
+# Copyright (C) 2012 Crowd Favorite, Ltd. All rights reserved.
+#
+# This file is part of Textorum.
+#
+# Textorum is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2 of the License, or (at your
+# option) any later version.
+#
+# Textorum is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
+
+
+define (require) ->
+  CKEDITOR = require('ckeditor')
+
+  commands = toolbarFocus:
+    editorFocus: false
+    readOnly: 1
+    exec: (editor) ->
+      idBase = editor._.txtElementsPath.idBase
+      element = CKEDITOR.document.getById(idBase + "0")
+      
+      # Make the first button focus accessible for IE. (#3417)
+      # Adobe AIR instead need while of delay.
+      element and element.focus(CKEDITOR.env.ie or CKEDITOR.env.air)
+
+  emptyHtml = "<span class=\"cke_path_empty\">&nbsp;</span>"
+  extra = ""
+  
+  # Some browsers don't cancel key events in the keydown but in the
+  # keypress.
+  # TODO: Check if really needed for Gecko+Mac.
+  extra += " onkeypress=\"return false;\""  if CKEDITOR.env.opera or (CKEDITOR.env.gecko and CKEDITOR.env.mac)
+  
+  # With Firefox, we need to force the button to redraw, otherwise it
+  # will remain in the focus state.
+  extra += " onblur=\"this.style.cssText = this.style.cssText;\""  if CKEDITOR.env.gecko
+  pathItemTpl = CKEDITOR.addTemplate("pathItem", "<a" + " id=\"{id}\"" + " href=\"{jsTitle}\"" + " tabindex=\"-1\"" + " class=\"cke_path_item\"" + " title=\"{label}\"" + ((if (CKEDITOR.env.gecko and CKEDITOR.env.version < 10900) then " onfocus=\"event.preventBubble();\"" else "")) + extra + " hidefocus=\"true\" " + " onkeydown=\"return CKEDITOR.tools.callFunction({keyDownFn},'{index}', event );\"" + " onclick=\"CKEDITOR.tools.callFunction({clickFn},'{index}', event); return false;\"" + " role=\"button\" aria-label=\"{label}\">" + "{text}" + "</a>")
+  CKEDITOR.plugins.add "txtElementsPath",
+    init: (editor) ->
+      console.log "here i am"
+      # Elements path isn't available in inline mode.
+      
+      # Register the ui element to the focus manager.
+      onClick = (elementIndex, ev) ->
+        element = editor._.txtElementsPath.list[elementIndex]
+        if !element
+          return
+        editor.focus()
+        if element.equals(editor.editable())
+          range = editor.createRange()
+          range.selectNodeContents element
+          range.select()
+        else
+          editor.getSelection().selectElement element
+      # LEFT-ARROW
+      # TAB
+      # RIGHT-ARROW
+      # SHIFT + TAB
+      # ESC
+      # ENTER	// Opera
+      # SPACE
+      empty = ->
+        spaceElement and spaceElement.setHtml(emptyHtml)
+        delete editor._.txtElementsPath.list
+      return  if editor.elementMode is CKEDITOR.ELEMENT_MODE_INLINE
+      spaceName = "txtpath"
+      spaceId = editor.ui.spaceId(spaceName)
+      spaceElement = undefined
+      getSpaceElement = ->
+        spaceElement = CKEDITOR.document.getById(spaceId)  unless spaceElement
+        spaceElement
+
+      idBase = "cke_txtElementsPath_" + CKEDITOR.tools.getNextNumber() + "_"
+      editor._.txtElementsPath =
+        idBase: idBase
+        filters: []
+
+      editor.on "uiSpace", (event) ->
+        event.data.html += "<span id=\"" + spaceId + "_label\" class=\"cke_voice_label\">" + "Textorum Elements Path" + "</span>" + "<div id=\"" + spaceId + "\" class=\"cke_path\" role=\"group\" aria-labelledby=\"" + spaceId + "_label\">" + emptyHtml + "</div>"  if event.data.space is "bottom"
+
+      editor.on "uiReady", ->
+        element = editor.ui.space(spaceName)
+        element and editor.focusManager.add(element, 1)
+
+      onClickHanlder = CKEDITOR.tools.addFunction(onClick)
+      onKeyDownHandler = CKEDITOR.tools.addFunction((elementIndex, ev) ->
+        idBase = editor._.txtElementsPath.idBase
+        element = undefined
+        ev = new CKEDITOR.dom.event(ev)
+        rtl = editor.lang.dir is "rtl"
+        switch ev.getKeystroke()
+          when (if rtl then 39 else 37), 9
+            element = CKEDITOR.document.getById(idBase + (elementIndex + 1))
+            element = CKEDITOR.document.getById(idBase + "0")  unless element
+            element.focus()
+            return false
+          when (if rtl then 37 else 39), CKEDITOR.SHIFT + 9
+            element = CKEDITOR.document.getById(idBase + (elementIndex - 1))
+            element = CKEDITOR.document.getById(idBase + (editor._.txtElementsPath.list.length - 1))  unless element
+            element.focus()
+            return false
+          when 27
+            editor.focus()
+            return false
+          when 13, 32
+            onClick elementIndex, ev
+            return false
+        true
+      )
+
+      addElementHandler = CKEDITOR.tools.addFunction((elementIndex, ev) ->
+        realIndex = elementIndex.substr(elementIndex.indexOf('-') + 1)
+        insertType = elementIndex.substr(0, elementIndex.indexOf('-'))
+        element = editor._.txtElementsPath.list[realIndex]
+        console.log "addElementHandler", element, elementIndex, realIndex, insertType, ev
+        if !element
+          return
+        editor.focus()
+        if element.equals(editor.editable())
+          range = editor.createRange()
+          range.selectNodeContents element
+          range.select()
+        else
+          editor.fire( 'saveSnapshot' )
+          insertable = new CKEDITOR.dom.element('div', editor.document)
+          dummy = editor.document.createText( '\u00A0' );
+          dummy.appendTo( insertable );
+          switch insertType
+            when 'before'
+              insertable.insertBefore(element)
+            when 'after'
+              insertable.insertAfter(element)
+            when 'inside'
+              insertable.appendTo(element)
+            else
+              console.log "can't insert #{insertType}", elementIndex, ev
+          range = new CKEDITOR.dom.range( editor.document )
+          range.moveToPosition(insertable, CKEDITOR.POSITION_AFTER_START)
+          editor.getSelection().selectRanges([range])
+          insertable.scrollIntoView()
+          editor.fire( 'saveSnapshot' )
+      )
+
+      genericHandler = CKEDITOR.tools.addFunction((elementIndex, ev) ->
+        realIndex = elementIndex.substr(elementIndex.indexOf('-') + 1)
+        console.log elementIndex, realIndex, ev
+        onClick realIndex, ev
+      )
+
+      editor.on "selectionChange", (ev) ->
+        env = CKEDITOR.env
+        editable = editor.editable()
+        selection = ev.data.selection
+        element = selection.getStartElement()
+        html = []
+        closehtml = []
+        elementsList = editor._.txtElementsPath.list = []
+        filters = editor._.txtElementsPath.filters
+        while element
+          ignore = 0
+          name = undefined
+          if element.data("cke-display-name")
+            name = element.data("cke-display-name")
+          else if element.data("cke-real-element-type")
+            name = element.data("cke-real-element-type")
+          else
+            name = element.getName()
+          i = 0
+
+          while i < filters.length
+            ret = filters[i](element, name)
+            if ret is false
+              ignore = 1
+              break
+            name = ret or name
+            i++
+          unless ignore
+            index = elementsList.push(element) - 1
+            label = "%1 element".replace(/%1/, name)
+            item = pathItemTpl.output(
+              id: idBase + index
+              label: label
+              text: name
+              jsTitle: "javascript:void('" + name + "')"
+              index: index
+              keyDownFn: onKeyDownHandler
+              clickFn: onClickHanlder
+            )
+            html.unshift item
+            beforeitem = pathItemTpl.output(
+              id: idBase + "before" + index
+              label: label
+              text: "+"
+              jsTitle: "javascript:void('before " + name + "')"
+              index: "before-" + index
+              keyDownFn: genericHandler
+              clickFn: addElementHandler
+            )
+            if not element.equals(editable)
+              html.unshift beforeitem
+
+            if index == 0
+              insideitem = pathItemTpl.output(
+                id: idBase + "inside" + index
+                label: label
+                text: "+"
+                jsTitle: "javascript:void('inside " + name + "')"
+                index: "inside-" + index
+                keyDownFn: genericHandler
+                clickFn: addElementHandler
+              )
+              html.push insideitem
+
+            closeitem = pathItemTpl.output(
+              id: idBase + "close" + index
+              label: label
+              text: "/" + name
+              jsTitle: "javascript:void('" + name + "')"
+              index: index
+              keyDownFn: onKeyDownHandler
+              clickFn: onClickHanlder
+            )
+            html.push closeitem
+
+            afteritem = pathItemTpl.output(
+              id: idBase + "after" + index
+              label: label
+              text: "+"
+              jsTitle: "javascript:void('after " + name + "')"
+              index: "after-" + index
+              keyDownFn: genericHandler
+              clickFn: addElementHandler
+            )
+            if not element.equals(editable)
+              html.push afteritem
+
+
+
+          if element.equals(editable)
+            html.shift()
+            html.pop()
+            break
+          element = element.getParent()
+          if !element
+            html.shift()
+            html.pop()
+
+        space = getSpaceElement()
+        space.setHtml html.join("") + emptyHtml
+        editor.fire "txtElementsPathUpdate",
+          space: space
+
+
+      editor.on "readOnly", empty
+      editor.on "contentDomUnload", empty
+      editor.addCommand "txtElementsPathFocus", commands.toolbarFocus
+      editor.setKeystroke CKEDITOR.ALT + 122, "txtElementsPathFocus" #F11
+
+###
+Fired when the contents of the txtElementsPath are changed.
+
+@event txtElementsPathUpdate
+@member CKEDITOR.editor
+@param data
+@param {Object} data.space The txtElementsPath container.
+###
