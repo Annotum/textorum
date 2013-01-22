@@ -158,8 +158,28 @@ define (require) ->
         onClick realIndex, ev
       )
 
+      filterName = (element, name) ->
+        filters = editor._.txtElementsPath.filters
+        for filter in filters
+          ret = filter(element, name)
+          if ret is false
+            return ret
+          name = ret or name
+        name
+
+      findName = (element) ->
+        name = undefined
+        if element.data("cke-display-name")
+          name = element.data("cke-display-name")
+        else if element.data("cke-real-element-type")
+          name = element.data("cke-real-element-type")
+        else
+          name = element.getName()
+        name
+
       editor.on "selectionChange", (ev) ->
         env = CKEDITOR.env
+        schema = CKEDITOR.textorum.schema.defs
         editable = editor.editable()
         selection = ev.data.selection
         element = selection.getStartElement()
@@ -169,22 +189,14 @@ define (require) ->
         filters = editor._.txtElementsPath.filters
         while element
           ignore = 0
-          name = undefined
-          if element.data("cke-display-name")
-            name = element.data("cke-display-name")
-          else if element.data("cke-real-element-type")
-            name = element.data("cke-real-element-type")
-          else
-            name = element.getName()
-          i = 0
-
-          while i < filters.length
-            ret = filters[i](element, name)
-            if ret is false
-              ignore = 1
-              break
-            name = ret or name
-            i++
+          name = findName(element)
+          elementParent = element.getParent()
+          parentName = filterName(elementParent, findName(elementParent))
+          console.log "parent", parentName
+          ret = filterName(element, name)
+          if ret is false
+            ignore = 1
+          name = ret or name
           unless ignore
             index = elementsList.push(element) - 1
             label = "%1 element".replace(/%1/, name)
@@ -198,29 +210,41 @@ define (require) ->
               clickFn: onClickHanlder
             )
             html.unshift item
-            beforeitem = pathItemTpl.output(
-              id: idBase + "before" + index
-              label: label
-              text: "+"
-              jsTitle: "javascript:void('before " + name + "')"
-              index: "before-" + index
-              keyDownFn: genericHandler
-              clickFn: addElementHandler
-            )
+
             if not element.equals(editable)
-              html.unshift beforeitem
+              if not CKEDITOR.tools.isEmpty(schema[parentName]?.contains)
+                parentContains = []
+                for contained, v of schema[parentName]?.contains
+                  parentContains.push contained
+
+                beforeitem = pathItemTpl.output(
+                  id: idBase + "before" + index
+                  label: parentName + " element - " + parentContains.join(", ")
+                  text: "+"
+                  jsTitle: "javascript:void('before " + name + "')"
+                  index: "before-" + index
+                  keyDownFn: genericHandler
+                  clickFn: addElementHandler
+                )
+                html.unshift beforeitem
 
             if index == 0
-              insideitem = pathItemTpl.output(
-                id: idBase + "inside" + index
-                label: label
-                text: "+"
-                jsTitle: "javascript:void('inside " + name + "')"
-                index: "inside-" + index
-                keyDownFn: genericHandler
-                clickFn: addElementHandler
-              )
-              html.push insideitem
+              if not CKEDITOR.tools.isEmpty(schema[name]?.contains)
+                contains = []
+                for contained, v of schema[name]?.contains
+                  contains.push contained
+
+
+                insideitem = pathItemTpl.output(
+                  id: idBase + "inside" + index
+                  label: label + " - " + contains.join(", ")
+                  text: "+"
+                  jsTitle: "javascript:void('inside " + name + "')"
+                  index: "inside-" + index
+                  keyDownFn: genericHandler
+                  clickFn: addElementHandler
+                )
+                html.push insideitem
 
             closeitem = pathItemTpl.output(
               id: idBase + "close" + index
@@ -233,28 +257,24 @@ define (require) ->
             )
             html.push closeitem
 
-            afteritem = pathItemTpl.output(
-              id: idBase + "after" + index
-              label: label
-              text: "+"
-              jsTitle: "javascript:void('after " + name + "')"
-              index: "after-" + index
-              keyDownFn: genericHandler
-              clickFn: addElementHandler
-            )
             if not element.equals(editable)
-              html.push afteritem
+              if not CKEDITOR.tools.isEmpty(schema[parentName]?.contains)
+                afteritem = pathItemTpl.output(
+                  id: idBase + "after" + index
+                  label: parentName + " element - " + parentContains.join(", ")
+                  text: "+"
+                  jsTitle: "javascript:void('after " + name + "')"
+                  index: "after-" + index
+                  keyDownFn: genericHandler
+                  clickFn: addElementHandler
+                )
+                html.push afteritem
 
 
 
           if element.equals(editable)
-            html.shift()
-            html.pop()
             break
-          element = element.getParent()
-          if !element
-            html.shift()
-            html.pop()
+          element = elementParent
 
         space = getSpaceElement()
         space.setHtml html.join("") + emptyHtml

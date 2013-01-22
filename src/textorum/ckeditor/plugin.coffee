@@ -96,6 +96,8 @@ define (require) ->
           CKEDITOR.dtd['$block'][element] = 1
 
       schema.containedBy = containedBy
+      CKEDITOR.textorum ||= {}
+      CKEDITOR.textorum.schema = schema
       CKEDITOR.dtd.$inline = {}
 
 
