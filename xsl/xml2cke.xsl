@@ -11,10 +11,10 @@
         <xsl:variable name="newElement">
             <xsl:choose>
                 <xsl:when test="local-name(.) = 'journal-meta'">
-                    <xsl:text>span</xsl:text>
+                    <xsl:text>div</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>span</xsl:text>
+                    <xsl:text>div</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>

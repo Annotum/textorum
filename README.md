@@ -28,10 +28,8 @@ _from the textorum dir:_
 npm install
 bundle install
 
-git clone --depth=1 https://github.com/ckeditor/ckeditor-dev.git
-
-cd ckeditor-dev; dev/builder/build.sh
-
+git clone --depth=1 https://github.com/tinymce/tinymce.git
+cd tinymce; ant
 cd ..
 
 npm run-script watch
