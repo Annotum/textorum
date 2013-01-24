@@ -135,6 +135,23 @@ define (require) ->
             result += child.nodeValue
       result
 
+    getXML: (url) ->
+      xslDoc = null
+      if window.tinymce?.util?.XHR?
+        tinymce.util.XHR.send {
+          url: url,
+          content_type: 'text/xml'
+          async: false,
+          success: (text, response) ->
+            xslDoc = response.responseXML
+        }
+        return xslDoc
+      xmlhttp = new XMLHttpRequest()
+      xmlhttp.open("GET", url, false)
+      xmlhttp.send('')
+      xslDoc = xmlhttp.responseXML
+
+
     parseXML: (data) ->
       if not data or typeof data isnt "string"
         return data
@@ -150,6 +167,9 @@ define (require) ->
         xml = undefined
       xml
 
+    parseJSON: (text) ->
+      (window.jQuery?.parseJSON || window.tinymce?.util?.JSON?.parse)(text)
+      
     hasDomError: (dom) ->
       errorNS = "http://www.mozilla.org/newlayout/xml/parsererror.xml"
       (!dom or
