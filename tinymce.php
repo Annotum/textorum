@@ -52,7 +52,9 @@
       height: '100%',
       keep_styles: false,
       theme_advanced_resizing: true,
-      theme_advanced_resize_horizontal: false
+      theme_advanced_resize_horizontal: false,
+      preformatted: true,
+      apply_source_formatting: false
     });
   });
   </script>
