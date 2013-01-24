@@ -17,15 +17,37 @@
     </xsl:template>
 
     <xsl:template match="rng:grammar">
-        <xsl:text>{ 
+        <xsl:text>{</xsl:text>
+        <xsl:apply-templates select="rng:start"/>
+        <xsl:text>
   "defs": 
     {</xsl:text>
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="rng:define"/>
         <xsl:text>
     } 
 } </xsl:text>
     </xsl:template>
-
+    <xsl:template match="rng:start">
+        <xsl:text>
+  "$root":
+    [</xsl:text>
+        <xsl:for-each select="descendant::rng:ref">
+            <xsl:variable name="refname">
+                <xsl:value-of select="@name"/>
+            </xsl:variable>
+            <xsl:text>
+      "</xsl:text>
+            <xsl:value-of select="/*//rng:define[@name=$refname]/rng:element/rng:name/text()"/>
+            <xsl:text>"</xsl:text>
+            <xsl:if test="position() != last()">
+                <xsl:text>,</xsl:text>
+            </xsl:if>
+        </xsl:for-each>
+        <xsl:text>
+    ],
+        </xsl:text>
+    </xsl:template>
+    
     <xsl:template match="rng:define">
         <xsl:for-each select="rng:element">
             <xsl:text>
@@ -45,7 +67,7 @@
                 <xsl:value-of select="/*//rng:define[@name=$refname]/rng:element/rng:name/text()"/>
                 <xsl:text>": </xsl:text>
                 <xsl:choose>
-                <xsl:when test="parent::rng:choice/rng:empty"><xsl:text>0</xsl:text></xsl:when>
+                    <xsl:when test="parent::rng:choice/rng:empty"><xsl:text>0</xsl:text></xsl:when>
                     <xsl:otherwise><xsl:text>1</xsl:text></xsl:otherwise>
                 </xsl:choose>
                 <xsl:if test="position() != last()">
