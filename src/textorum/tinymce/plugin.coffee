@@ -22,10 +22,12 @@
 define (require) ->
   pluginCss = require('text!./plugin.css')
   testload = require('./testload')
+  helper = require('../helper')
   #pathHelper = require('./pathhelper')
 
-  tinymce = window.tinymce
+  tinymce = require('tinymce')
 
+  window.textorum ||= {}
   originalDTD = {}
 
   schema = {
@@ -33,15 +35,24 @@ define (require) ->
     defs: {}
   }
 
-  jQuery.getJSON "test/rng/kipling-jp3.json", (data) ->
-    schema = data
-    schema.containedBy ||= {}
-    schema.defs ||= {}
-    for element, details of schema.defs
-      elementContains = {}
-      for own containedElement, v of details.contains
-        schema.containedBy[containedElement] ||= {}
-        schema.containedBy[containedElement][element] = 1
+
+  $ = window.jQuery
+
+  schemaprocessor = new XSLTProcessor()
+  schemaStylesheet = helper.getXML "xsl/rng2js.xsl"
+  schemaprocessor.importStylesheet(schemaStylesheet)
+  schema = helper.getXML "test/rng/kipling-jp3-xsl.srng"
+  xsltschema = schemaprocessor.transformToDocument(schema)
+  schema = ($.parseJSON || tinymce.util.JSON.parse)(xsltschema.documentElement.innerText)
+  schema.containedBy ||= {}
+  schema.defs ||= {}
+  schema.$root ||= []
+  for element, details of schema.defs
+    elementContains = {}
+    for own containedElement, v of details.contains
+      schema.containedBy[containedElement] ||= {}
+      schema.containedBy[containedElement][element] = 1
+  window.textorum.schema = schema
 
   tinymce.create 'tinymce.plugins.textorum.loader', {
     init: (editor, url) =>
@@ -53,11 +64,11 @@ define (require) ->
 
     getInfo : ->
       {
-        longname : 'Example plugin',
-        author : 'Some author',
-        authorurl : 'http://tinymce.moxiecode.com',
-        infourl : 'http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/example',
-        version : "1.0"
+        longname : 'Textorum',
+        author : 'NCBI / Crowd Favorite',
+        authorurl : 'https://github.com/Annotum/',
+        infourl : 'https://github.com/Annotum/textorum/',
+        version : "0.1"
       }
   }
   tinymce.PluginManager.add('textorum.loader', tinymce.plugins.textorum.loader)

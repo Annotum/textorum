@@ -24,57 +24,34 @@ define (require) ->
   helper = require('../helper')
   tinymce = require('tinymce')
 
-  $ = window.jQuery.noConflict()
+  $ = window.jQuery
 
   processor = new XSLTProcessor()
-  xmlhttp = new XMLHttpRequest()
-
-  xmlhttp.open("GET", "xsl/xml2cke.xsl", false)
-  xmlhttp.send('')
-
-  xslDoc = xmlhttp.responseXML
-  processor.importStylesheet(xslDoc)
+  forwardStylesheet = helper.getXML "xsl/xml2cke.xsl"
+  processor.importStylesheet(forwardStylesheet)
 
   revprocessor = new XSLTProcessor()
-
-  xmlhttp = new XMLHttpRequest()
-
-  xmlhttp.open("GET", "xsl/cke2xml.xsl", false)
-  xmlhttp.send('')
-
-  xslDoc = xmlhttp.responseXML
-  revprocessor.importStylesheet(xslDoc)
-
-  xslDoc = xmlhttp = undefined
-
-  loadFromURI = (uri) ->
-    xmlhttp = new XMLHttpRequest()
-    xmlhttp.open("GET", uri, false)
-    xmlhttp.send('')
-    loadFromText(xmlhttp.responseText)
+  revStylesheet = helper.getXML "xsl/cke2xml.xsl"
+  revprocessor.importStylesheet(revStylesheet)
 
   loadFromText = (text) ->
-    xmlDoc = (new DOMParser()).parseFromString(text, "text/xml")
-    if xmlDoc.getElementsByTagName('parsererror').length
+    xmlDoc = helper.parseXML text
+    if helper.hasDomError(xmlDoc)
       return (new XMLSerializer()).serializeToString(xmlDoc)
     newDoc = processor.transformToDocument(xmlDoc)
-    console.log newDoc
     (new XMLSerializer()).serializeToString(newDoc)
     
   saveFromText = (text) ->
-    xmlDoc = (new DOMParser()).parseFromString(text, "text/xml")
-    if xmlDoc.getElementsByTagName('parsererror').length
-      window.parserErrorText = text
+    xmlDoc = helper.parseXML text
+    if helper.hasDomError(xmlDoc)
       return (new XMLSerializer()).serializeToString(xmlDoc)
     revNewDoc = revprocessor.transformToDocument(xmlDoc)
     (new XMLSerializer()).serializeToString(revNewDoc)
 
   loadDataHandler = (event) ->
     uri = $('#datafile').val()
-    xmlhttp = new XMLHttpRequest()
-    xmlhttp.open("GET", uri, false)
-    xmlhttp.send('')
-    tinymce.EditorManager.get('editor1').setContent(xmlhttp.responseText)
+    data = helper.getXML uri
+    tinymce.EditorManager.get('editor1').setContent(data)
 
   saveDataHandler = (event) ->
     $('#mainform').submit()
