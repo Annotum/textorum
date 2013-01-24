@@ -99,6 +99,7 @@ define (require) ->
       CKEDITOR.textorum ||= {}
       CKEDITOR.textorum.schema = schema
       CKEDITOR.dtd.$inline = {}
+      delete CKEDITOR.dtd.$removeEmpty['span']
 
 
     addElementMapping = (originalElementName, newElementName) ->
