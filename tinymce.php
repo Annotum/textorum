@@ -11,9 +11,7 @@
 <body>
   <form id="mainform" action="post_test.php" method="post">
     <p>
-      <textarea id='editor1' name='editor1'>
-
-      </textarea>
+      <textarea id='editor1' name='editor1'></textarea>
     </p>
     <p>
       <!-- <input type="submit" value="Submit" /> -->
@@ -52,7 +50,9 @@
       content_css: 'lib/textorum/tinymce/plugin.css',
       width: '100%',
       height: '100%',
-      keep_styles: false
+      keep_styles: false,
+      theme_advanced_resizing: true,
+      theme_advanced_resize_horizontal: false
     });
   });
   </script>
