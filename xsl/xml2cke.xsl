@@ -13,6 +13,9 @@
                 <xsl:when test="local-name(.) = 'journal-meta'">
                     <xsl:text>div</xsl:text>
                 </xsl:when>
+                <xsl:when test="contains(',table,thead,tbody,td,tr,th,', concat(',',local-name(.),','))">
+                    <xsl:value-of select="local-name(.)"/>
+                </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>div</xsl:text>
                 </xsl:otherwise>
