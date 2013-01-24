@@ -37,8 +37,12 @@ define (require) ->
     schema = data
     schema.containedBy ||= {}
     schema.defs ||= {}
+    for element, details of schema.defs
+      elementContains = {}
+      for own containedElement, v of details.contains
+        schema.containedBy[containedElement] ||= {}
+        schema.containedBy[containedElement][element] = 1
 
-  console.log "let's go"
   tinymce.create 'tinymce.plugins.textorum.loader', {
     init: (editor, url) =>
       console.log "editor", editor
