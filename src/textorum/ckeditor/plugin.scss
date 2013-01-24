@@ -11,11 +11,11 @@ div[data-xmlel] {
 }
 
 div[data-xmlel]:before {
-	display: inline;
-	content: "[" attr(data-xmlel) "] ";
-	font-size: 75%;
 	background-color: $defaultback;
 	color: $defaultfront;
+	content: "[" attr(data-xmlel) "] ";
+	font-size: 75%;
+	font-weight: bold;
 	margin-right: 4px;
 	padding: 2px;
 }
@@ -124,6 +124,67 @@ article-meta:before {
 		font-size: 100%;
 	}
 
+	div[data-xmlel="article-categories"]:before {
+		content: "Article Categories";
+	}
+
+	div[data-xmlel="title-group"]:before {
+		content: "Title Group";
+	}
+
+	div[data-xmlel="contrib-group"]:before {
+		content: "Contributors";
+	}
+
+		div[data-xmlel="subj-group"]:before,
+		div[data-xmlel="subject"]:before,
+		div[data-xmlel="article-title"]:before,
+		div[data-xmlel="contrib"]:before {
+			background: none;
+			color: #333;
+			content: "Subject Group:";
+			font-size: 100%;
+			font-weight: bold;
+		}
+
+		div[data-xmlel="subject"]:before {
+			content: "Subject:";
+		}
+
+		div[data-xmlel="article-title"]:before {
+			content: "Article Title:";
+		}
+
+		div[data-xmlel="contrib"]:before {
+			content: "Contributor:";
+		}
+
+			div[data-xmlel="name"]:before {
+				display: none;
+			}
+
+			div[data-xmlel="surname"],
+			div[data-xmlel="given-names"] {
+				display: inline;
+			}
+
+			div[data-xmlel="surname"]:before,
+			div[data-xmlel="given-names"]:before {
+				background: none;
+				color: #333;
+				content: "Last Name:";
+				font-size: 100%;
+				font-weight: bold;
+			}
+
+			div[data-xmlel="given-names"]:before {
+				content: "First Name:";
+			}
+
+
+
+
+
 // BODY CONTENT
 
 // inline elements
@@ -168,6 +229,12 @@ cke-p {
 
 sec {
 	margin-bottom: 20px;
+}
+
+// Tables
+th {
+	background: $dark;
+	color: $light;
 }
 
 // Footer References
