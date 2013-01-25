@@ -4,15 +4,22 @@
   <meta charset="UTF-8">
   <title></title>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script src="/jstree/jquery.jstree.js"></script>
   <!-- <script src="/sarissa-full-0.9.9.6/gr/abiss/js/sarissa/sarissa.js"></script> -->
   <script src="/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
   <script src="vendor/require.js"></script>
 </head>
 <body>
   <form id="mainform" action="post_test.php" method="post">
-    <p>
-      <textarea id='editor1' name='editor1'></textarea>
-    </p>
+    <div style="width: 100%;">
+      <div style="float: left; border: 1px solid red; max-height: 400px; overflow: auto; width: 29%;" id="editortree">
+        &nbsp;foobar
+      </div>
+      <div style="float: right; width: 69%; border: 1px solid blue;">
+        <textarea style="width: 100%;" id='editor1' name='editor1'></textarea>
+      </div>
+      <div style="clear: both;"></div>
+    </div>
     <p>
       <!-- <input type="submit" value="Submit" /> -->
     </p>
@@ -44,12 +51,12 @@
   require( ["textorum/tinymce/plugin"], function() {
     tinymce.init({
       mode: 'exact',
+      theme: 'advanced',
       elements: 'editor1',
       plugins: '-textorum.loader,inlinepopups',
       entity_encoding: 'raw',
       content_css: 'lib/textorum/tinymce/plugin.css',
-      width: '100%',
-      height: '100%',
+
       keep_styles: false,
       theme_advanced_resizing: true,
       theme_advanced_resize_horizontal: false,

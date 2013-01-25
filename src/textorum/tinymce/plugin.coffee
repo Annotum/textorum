@@ -23,6 +23,7 @@ define (require) ->
   pluginCss = require('text!./plugin.css')
   testload = require('./testload')
   helper = require('../helper')
+  tree = require('./tree')
   #pathHelper = require('./pathhelper')
 
   tinymce = require('tinymce')
@@ -58,9 +59,11 @@ define (require) ->
     init: (editor, url) =>
       console.log "editor", editor
       console.log "url", url
-
+      tree.create '#editortree', editor
       testload.bindHandler editor
-
+      editor.onSetContent.add (ed, o) ->
+        tree.update '#editortree', ed
+      editor.onNodeChange.add tree.navigate
 
     getInfo : ->
       {
