@@ -121,6 +121,8 @@ define (require) ->
           nodeEl = node[0]
           editor.getWin().scrollTo(0, editor.dom.getPos(nodeEl).y);
           editor.selection.select(nodeEl)
+          editor.nodeChanged()
+
           editor.focus()
           
       )
@@ -140,6 +142,7 @@ define (require) ->
       treeInstance.open_node(firstNode)
       treeInstance.select_node(firstNode)
     ignoreNavigation = false
+    return null
 
 
 
