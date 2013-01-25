@@ -34,7 +34,7 @@ div[data-xmlel="journal-meta"] {
 	border: 1px solid $defaultback;
 }
 div[data-xmlel="journal-meta"]:before {
-	content: "Journal Meta:";
+	content: "Journal Meta";
 	display: block;
 	margin: 5px 0;
 	padding: 2px 5px;
@@ -51,20 +51,25 @@ div[data-xmlel="journal-id"]:before {
 	color: inherit;
 	content: "JID: ";
 }
-div[data-xmlel="journal-title"] {
-	display: inline;
-	font-size: 110%;
-	font-weight: bold;
-	border: 1px dotted $highlight;
-}
+
 div[data-xmlel="journal-title-group"]:before, div[data-xmlel="journal-title"]:before {
 	content: "";
 	background-color: inherit;
 	margin-right: 0px;
 }
-div[data-xmlel="journal-title"]:before {
-	padding: inherit;
+
+div[data-xmlel="journal-title"] {
+	font-size: 100%;
+	font-weight: bold;
+	border: 1px dotted $highlight;
 }
+div[data-xmlel="journal-title"]:before {
+	color: #333;
+	content: "Journal Title:";
+	font-size: 100%;
+	font-weight: bold;
+}
+
 div[data-xmlel="issn"] {
 	border: 1px dotted $highlight;
 	// using important to override inline style
@@ -107,7 +112,7 @@ div[data-xmlel="article-meta"] {
 }
 div[data-xmlel="article-meta"]:before {
 	display: block;
-	content: "Article Meta:";
+	content: "Article Meta";
 	padding: 2px 5px;
 }
 
@@ -115,6 +120,7 @@ div[data-xmlel="article-meta"]:before {
 		// using !important to override inline style
 		display: inline-block !important;
 		font-size: 75%;
+		border: 1px dotted $highlight;
 	}
 
 	div[data-xmlel="article-id"]:before {
@@ -136,10 +142,14 @@ div[data-xmlel="article-meta"]:before {
 		content: "Contributors";
 	}
 
+		div[data-xmlel="subject"],
+		div[data-xmlel="article-title"] {
+			border: 1px dotted $highlight;
+		}
+
 		div[data-xmlel="subj-group"]:before,
 		div[data-xmlel="subject"]:before,
-		div[data-xmlel="article-title"]:before,
-		div[data-xmlel="contrib"]:before {
+		div[data-xmlel="article-title"]:before {
 			background: none;
 			color: #333;
 			content: "Subject Group:";
@@ -156,7 +166,7 @@ div[data-xmlel="article-meta"]:before {
 		}
 
 		div[data-xmlel="contrib"]:before {
-			content: "Contributor:";
+			content: "";
 		}
 
 			div[data-xmlel="name"]:before {
@@ -169,7 +179,8 @@ div[data-xmlel="article-meta"]:before {
 			}
 
 			div[data-xmlel="surname"]:before,
-			div[data-xmlel="given-names"]:before {
+			div[data-xmlel="given-names"]:before,
+			div[data-xmlel="author-comment"]:before {
 				background: none;
 				color: #333;
 				content: "Last Name:";
@@ -179,6 +190,16 @@ div[data-xmlel="article-meta"]:before {
 
 			div[data-xmlel="given-names"]:before {
 				content: "First Name:";
+			}
+
+			div[data-xmlel="author-comment"]:before {
+				content: "Author Comment:";
+				display: inline;
+			}
+
+			div[data-xmlel="author-comment"] .p {
+				display: inline;
+				padding: 0;
 			}
 
 
