@@ -87,17 +87,118 @@ define (require) ->
       title = node.getAttribute('data-xmlel') || ("[" + node.localName + "]")
       holder[0]['children'] ||= []
       holder[0]['state'] ||= 'closed'
-      holder[0]['children'].push {
-        'data': title,
-        'attr': {
-          name: id,
+      holder[0]['children'].push
+        'data': title
+        'attr':
+          name: id
           class: node.getAttribute('class')
-        }
-      }
+          'data-xmlel': node.getAttribute('data-xmlel')
+        
       if (depth) <= holder.length - 1
         holder.unshift holder[0]['children'][holder[0]['children'].length - 1]
       true
 
+  _contextMenuItemsGenerator = (editor) ->
+    _getSubmenu = (keys) ->
+      inserts = {}
+      inserted = false
+      for key of keys
+        inserted = true
+        inserts[key] =
+          label: key
+          icon: "img/tag.png"
+          action: (obj) ->
+            actionType = obj.parents("li.submenu").children("a").attr("rel")
+            key = obj.text()
+            pos =
+              x: parseInt($("#tree_popup").css("left"))
+              y: parseInt($("#tree_popup").css("top"))
+
+            if actionType is "change"
+              id = $("#tree a.ui-state-active").closest("li").attr("name")
+              editor.execCommand "changeTag",
+                key: key
+                pos: pos
+                id: id
+
+            else
+              editor.currentBookmark = editor.selection.getBookmark(1)
+              editor.execCommand "addSchemaTag",
+                key: key
+                pos: pos
+                action: actionType
+
+      unless inserted
+        inserts["no_tags"] =
+          label: "No tags available."
+          icon: "img/cross.png"
+          action: (obj) ->
+      inserts
+
+
+    contextMenuItems = (node) ->
+      schema = editor.plugins.textorum.schema
+      if not node.attr('data-xmlel') 
+        return {}
+      editorNode = editor.dom.select("##{node.attr('name')}")
+      validNodes = schema.defs?[node.attr('data-xmlel')]?.contains
+      siblingNodes = (
+        parent = node.parents('li:first')
+        if parent
+          if parent.attr('data-xmlel')
+            schema.defs?[parent.attr('data-xmlel')]?.contains
+          else
+            # schema.$root
+            {}
+        else
+          {}
+      )
+      submenu = _getSubmenu(validNodes)
+      siblingSubmenu = _getSubmenu(siblingNodes)
+      items =
+        before:
+          label: "Insert Tag Before"
+          icon: "img/tag_add.png"
+          _class: "submenu"
+          submenu: siblingSubmenu
+
+        after:
+          label: "Insert Tag After"
+          icon: "img/tag_add.png"
+          _class: "submenu"
+          submenu: siblingSubmenu
+
+        inside:
+          label: "Insert Tag Inside"
+          icon: "img/tag_add.png"
+          _class: "submenu"
+          separator_after: true
+          submenu: submenu
+
+        change:
+          label: "Change Tag"
+          icon: "img/tag_edit.png"
+          _class: "submenu"
+          submenu: siblingSubmenu
+
+        edit:
+          label: "Edit Tag"
+          icon: "img/tag_edit.png"
+          action: (obj) ->
+
+
+        delete:
+          label: "Remove Tag Only"
+          icon: "img/tag_delete.png"
+          action: (obj) ->
+
+
+      if not parent.attr('data-xmlel')
+        delete items["delete"]
+        delete items["before"]
+        delete items["after"]
+        delete items["around"]
+      items
 
   updateTree = (selector, editor) ->
     body = editor.dom.getRoot()
@@ -109,25 +210,24 @@ define (require) ->
       state: 'open',
       children: []
     }
-    window.topcontainer = top
     holder = []
     holder.unshift top
-    window.bodything = body
 
     helper.depthFirstWalk body, _depthWalkCallbackGenerator(holder)
 
-    $(selector).jstree({
-      json_data: {
-        data: [window.topcontainer]
-      },
-      ui: {
+    $(selector).jstree(
+      json_data:
+        data: [top]
+      ui: 
         select_limit: 1
-      }
-      core: {
+      core:
         animation: 0
-      },
+      contextmenu:
+        select_node: true
+        show_at_node: true
+        items: _contextMenuItemsGenerator(editor)
       plugins: ['json_data', 'ui', 'themes', 'contextmenu']
-      }).on('select_node.jstree', _selectNodeHandlerGenerator(editor))
+      ).on('select_node.jstree', _selectNodeHandlerGenerator(editor))
     
   navigateTree = (editor, controlmanager, node) ->
     ignoreNavigation = true
