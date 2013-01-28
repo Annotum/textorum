@@ -1,4 +1,4 @@
-# plugin.coffee - Textorum CKEditor plugin, main body
+# plugin.coffee - Textorum TinyMCE plugin, main body
 #
 # Copyright (C) 2012 Crowd Favorite, Ltd. All rights reserved.
 #
