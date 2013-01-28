@@ -266,6 +266,7 @@ div[data-xmlel="p"]:before,
 div[data-xmlel="title"]:before {
 	content:'';
 	padding: 0;
+	margin-right: 0;
 }
 
 div[data-xmlel="title"] {
@@ -285,6 +286,54 @@ div[data-xmlel="sec"] {
 th {
 	background: $dark;
 	color: $light;
+}
+
+// Styles
+
+div[data-xmlel="bold"]:before, 
+div[data-xmlel="italic"]:before {
+	content: "";
+	background-color: inherit;
+	margin-right: 0px;
+	padding: 0px;
+}
+
+div[data-xmlel="bold"] {
+	display: inline;
+	font-weight: bold;
+}
+div[data-xmlel="italic"] {
+	display: inline;
+	font-style: italic;
+}
+
+// Lists
+div[data-xmlel="list"] {
+    display: block;
+    list-style-position: inside;
+    counter-reset: item;
+}
+div[data-xmlel="list"]:before, div[data-xmlel="list-item"]:before {
+	content: "";
+	background-color: inherit;
+	margin-right: 0px;
+	padding: 0px;
+}
+
+div[data-xmlel="list"] div[data-xmlel="list-item"] {
+    display: list-item;
+    list-style-type: disc;
+    counter-increment: item;
+}
+
+div[data-xmlel="list"][list-type="order"] div[data-xmlel="list-item"]:before {
+	color: inherit;
+	background-color: inherit;
+	display: inline;
+    content: counter(item, decimal)". ";
+}
+div[data-xmlel="list"][list-type="order"] div[data-xmlel="list-item"] {
+	list-style-type: none;
 }
 
 // Footer References
