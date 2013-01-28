@@ -48,10 +48,28 @@ define (require) ->
     revNewDoc = revprocessor.transformToDocument(xmlDoc)
     (new XMLSerializer()).serializeToString(revNewDoc)
 
-  loadDataHandler = (event) ->
+  loadDataHandler = ->
     uri = $('#datafile').val()
     data = helper.getXML uri
-    tinymce.EditorManager.get('editor1').setContent(data)
+    if data
+      tinymce.EditorManager.get('editor1').setContent(data)
+
+  clickLoadDataHandler = (event) ->
+    uri = $('#datafile').val()
+    browseruri = window.location + ""
+    browseruri = browseruri.replace(/\?.*$/, "")
+    browseruri = browseruri + "?s=" + encodeURIComponent(uri)
+    if history?.pushState
+      history.pushState {
+        uri: uri
+      }, "uri #{uri}", browseruri
+    loadDataHandler()
+
+  popStateHandler = (event) ->
+    console.log event
+    if event.originalEvent?.state?.uri
+      $('#datafile').val(event.originalEvent.state.uri)
+      loadDataHandler()
 
   saveDataHandler = (event) ->
     $('#mainform').submit()
@@ -79,9 +97,8 @@ define (require) ->
       if (o.get)
         o.content = saveFromText(o.content)
 
-  
-  
-  $('#loaddata').on('click', loadDataHandler)
+  $(window).on('popstate', popStateHandler)
+  $('#loaddata').on('click', clickLoadDataHandler)
   $('#savedata').on('click', saveDataHandler)
   $('.filenames').on 'click', 'li', (e) ->
     $('#datafile').val($(e.target).text())
