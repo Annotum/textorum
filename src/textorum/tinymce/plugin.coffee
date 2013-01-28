@@ -39,11 +39,13 @@ define (require) ->
 
   $ = window.jQuery
 
-  _getSchema = ->
+  _getSchema = (schemaUri) ->
+    if not schemaUri
+      return ""
     schemaprocessor = new XSLTProcessor()
     schemaStylesheet = helper.getXML "xsl/rng2js.xsl"
     schemaprocessor.importStylesheet(schemaStylesheet)
-    xmlschema = helper.getXML "test/rng/kipling-jp3-xsl.srng"
+    xmlschema = helper.getXML(schemaUri)
     xsltschema = schemaprocessor.transformToDocument(xmlschema)
     schemadoc = xsltschema.documentElement
     schematext = (schemadoc.text || schemadoc.textContent || schemadoc.innerHTML)
@@ -57,9 +59,7 @@ define (require) ->
       for own containedElement, v of details.contains
         schema.containedBy[containedElement] ||= {}
         schema.containedBy[containedElement][element] = 1
-    window.textorum.schema = schema
-
-  _getSchema()
+    schema
 
   _treeAttributeFilter = (nodes, name) ->
     i = nodes.length;
@@ -69,7 +69,8 @@ define (require) ->
         nodes[i].attr(name, null)
 
   tinymce.create 'tinymce.plugins.textorum.loader', {
-    init: (editor, url) =>
+    init: (editor, url) ->
+      @schema = _getSchema("test/rng/kipling-jp3-xsl.srng")
       console.log "editor", editor
       console.log "url", url
       tree.create '#editortree', editor
@@ -94,4 +95,4 @@ define (require) ->
         version : "0.1"
       }
   }
-  tinymce.PluginManager.add('textorum.loader', tinymce.plugins.textorum.loader)
+  tinymce.PluginManager.add('textorum', tinymce.plugins.textorum.loader)

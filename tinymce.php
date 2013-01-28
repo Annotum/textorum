@@ -53,7 +53,7 @@
       mode: 'exact',
       theme: 'advanced',
       elements: 'editor1',
-      plugins: '-textorum.loader,inlinepopups',
+      plugins: '-textorum,inlinepopups',
       entity_encoding: 'raw',
       content_css: 'lib/textorum/tinymce/plugin.css',
 
