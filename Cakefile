@@ -65,6 +65,24 @@ task 'dist', 'Compiles and minifies JavaScript file for production use', ->
     console.log "CoffeeScript Compiled".green
     invoke 'size'
 
+task 'build', 'Compiles JavaScript and CSS files', ->
+  console.log "Compiling CoffeeScript".yellow
+  exec "coffee --compile --output #{paths.testLibDir} #{paths.testDir}"
+  exec "coffee --compile --output #{paths.libDir} #{paths.srcDir}", (e, o, se) ->
+    if e
+      console.error "Error encountered while compiling CoffeeScript".red
+      console.error se
+      process.exit 1
+    console.log "CoffeeScript Compiled".green
+  console.log "Compiling SCSS".yellow
+  exec "sass --update #{paths.srcDir}:#{paths.libDir}", (e, o, se) ->
+    if e
+      console.error "Error encountered while compiling SCSS".red
+      console.error se
+      process.exit 1
+    console.log "SCSS Compiled".green
+
+
 task 'watch', 'Automatically recompile CoffeeScript files to JavaScript, SASS to CSS', ->
   console.log "Watching coffee and sass files for changes, press Control-C to quit".yellow
   srcWatcher  = exec "coffee --compile --watch --output #{paths.libDir} #{paths.srcDir}"
