@@ -309,6 +309,7 @@ div[data-xmlel="italic"] {
 
 // Lists
 div[data-xmlel="list"] {
+	padding-left: 10px;
     display: block;
     list-style-position: inside;
     counter-reset: item;
