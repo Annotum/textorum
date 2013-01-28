@@ -62,6 +62,7 @@
       theme_advanced_resize_horizontal: false,
       preformatted: true,
       apply_source_formatting: false,
+      valid_elements: "*[*]",
       setup: function(ed) {
         ed.onInit.add(function(ed) {
           if ($('#datafile').val()) {
