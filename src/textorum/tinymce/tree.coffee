@@ -52,27 +52,28 @@ define (require) ->
       plugins: ['json_data', 'ui', 'themeroller', 'contextmenu']
       })
 
-  updateTree = (selector, editor) ->
-    body = editor.dom.getRoot()
-    $(selector).jstree('delete_node', '#root');
-    root = $(selector).jstree('create_node', $(selector), 'first', {
-      data: 'Tags',
-      attr: {id: 'root'},
-      state: 'open'
-    });
-    treeInstance = $(selector).jstree('get_instance')
+  _selectNodeHandlerGenerator = (editor) ->
+    selectNodeHandler = (event, data) ->
+      if ignoreNavigation
+        return
+      console.log "select_node", event, data
+      node = data.rslt.obj;
+      id = node.attr('name');
+      if (id)
+        console.log "clicked", id
 
-    top = {
-      data: 'root',
-      state: 'open',
-      children: []
-    }
-    window.topcontainer = top
-    holder = []
-    holder.unshift top
-    window.bodything = body
-    tally = 0
-    helper.depthFirstWalk body, (depth) ->
+        node = editor.dom.select('#'+id);
+        #node.append('<span class="empty_tag_remove_me"></span>');
+
+        nodeEl = node[0]
+        editor.getWin().scrollTo(0, editor.dom.getPos(nodeEl).y);
+        editor.selection.select(nodeEl)
+        editor.nodeChanged()
+
+        editor.focus()
+
+  _depthWalkCallbackGenerator = (holder) ->
+    depthWalkCallback = (depth) ->
       node = this
       if not node.getAttribute?
         return false
@@ -92,9 +93,33 @@ define (require) ->
           class: node.getAttribute('class')
         }
       }
-      tally += 1
       if (depth) <= holder.length - 1
         holder.unshift holder[0]['children'][holder[0]['children'].length - 1]
+      true
+
+
+  updateTree = (selector, editor) ->
+    body = editor.dom.getRoot()
+    $(selector).jstree('delete_node', '#root');
+    root = $(selector).jstree('create_node', $(selector), 'first', {
+      data: 'Tags',
+      attr: {id: 'root'},
+      state: 'open'
+    });
+    treeInstance = $(selector).jstree('get_instance')
+
+    top = {
+      data: 'root',
+      state: 'open',
+      children: []
+    }
+    window.topcontainer = top
+    holder = []
+    holder.unshift top
+    window.bodything = body
+
+    helper.depthFirstWalk body, _depthWalkCallbackGenerator(holder)
+
     $(selector).jstree({
       json_data: {
         data: [window.topcontainer]
@@ -106,30 +131,7 @@ define (require) ->
         animation: 0
       },
       plugins: ['json_data', 'ui', 'themes']
-      }).on('select_node.jstree', (event, data) ->
-        if ignoreNavigation
-          return
-        console.log "select_node", event, data
-        node = data.rslt.obj;
-        id = node.attr('name');
-        if (id)
-          console.log "clicked", id
-
-          node = editor.dom.select('#'+id);
-          #node.append('<span class="empty_tag_remove_me"></span>');
-          
-          nodeEl = node[0]
-          editor.getWin().scrollTo(0, editor.dom.getPos(nodeEl).y);
-          editor.selection.select(nodeEl)
-          editor.nodeChanged()
-
-          editor.focus()
-          
-      )
-
-
-
-
+      }).on('select_node.jstree', _selectNodeHandlerGenerator(editor))
     
   navigateTree = (editor, controlmanager, node) ->
     ignoreNavigation = true
@@ -144,8 +146,7 @@ define (require) ->
     ignoreNavigation = false
     return null
 
-
-
+  # Module return
   {
     create: createTree
     update: updateTree
