@@ -34,17 +34,25 @@ define (require) ->
   revStylesheet = helper.getXML "xsl/cke2xml.xsl"
   revprocessor.importStylesheet(revStylesheet)
 
+  serializeError = (xmlDoc) ->
+    try
+      return (new XMLSerializer()).serializeToString(xmlDoc)
+    catch e
+      if e.name is "NS_ERROR_XPC_BAD_CONVERT_JS"
+        return ""
+      throw e
+
   loadFromText = (text) ->
     xmlDoc = helper.parseXML text
     if helper.hasDomError(xmlDoc)
-      return (new XMLSerializer()).serializeToString(xmlDoc)
+      return serializeError(xmlDoc)
     newDoc = processor.transformToDocument(xmlDoc)
     (new XMLSerializer()).serializeToString(newDoc)
     
   saveFromText = (text) ->
     xmlDoc = helper.parseXML text
     if helper.hasDomError(xmlDoc)
-      return (new XMLSerializer()).serializeToString(xmlDoc)
+      return serializeError(xmlDoc)
     revNewDoc = revprocessor.transformToDocument(xmlDoc)
     (new XMLSerializer()).serializeToString(revNewDoc)
 
