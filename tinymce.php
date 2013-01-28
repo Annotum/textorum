@@ -13,7 +13,7 @@
   <form id="mainform" action="post_test.php" method="post">
     <div style="width: 100%;">
       <div style="float: left; border: 1px solid red; max-height: 400px; overflow: auto; width: 29%;" id="editortree">
-        &nbsp;foobar
+        &nbsp;
       </div>
       <div style="float: right; width: 69%; border: 1px solid blue;">
         <textarea style="width: 100%;" id='editor1' name='editor1'></textarea>

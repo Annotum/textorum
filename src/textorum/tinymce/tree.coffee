@@ -45,7 +45,7 @@ define (require) ->
       },
       json_data: {
         data: {
-          data: 'Tags',
+          data: 'Document',
           attr: {id: 'root'},
           state: 'open'
         }
@@ -101,16 +101,11 @@ define (require) ->
 
   updateTree = (selector, editor) ->
     body = editor.dom.getRoot()
-    $(selector).jstree('delete_node', '#root');
-    root = $(selector).jstree('create_node', $(selector), 'first', {
-      data: 'Tags',
-      attr: {id: 'root'},
-      state: 'open'
-    });
+
     treeInstance = $(selector).jstree('get_instance')
 
     top = {
-      data: 'root',
+      data: 'Document',
       state: 'open',
       children: []
     }
@@ -131,7 +126,7 @@ define (require) ->
       core: {
         animation: 0
       },
-      plugins: ['json_data', 'ui', 'themes']
+      plugins: ['json_data', 'ui', 'themes', 'contextmenu']
       }).on('select_node.jstree', _selectNodeHandlerGenerator(editor))
     
   navigateTree = (editor, controlmanager, node) ->
