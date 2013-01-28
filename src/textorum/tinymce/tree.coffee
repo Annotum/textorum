@@ -1,4 +1,4 @@
-# tree.coffee - Textorum CKEditor plugin, element tree
+# tree.coffee - Textorum TinyMCE plugin, element tree
 #
 # Copyright (C) 2012 Crowd Favorite, Ltd. All rights reserved.
 #
@@ -28,6 +28,7 @@ define (require) ->
   window.textorum.w ||= {}
   w = window.textorum.w
 
+  treeIDPrefix = 'tmp_tree_'
   ignoreNavigation = false
   w.structs = {}
   w.deletedStructs = {}
@@ -79,7 +80,7 @@ define (require) ->
         return false
       id = node.getAttribute('id')
       if not id
-        node.setAttribute('id', tinymce.DOM.uniqueId('t_'))
+        node.setAttribute('id', tinymce.DOM.uniqueId(treeIDPrefix))
         id = node.getAttribute('id')
       while depth < (holder.length - 1)
         holder.shift()
@@ -151,6 +152,7 @@ define (require) ->
     create: createTree
     update: updateTree
     navigate: navigateTree
+    id_prefix: treeIDPrefix
   }
     
 

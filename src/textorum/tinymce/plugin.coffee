@@ -60,7 +60,14 @@ define (require) ->
     window.textorum.schema = schema
 
   _getSchema()
-  
+
+  _treeAttributeFilter = (nodes, name) ->
+    i = nodes.length;
+    snip = tree.id_prefix.length
+    while (i--)
+      if nodes[i].attr('id').substr(0, snip) is tree.id_prefix
+        nodes[i].attr(name, null)
+
   tinymce.create 'tinymce.plugins.textorum.loader', {
     init: (editor, url) =>
       console.log "editor", editor
@@ -70,7 +77,9 @@ define (require) ->
       editor.onSetContent.add (ed, o) ->
         tree.update '#editortree', ed
       editor.onNodeChange.add tree.navigate
-
+      editor.onInit.add (editor) ->
+        editor.serializer.addAttributeFilter 'id', _treeAttributeFilter
+        
       if editor.theme.onResolveName
         editor.theme.onResolveName.add (theme, path_object) ->
           if path_object.node.getAttribute?('data-xmlel')
