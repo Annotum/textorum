@@ -31,7 +31,7 @@ define (require) ->
   window.textorum ||= {}
   originalDTD = {}
 
-  schema = {
+  window.textorum.schema ||= {
     containedBy: {},
     defs: {}
   }
@@ -39,22 +39,28 @@ define (require) ->
 
   $ = window.jQuery
 
-  schemaprocessor = new XSLTProcessor()
-  schemaStylesheet = helper.getXML "xsl/rng2js.xsl"
-  schemaprocessor.importStylesheet(schemaStylesheet)
-  schema = helper.getXML "test/rng/kipling-jp3-xsl.srng"
-  xsltschema = schemaprocessor.transformToDocument(schema)
-  schema = ($.parseJSON || tinymce.util.JSON.parse)(xsltschema.documentElement.innerText)
-  schema.containedBy ||= {}
-  schema.defs ||= {}
-  schema.$root ||= []
-  for element, details of schema.defs
-    elementContains = {}
-    for own containedElement, v of details.contains
-      schema.containedBy[containedElement] ||= {}
-      schema.containedBy[containedElement][element] = 1
-  window.textorum.schema = schema
+  _getSchema = ->
+    schemaprocessor = new XSLTProcessor()
+    schemaStylesheet = helper.getXML "xsl/rng2js.xsl"
+    schemaprocessor.importStylesheet(schemaStylesheet)
+    xmlschema = helper.getXML "test/rng/kipling-jp3-xsl.srng"
+    xsltschema = schemaprocessor.transformToDocument(xmlschema)
+    schemadoc = xsltschema.documentElement
+    schematext = (schemadoc.text || schemadoc.textContent || schemadoc.innerHTML)
+    schema = ($.parseJSON || tinymce.util.JSON.parse)(schematext)
+    schema ||= {}
+    schema.containedBy ||= {}
+    schema.defs ||= {}
+    schema.$root ||= []
+    for element, details of schema.defs
+      elementContains = {}
+      for own containedElement, v of details.contains
+        schema.containedBy[containedElement] ||= {}
+        schema.containedBy[containedElement][element] = 1
+    window.textorum.schema = schema
 
+  _getSchema()
+  
   tinymce.create 'tinymce.plugins.textorum.loader', {
     init: (editor, url) =>
       console.log "editor", editor
