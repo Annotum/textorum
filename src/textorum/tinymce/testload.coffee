@@ -94,15 +94,17 @@ define (require) ->
 
   bindHandler = (editor) ->
     editor.onBeforeSetContent.add (ed, o) ->
-      console.log "beforesetcontent", o
+      if o.format is "raw"
+        return
+      console.log "beforesetcontent", o, [o.content]
       o.content = loadFromText(o.content)
 
     editor.onPostProcess.add (ed, o) ->
       console.log "postprocess", o
-      if (o.set)
+      if o.set and not o.format is "raw"
         o.content = loadFromText(o.content)
 
-      if (o.get)
+      if o.get
         o.content = saveFromText(o.content)
 
   $(window).on('popstate', popStateHandler)
