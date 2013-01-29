@@ -54,6 +54,8 @@ define (require) ->
       })
 
   _selectNodeHandlerGenerator = (editor) ->
+    previousNode = null
+
     selectNodeHandler = (event, data) ->
       if ignoreNavigation
         return
@@ -67,11 +69,15 @@ define (require) ->
         #node.append('<span class="empty_tag_remove_me"></span>');
 
         nodeEl = node[0]
-        editor.getWin().scrollTo(0, editor.dom.getPos(nodeEl).y);
-        editor.selection.select(nodeEl)
+        editor.getWin().scrollTo(0, editor.dom.getPos(nodeEl).y - 10);
+        if id is previousNode
+          editor.selection.select(nodeEl)
+        else
+          editor.selection.setCursorLocation(nodeEl, 0)
         editor.nodeChanged()
 
         editor.focus()
+        previousNode = id
 
   _depthWalkCallbackGenerator = (holder) ->
     depthWalkCallback = (depth) ->
