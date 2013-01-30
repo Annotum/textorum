@@ -61,6 +61,7 @@
       theme_advanced_resizing: true,
       theme_advanced_resize_horizontal: false,
       preformatted: true,
+      whitespace_elements: 'pre script noscript style textarea div span code',
       apply_source_formatting: false,
       valid_elements: "*[*]",
       setup: function(ed) {
