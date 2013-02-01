@@ -22,7 +22,7 @@ div[data-xmlel]:before {
 	content: "[" attr(data-xmlel) "] ";
 	font-size: $smalltext;
 	font-weight: bold;
-	margin-right: 4px;
+	margin: 0 4px;
 	padding: 2px 4px;
 }
 
@@ -41,7 +41,7 @@ div[data-xmlel="back"] {
 div[data-xmlel="journal-meta"] {
 	background-color: $mid;
 	border: 1px solid $defaultback;
-	margin-bottom: 6px;
+	margin: 0 0 6px;
 }
 div[data-xmlel="journal-meta"]:before {
 	content: "Journal Meta";
@@ -125,6 +125,7 @@ div[data-xmlel="article-meta"] {
 div[data-xmlel="article-meta"]:before {
 	display: block;
 	content: "Article Meta";
+	margin-left: 0;
 	padding: 2px 5px;
 }
 
@@ -140,6 +141,7 @@ div[data-xmlel="article-meta"]:before {
 		color: #333;
 		content: "Article ID:";
 		font-size: $normaltext;
+		margin-left: 0;
 	}
 
 	div[data-xmlel="article-categories"]:before {
@@ -162,6 +164,7 @@ div[data-xmlel="article-meta"]:before {
 			content: "Subject:";
 			font-size: inherit;
 			font-weight: bold;
+			margin-left: 0;
 		}
 
 		div[data-xmlel="article-title"]:before {
@@ -205,6 +208,7 @@ div[data-xmlel="article-meta"]:before {
 				content: "Last Name:";
 				font-size: inherit;
 				font-weight: bold;
+				margin-left: 0;
 			}
 
 			div[data-xmlel="given-names"]:before {
@@ -278,12 +282,17 @@ div[data-xmlel="article-meta"]:before {
 
 					div[data-xmlel="license-p"]:before {
 						content: "";
+						margin: 0;
 						padding: 0;
 					}
 
 				div[data-xmlel="permissions"],
 				div[data-xmlel="abstract"] {
 					border-top: $border;
+				}
+
+				div[data-xmlel="permissions"] {
+					padding-top: 4px;
 				}
 
 				div[data-xmlel="abstract"]:before {
@@ -316,10 +325,19 @@ div[data-xmlel="article-meta"]:before {
 
 // BODY CONTENT
 
-div[data-xmlel="article"]:before,
-div[data-xmlel="front"]:before,
+div[data-xmlel="body"] {
+	margin-top: 20px;
+}
+
 div[data-xmlel="body"]:before,
 div[data-xmlel="sec"]:before {
+	content: "";
+	margin: 0;
+	padding: 0;
+}
+
+div[data-xmlel="article"]:before,
+div[data-xmlel="front"]:before {
 	background: #999;
 	color: $light;
 }
@@ -333,16 +351,20 @@ div[data-xmlel="xref"]:before,
 div[data-xmlel="p"]:before,
 div[data-xmlel="title"]:before {
 	content:'';
+	margin: 0;
 	padding: 0;
 }
 
 div[data-xmlel="title"] {
 	background: $mid;
 	color: $defaultback;
+	margin-bottom: 6px;
+	padding: 1px 4px 0;
 }
 
 div[data-xmlel="p"] {
 	margin-bottom: 10px;
+	padding: 0 4px;
 }
 
 div[data-xmlel="sec"] {
