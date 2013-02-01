@@ -74,7 +74,7 @@ define (require) ->
     loadDataHandler()
 
   popStateHandler = (event) ->
-    console.log event
+    #console.log event
     if event.originalEvent?.state?.uri
       $('#datafile').val(event.originalEvent.state.uri)
       loadDataHandler()
@@ -96,11 +96,11 @@ define (require) ->
     editor.onBeforeSetContent.add (ed, o) ->
       if o.format is "raw"
         return
-      console.log "beforesetcontent", o, [o.content]
+      # console.log "beforesetcontent", o, [o.content]
       o.content = loadFromText(o.content)
 
     editor.onPostProcess.add (ed, o) ->
-      console.log "postprocess", o
+      # console.log "postprocess", o
       if o.set and not o.format is "raw"
         o.content = loadFromText(o.content)
 

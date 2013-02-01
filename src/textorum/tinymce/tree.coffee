@@ -59,12 +59,9 @@ define (require) ->
     selectNodeHandler = (event, data) ->
       if ignoreNavigation
         return
-      console.log "select_node", event, data
       node = data.rslt.obj;
       id = node.attr('name');
       if (id)
-        console.log "clicked", id
-
         node = editor.dom.select('#'+id);
         #node.append('<span class="empty_tag_remove_me"></span>');
 

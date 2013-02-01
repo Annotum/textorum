@@ -71,8 +71,6 @@ define (require) ->
   tinymce.create 'tinymce.plugins.textorum.loader', {
     init: (editor, url) ->
       @schema = _getSchema("test/rng/kipling-jp3-xsl.srng")
-      console.log "editor", editor
-      console.log "url", url
       tree.create '#editortree', editor
       testload.bindHandler editor
       editor.onSetContent.add (ed, o) ->
