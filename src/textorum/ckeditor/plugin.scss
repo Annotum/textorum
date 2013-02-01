@@ -23,26 +23,30 @@ div[data-xmlel]:before {
 	font-size: $smalltext;
 	font-weight: bold;
 	margin-right: 4px;
-	padding: 2px;
+	padding: 2px 4px;
 }
+
+div[data-xmlel="article"]:before,
+div[data-xmlel="front"]:before {
+	content: "";
+	padding: 0;
+}
+
 div[data-xmlel="front"],
 div[data-xmlel="back"] {
 	background-color: $light;
 	padding: .5em;
 }
-div[data-xmlel="front"]:before {
-	content: "[Frontmatter]";
-	background-color: $defaultback;
-	color: $light;
-}
+
 div[data-xmlel="journal-meta"] {
 	background-color: $mid;
 	border: 1px solid $defaultback;
+	margin-bottom: 6px;
 }
 div[data-xmlel="journal-meta"]:before {
 	content: "Journal Meta";
 	display: block;
-	margin: 5px 0;
+	margin: 0 0 5px;
 	padding: 2px 5px;
 }
 div[data-xmlel="journal-id"] {
