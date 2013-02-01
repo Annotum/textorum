@@ -8,6 +8,9 @@ $defaultfront: #cccccc;
 
 $smalltext: 85%;
 $normaltext: 100%;
+$largetext: 120%;
+
+$border: 1px dashed #333;
 
 div[data-xmlel] {
 	margin: 3px 0;
@@ -45,7 +48,7 @@ div[data-xmlel="journal-meta"]:before {
 div[data-xmlel="journal-id"] {
 	// using imporant to override inline style
 	display: inline-block !important;
-	font-size: $smalltext;
+	font-size: $normaltext;
 	border: 1px dotted $highlight;
 }
 div[data-xmlel="journal-id"]:before {
@@ -55,21 +58,22 @@ div[data-xmlel="journal-id"]:before {
 	content: "JID: ";
 }
 
-div[data-xmlel="journal-title-group"]:before, div[data-xmlel="journal-title"]:before {
+div[data-xmlel="journal-title-group"]:before,
+div[data-xmlel="journal-title"]:before {
 	content: "";
 	background-color: inherit;
 	margin-right: 0px;
 }
 
 div[data-xmlel="journal-title"] {
-	font-size: $normaltext;
+	font-size: $largetext;
 	font-weight: bold;
-	border: 1px dotted $highlight;
+	// border: 1px dotted $highlight;
 }
 div[data-xmlel="journal-title"]:before {
 	color: #333;
 	content: "Journal Title:";
-	font-size: $normaltext;
+	font-size: inherit;
 	font-weight: bold;
 }
 
@@ -77,7 +81,7 @@ div[data-xmlel="issn"] {
 	border: 1px dotted $highlight;
 	// using important to override inline style
 	display: inline-block !important;
-	font-size: $smalltext;
+	font-size: $normaltext;
 }
 div[data-xmlel="issn"]:before {
 	font-size: inherit;
@@ -105,6 +109,7 @@ div[data-xmlel^="publisher-"] {
 }
 div[data-xmlel="publisher-name"]:before {
 	content: "by";
+	font-weight: normal;
 }
 div[data-xmlel="publisher-loc"]:before {
 	content: "at";
@@ -121,9 +126,9 @@ div[data-xmlel="article-meta"]:before {
 
 	div[data-xmlel="article-id"] {
 		// using !important to override inline style
-		display: inline-block !important;
-		font-size: $smalltext;
 		border: 1px dotted $highlight;
+		display: inline-block !important;
+		font-size: $normaltext;
 	}
 
 	div[data-xmlel="article-id"]:before {
@@ -151,7 +156,7 @@ div[data-xmlel="article-meta"]:before {
 			background: none;
 			color: #333;
 			content: "Subject:";
-			font-size: $normaltext;
+			font-size: inherit;
 			font-weight: bold;
 		}
 
@@ -160,7 +165,7 @@ div[data-xmlel="article-meta"]:before {
 		}
 
 		div[data-xmlel="contrib"] {
-			border-bottom: 1px dashed #333;
+			border-bottom: $border;
 		}
 
 		div[data-xmlel="title-group"]:before,
@@ -174,17 +179,27 @@ div[data-xmlel="article-meta"]:before {
 			}
 
 			div[data-xmlel="surname"],
-			div[data-xmlel="given-names"] {
+			div[data-xmlel="given-names"],
+			div[data-xmlel="day"],
+			div[data-xmlel="month"],
+			div[data-xmlel="year"] {
 				display: inline;
 			}
 
 			div[data-xmlel="surname"]:before,
 			div[data-xmlel="given-names"]:before,
-			div[data-xmlel="author-comment"]:before {
+			div[data-xmlel="author-comment"]:before,
+			div[data-xmlel="day"]:before,
+			div[data-xmlel="month"]:before,
+			div[data-xmlel="year"]:before,
+			div[data-xmlel="copyright-statement"]:before,
+			div[data-xmlel="copyright-year"]:before,
+			div[data-xmlel="license"]:before,
+			div[data-xmlel="abstract"]:before {
 				background: none;
 				color: #333;
 				content: "Last Name:";
-				font-size: $normaltext;
+				font-size: inherit;
 				font-weight: bold;
 			}
 
@@ -217,9 +232,80 @@ div[data-xmlel="article-meta"]:before {
 				content: "E-Pub";
 			}
 
+				div[data-xmlel="day"]:before {
+					content: "Day:";
+				}
+
+				div[data-xmlel="month"]:before {
+					content: "Month:";
+				}
+
+				div[data-xmlel="year"]:before {
+					content: "Year:";
+				}
+
 			div[pub-type="collection"][data-xmlel="pub-date"]:before {
 				content: "Collection";
 			}
+
+			div[data-xmlel="volume"]:before {
+				content: "Volume";
+			}
+
+			div[data-xmlel="permissions"]:before {
+				content: "Permissions";
+			}
+
+				div[data-xmlel="copyright-statement"]:before {
+					content: "Copyright:";
+				}
+
+				div[data-xmlel="copyright-year"]:before {
+					content: "Copyright Year:";
+				}
+
+				div[data-xmlel="license"]:before {
+					content: "License:";
+				}
+
+				div[data-xmlel="license-p"] {
+					display: inline;
+				}
+
+					div[data-xmlel="license-p"]:before {
+						content: "";
+						padding: 0;
+					}
+
+				div[data-xmlel="permissions"],
+				div[data-xmlel="abstract"] {
+					border-top: $border;
+				}
+
+				div[data-xmlel="abstract"]:before {
+					content: "Abstract:";
+				}
+
+				div[data-xmlel="kwd-group"]:before {
+					content: "Keywords:";
+				}
+
+					div[data-xmlel="kwd"] {
+						display: inline;
+					}
+
+					div[data-xmlel="kwd"]:before {
+						content: "";
+						padding: 0;
+					}
+
+					div[data-xmlel="kwd"]:after {
+						content: ",";
+					}
+
+					div[data-xmlel="kwd"]:last-child {
+						content: "";
+					}
 
 
 
