@@ -19,11 +19,12 @@ div[data-xmlel] {
 div[data-xmlel]:before {
 	background-color: $defaultback;
 	color: $defaultfront;
-	content: "[" attr(data-xmlel) "] ";
+	content: attr(data-xmlel);
 	font-size: $smalltext;
 	font-weight: bold;
 	margin: 0 4px;
 	padding: 2px 4px;
+	text-transform: capitalize;
 }
 
 div[data-xmlel="article"]:before,
@@ -125,7 +126,7 @@ div[data-xmlel="article-meta"] {
 div[data-xmlel="article-meta"]:before {
 	display: block;
 	content: "Article Meta";
-	margin-left: 0;
+	margin: 0;
 	padding: 2px 5px;
 }
 
@@ -240,6 +241,10 @@ div[data-xmlel="article-meta"]:before {
 				content: "E-Pub";
 			}
 
+			div[pub-type="ppub"][data-xmlel="pub-date"]:before {
+				content: "Print Publication";
+			}
+
 				div[data-xmlel="day"]:before {
 					content: "Day:";
 				}
@@ -256,13 +261,6 @@ div[data-xmlel="article-meta"]:before {
 				content: "Collection";
 			}
 
-			div[data-xmlel="volume"]:before {
-				content: "Volume";
-			}
-
-			div[data-xmlel="permissions"]:before {
-				content: "Permissions";
-			}
 
 				div[data-xmlel="copyright-statement"]:before {
 					content: "Copyright:";
@@ -291,6 +289,22 @@ div[data-xmlel="article-meta"]:before {
 					border-top: $border;
 				}
 
+				div[data-xmlel="date"] {
+					padding-left: 10px;
+				}
+
+				div[date-type="received"][data-xmlel="date"]:before {
+					content: "Date Received";
+				}
+
+				div[date-type="rev-recd"][data-xmlel="date"]:before {
+					content: "Date Revisions Received";
+				}
+
+				div[date-type="accepted"][data-xmlel="date"]:before {
+					content: "Date Accepted";
+				}
+
 				div[data-xmlel="permissions"] {
 					padding-top: 4px;
 				}
@@ -300,7 +314,7 @@ div[data-xmlel="article-meta"]:before {
 				}
 
 				div[data-xmlel="kwd-group"]:before {
-					content: "Keywords:";
+					content: "Keywords";
 				}
 
 					div[data-xmlel="kwd"] {
@@ -316,7 +330,7 @@ div[data-xmlel="article-meta"]:before {
 						content: ",";
 					}
 
-					div[data-xmlel="kwd"]:last-child {
+					div[data-xmlel="kwd"]:last-child:after {
 						content: "";
 					}
 
@@ -330,7 +344,10 @@ div[data-xmlel="body"] {
 }
 
 div[data-xmlel="body"]:before,
-div[data-xmlel="sec"]:before {
+div[data-xmlel="sec"]:before,
+div[data-xmlel="xref"]:before,
+div[data-xmlel="p"]:before,
+div[data-xmlel="title"]:before {
 	content: "";
 	margin: 0;
 	padding: 0;
@@ -345,14 +362,6 @@ div[data-xmlel="front"]:before {
 div[data-xmlel="xref"] {
 	color: $dark;
 	display: inline;
-}
-
-div[data-xmlel="xref"]:before,
-div[data-xmlel="p"]:before,
-div[data-xmlel="title"]:before {
-	content:'';
-	margin: 0;
-	padding: 0;
 }
 
 div[data-xmlel="title"] {
@@ -383,6 +392,39 @@ div[data-xmlel="ref"] {
 	div[data-xmlel="label"],
 	div[data-xmlel="mixed-citation"],
 	div[data-xmlel="pub-id"] {
-		display: inline-block;
+		display: inline;
 	}
+}
+
+div[data-xmlel="back"]:before,
+div[data-xmlel="ack"]:before,
+div[data-xmlel="ref-list"]:before,
+div[data-xmlel="ref"]:before,
+div[data-xmlel="label"]:before,
+div[data-xmlel="mixed-citation"]:before {
+	content: "";
+	margin: 0;
+	padding: 0;
+}
+
+div[data-xmlel="ref-list"] {
+	margin-bottom: 20px;
+}
+
+div[data-xmlel="ref"] {
+	border-bottom: $border;
+	padding: 5px 0;
+
+	div[data-xmlel="label"] {
+		margin-left: 0;
+	}
+}
+
+div[data-xmlel="pub-id"]:before {
+	background: none;
+	color: #333;
+	content: "Pub ID:";
+	font-size: inherit;
+	font-weight: bold;
+	margin-left: 0;
 }
