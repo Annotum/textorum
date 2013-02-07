@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
+    exclude-result-prefixes="#default xml">
     <xsl:output method="html" standalone="no"/>
+    <xsl:param name="inlineelements"><xsl:text>span</xsl:text></xsl:param>
     <xsl:template match="*">
         <xsl:variable name="oldElement">
             <xsl:value-of select="local-name(.)"/>
@@ -10,8 +12,8 @@
         </xsl:variable>
         <xsl:variable name="newElement">
             <xsl:choose>
-                <xsl:when test="local-name(.) = 'journal-meta'">
-                    <xsl:text>div</xsl:text>
+                <xsl:when test="contains(concat(',', $inlineelements, ','), concat(',',local-name(.),','))">
+                    <xsl:text>span</xsl:text>
                 </xsl:when>
                 <xsl:when test="contains(',table,thead,tbody,td,tr,th,', concat(',',local-name(.),','))">
                     <xsl:value-of select="local-name(.)"/>
@@ -22,7 +24,7 @@
             </xsl:choose>
         </xsl:variable>
         <xsl:element name="{$newElement}">
-            <xsl:copy-of select="namespace::*"/>
+            <xsl:copy-of select="namespace::*[local-name(.) != 'xml']"/>
             <xsl:copy-of select="@*"/>
             <xsl:if test="$oldElementFull != $oldElement">
                 <xsl:attribute name="data-nsbk">

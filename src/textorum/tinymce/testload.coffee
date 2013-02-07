@@ -29,6 +29,7 @@ define (require) ->
   processor = new XSLTProcessor()
   forwardStylesheet = helper.getXML "xsl/xml2cke.xsl"
   processor.importStylesheet(forwardStylesheet)
+  processor.setParameter(null, "inlineelements", "bold,italic")
 
   revprocessor = new XSLTProcessor()
   revStylesheet = helper.getXML "xsl/cke2xml.xsl"
@@ -55,6 +56,9 @@ define (require) ->
       return serializeError(xmlDoc)
     revNewDoc = revprocessor.transformToDocument(xmlDoc)
     (new XMLSerializer()).serializeToString(revNewDoc)
+      .replace(/\/\/TEXTORUM\/\/DOCTYPE-SYSTEM\/\//, "http://dtd.nlm.nih.gov/publishing/3.0/journalpublishing3.dtd") # XSLT 1.0 doesn't support params in <xsl:output>, so use a placeholder
+      .replace(/^(<!DOCTYPE[^>]*>\s*<[^>]*?)[ ]?xmlns:xml="http:\/\/www.w3.org\/XML\/1998\/namespace"/g, "$1") # Chrome adds an unneeded xmlns:xml
+    
 
   loadDataHandler = ->
     uri = $('#datafile').val()
