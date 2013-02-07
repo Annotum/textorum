@@ -29,7 +29,7 @@ define (require) ->
   processor = new XSLTProcessor()
   forwardStylesheet = helper.getXML "xsl/xml2cke.xsl"
   processor.importStylesheet(forwardStylesheet)
-  processor.setParameter(null, "inlineelements", "bold,italic")
+  processor.setParameter(null, "inlineelements", "bold,italic,monospace,underline,sub,sup,named-content,ext-link,inline-graphic,inline-formula")
 
   revprocessor = new XSLTProcessor()
   revStylesheet = helper.getXML "xsl/cke2xml.xsl"

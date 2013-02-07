@@ -1,25 +1,3 @@
-/*
-* plugin.scss - Textorum editor stylesheet
-*
-* Copyright (C) 2012 Crowd Favorite, Ltd. All rights reserved.
-*
-* This file is part of Textorum.
-*
-* Textorum is free software; you can redistribute it and/or modify it
-* under the terms of the GNU General Public License as published by the
-* Free Software Foundation; either version 2 of the License, or (at your
-* option) any later version.
-*
-* Textorum is distributed in the hope that it will be useful, but
-* WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-* 02110-1301, USA.
-*/
 $dark: #006b94;
 $mid: #99d1dd;
 $light: #f0f0f0;
@@ -30,6 +8,9 @@ $defaultfront: #cccccc;
 
 $smalltext: 85%;
 $normaltext: 100%;
+$largetext: 120%;
+
+$border: 1px dashed #333;
 
 div[data-xmlel] {
 	margin: 3px 0;
@@ -38,36 +19,41 @@ div[data-xmlel] {
 div[data-xmlel]:before {
 	background-color: $defaultback;
 	color: $defaultfront;
-	content: "[" attr(data-xmlel) "] ";
+	content: attr(data-xmlel);
 	font-size: $smalltext;
 	font-weight: bold;
-	margin-right: 4px;
-	padding: 2px;
+	margin: 0 4px;
+	padding: 2px 4px;
+	text-transform: capitalize;
 }
+
+div[data-xmlel="article"]:before,
+div[data-xmlel="front"]:before {
+	content: "";
+	padding: 0;
+}
+
 div[data-xmlel="front"],
 div[data-xmlel="back"] {
 	background-color: $light;
 	padding: .5em;
 }
-div[data-xmlel="front"]:before {
-	content: "[Frontmatter]";
-	background-color: $defaultback;
-	color: $light;
-}
+
 div[data-xmlel="journal-meta"] {
 	background-color: $mid;
 	border: 1px solid $defaultback;
+	margin: 0 0 6px;
 }
 div[data-xmlel="journal-meta"]:before {
 	content: "Journal Meta";
 	display: block;
-	margin: 5px 0;
+	margin: 0 0 5px;
 	padding: 2px 5px;
 }
 div[data-xmlel="journal-id"] {
 	// using imporant to override inline style
 	display: inline-block !important;
-	font-size: $smalltext;
+	font-size: $normaltext;
 	border: 1px dotted $highlight;
 }
 div[data-xmlel="journal-id"]:before {
@@ -77,21 +63,22 @@ div[data-xmlel="journal-id"]:before {
 	content: "JID: ";
 }
 
-div[data-xmlel="journal-title-group"]:before, div[data-xmlel="journal-title"]:before {
+div[data-xmlel="journal-title-group"]:before,
+div[data-xmlel="journal-title"]:before {
 	content: "";
 	background-color: inherit;
 	margin-right: 0px;
 }
 
 div[data-xmlel="journal-title"] {
-	font-size: $normaltext;
+	font-size: $largetext;
 	font-weight: bold;
-	border: 1px dotted $highlight;
+	// border: 1px dotted $highlight;
 }
 div[data-xmlel="journal-title"]:before {
 	color: #333;
 	content: "Journal Title:";
-	font-size: $normaltext;
+	font-size: inherit;
 	font-weight: bold;
 }
 
@@ -99,7 +86,7 @@ div[data-xmlel="issn"] {
 	border: 1px dotted $highlight;
 	// using important to override inline style
 	display: inline-block !important;
-	font-size: $smalltext;
+	font-size: $normaltext;
 }
 div[data-xmlel="issn"]:before {
 	font-size: inherit;
@@ -127,6 +114,7 @@ div[data-xmlel^="publisher-"] {
 }
 div[data-xmlel="publisher-name"]:before {
 	content: "by";
+	font-weight: normal;
 }
 div[data-xmlel="publisher-loc"]:before {
 	content: "at";
@@ -138,14 +126,15 @@ div[data-xmlel="article-meta"] {
 div[data-xmlel="article-meta"]:before {
 	display: block;
 	content: "Article Meta";
+	margin: 0;
 	padding: 2px 5px;
 }
 
 	div[data-xmlel="article-id"] {
 		// using !important to override inline style
-		display: inline-block !important;
-		font-size: $smalltext;
 		border: 1px dotted $highlight;
+		display: inline-block !important;
+		font-size: $normaltext;
 	}
 
 	div[data-xmlel="article-id"]:before {
@@ -153,6 +142,7 @@ div[data-xmlel="article-meta"]:before {
 		color: #333;
 		content: "Article ID:";
 		font-size: $normaltext;
+		margin-left: 0;
 	}
 
 	div[data-xmlel="article-categories"]:before {
@@ -173,8 +163,9 @@ div[data-xmlel="article-meta"]:before {
 			background: none;
 			color: #333;
 			content: "Subject:";
-			font-size: $normaltext;
+			font-size: inherit;
 			font-weight: bold;
+			margin-left: 0;
 		}
 
 		div[data-xmlel="article-title"]:before {
@@ -182,7 +173,7 @@ div[data-xmlel="article-meta"]:before {
 		}
 
 		div[data-xmlel="contrib"] {
-			border-bottom: 1px dashed #333;
+			border-bottom: $border;
 		}
 
 		div[data-xmlel="title-group"]:before,
@@ -196,18 +187,29 @@ div[data-xmlel="article-meta"]:before {
 			}
 
 			div[data-xmlel="surname"],
-			div[data-xmlel="given-names"] {
+			div[data-xmlel="given-names"],
+			div[data-xmlel="day"],
+			div[data-xmlel="month"],
+			div[data-xmlel="year"] {
 				display: inline;
 			}
 
 			div[data-xmlel="surname"]:before,
 			div[data-xmlel="given-names"]:before,
-			div[data-xmlel="author-comment"]:before {
+			div[data-xmlel="author-comment"]:before,
+			div[data-xmlel="day"]:before,
+			div[data-xmlel="month"]:before,
+			div[data-xmlel="year"]:before,
+			div[data-xmlel="copyright-statement"]:before,
+			div[data-xmlel="copyright-year"]:before,
+			div[data-xmlel="license"]:before,
+			div[data-xmlel="abstract"]:before {
 				background: none;
 				color: #333;
 				content: "Last Name:";
-				font-size: $normaltext;
+				font-size: inherit;
 				font-weight: bold;
+				margin-left: 0;
 			}
 
 			div[data-xmlel="given-names"]:before {
@@ -239,19 +241,120 @@ div[data-xmlel="article-meta"]:before {
 				content: "E-Pub";
 			}
 
+			div[pub-type="ppub"][data-xmlel="pub-date"]:before {
+				content: "Print Publication";
+			}
+
+				div[data-xmlel="day"]:before {
+					content: "Day:";
+				}
+
+				div[data-xmlel="month"]:before {
+					content: "Month:";
+				}
+
+				div[data-xmlel="year"]:before {
+					content: "Year:";
+				}
+
 			div[pub-type="collection"][data-xmlel="pub-date"]:before {
 				content: "Collection";
 			}
+
+
+				div[data-xmlel="copyright-statement"]:before {
+					content: "Copyright:";
+				}
+
+				div[data-xmlel="copyright-year"]:before {
+					content: "Copyright Year:";
+				}
+
+				div[data-xmlel="license"]:before {
+					content: "License:";
+				}
+
+				div[data-xmlel="license-p"] {
+					display: inline;
+				}
+
+					div[data-xmlel="license-p"]:before {
+						content: "";
+						margin: 0;
+						padding: 0;
+					}
+
+				div[data-xmlel="permissions"],
+				div[data-xmlel="abstract"] {
+					border-top: $border;
+				}
+
+				div[data-xmlel="date"] {
+					padding-left: 10px;
+				}
+
+				div[date-type="received"][data-xmlel="date"]:before {
+					content: "Date Received";
+				}
+
+				div[date-type="rev-recd"][data-xmlel="date"]:before {
+					content: "Date Revisions Received";
+				}
+
+				div[date-type="accepted"][data-xmlel="date"]:before {
+					content: "Date Accepted";
+				}
+
+				div[data-xmlel="permissions"] {
+					padding-top: 4px;
+				}
+
+				div[data-xmlel="abstract"]:before {
+					content: "Abstract:";
+				}
+
+				div[data-xmlel="kwd-group"]:before {
+					content: "Keywords";
+				}
+
+					div[data-xmlel="kwd"] {
+						display: inline;
+					}
+
+					div[data-xmlel="kwd"]:before {
+						content: "";
+						padding: 0;
+					}
+
+					div[data-xmlel="kwd"]:after {
+						content: ",";
+					}
+
+					div[data-xmlel="kwd"]:last-child:after {
+						content: "";
+					}
 
 
 
 
 // BODY CONTENT
 
-div[data-xmlel="article"]:before,
-div[data-xmlel="front"]:before,
+div[data-xmlel="body"] {
+	margin-top: 20px;
+}
+
 div[data-xmlel="body"]:before,
-div[data-xmlel="sec"]:before {
+div[data-xmlel="sec"]:before,
+div[data-xmlel="xref"]:before,
+div[data-xmlel="p"]:before,
+div[data-xmlel="title"]:before {
+	content: "";
+	margin: 0;
+	padding: 0;
+}
+
+div[data-xmlel="article"]:before,
+div[data-xmlel="front"]:before {
 	background: #999;
 	color: $light;
 }
@@ -261,48 +364,37 @@ div[data-xmlel="xref"] {
 	display: inline;
 }
 
-div[data-xmlel="xref"]:before,
-div[data-xmlel="p"]:before,
-div[data-xmlel="title"]:before {
-	content:'';
-	padding: 0;
-	margin-right: 0;
-}
-
 div[data-xmlel="title"] {
 	background: $mid;
 	color: $defaultback;
+	margin-bottom: 6px;
+	padding: 1px 4px 0;
 }
 
 div[data-xmlel="p"] {
 	margin-bottom: 10px;
+	padding: 0 4px;
 }
 
 div[data-xmlel="sec"] {
 	margin-bottom: 20px;
 }
 
-// Tables
-th {
-	background: $dark;
-	color: $light;
-}
+// Inline Styles
 
-// Styles
-
-div[data-xmlel="bold"]:before, 
-div[data-xmlel="italic"]:before {
+span[data-xmlel="bold"]:before, 
+span[data-xmlel="italic"]:before {
 	content: "";
 	background-color: inherit;
 	margin-right: 0px;
 	padding: 0px;
 }
 
-div[data-xmlel="bold"] {
+span[data-xmlel="bold"] {
 	display: inline;
 	font-weight: bold;
 }
-div[data-xmlel="italic"] {
+span[data-xmlel="italic"] {
 	display: inline;
 	font-style: italic;
 }
@@ -337,12 +429,51 @@ div[data-xmlel="list"][list-type="order"] div[data-xmlel="list-item"] {
 	list-style-type: none;
 }
 
+// Tables
+th {
+	background: $dark;
+	color: $light;
+}
+
 // Footer References
 
 div[data-xmlel="ref"] {
 	div[data-xmlel="label"],
 	div[data-xmlel="mixed-citation"],
 	div[data-xmlel="pub-id"] {
-		display: inline-block;
+		display: inline;
 	}
+}
+
+div[data-xmlel="back"]:before,
+div[data-xmlel="ack"]:before,
+div[data-xmlel="ref-list"]:before,
+div[data-xmlel="ref"]:before,
+div[data-xmlel="label"]:before,
+div[data-xmlel="mixed-citation"]:before {
+	content: "";
+	margin: 0;
+	padding: 0;
+}
+
+div[data-xmlel="ref-list"] {
+	margin-bottom: 20px;
+}
+
+div[data-xmlel="ref"] {
+	border-bottom: $border;
+	padding: 5px 0;
+
+	div[data-xmlel="label"] {
+		margin-left: 0;
+	}
+}
+
+div[data-xmlel="pub-id"]:before {
+	background: none;
+	color: #333;
+	content: "Pub ID:";
+	font-size: inherit;
+	font-weight: bold;
+	margin-left: 0;
 }
