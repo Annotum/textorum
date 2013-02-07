@@ -3,6 +3,7 @@
     exclude-result-prefixes="#default xml">
     <xsl:output method="html" standalone="no"/>
     <xsl:param name="inlineelements"><xsl:text>span</xsl:text></xsl:param>
+    <xsl:param name="fixedelements"><xsl:text></xsl:text></xsl:param>
     <xsl:template match="*">
         <xsl:variable name="oldElement">
             <xsl:value-of select="local-name(.)"/>
@@ -15,7 +16,7 @@
                 <xsl:when test="contains(concat(',', $inlineelements, ','), concat(',',local-name(.),','))">
                     <xsl:text>span</xsl:text>
                 </xsl:when>
-                <xsl:when test="contains(',table,thead,tbody,td,tr,th,', concat(',',local-name(.),','))">
+                <xsl:when test="contains(concat(',', $fixedelements, ','), concat(',',local-name(.),','))">
                     <xsl:value-of select="local-name(.)"/>
                 </xsl:when>
                 <xsl:otherwise>

@@ -29,7 +29,11 @@ define (require) ->
   processor = new XSLTProcessor()
   forwardStylesheet = helper.getXML "xsl/xml2cke.xsl"
   processor.importStylesheet(forwardStylesheet)
+  # Elements to bring across as <span> rather than <div>
   processor.setParameter(null, "inlineelements", "bold,italic,monospace,underline,sub,sup,named-content,ext-link,inline-graphic,inline-formula")
+  # Elements to bring over without changing their element name
+  processor.setParameter(null, "fixedelements", "table,thead,tbody,td,tr,th")
+  
 
   revprocessor = new XSLTProcessor()
   revStylesheet = helper.getXML "xsl/cke2xml.xsl"
