@@ -117,7 +117,7 @@ task 'watch', 'Automatically recompile CoffeeScript files to JavaScript, SASS to
       if err
         process.stdout.write "#{err[1].red}\n     #{err[2].red}\n"
       else
-        process.stdout.write ">>> #{err.red}"
+        process.stdout.write ">>> #{data.red}"
     else
       process.stdout.write data.green
   sassWriterCallback = (error, stdout, stderr) ->
