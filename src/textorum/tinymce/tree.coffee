@@ -235,7 +235,7 @@ define (require) ->
   navigateTree = (editor, controlmanager, node) ->
     ignoreNavigation = true
     treeInstance = $(treeSelector).jstree('get_instance')
-    treeInstance.close_all(-1, false)
+    #treeInstance.close_all(-1, false)
     firstNode = treeInstance._get_node("[name='#{node.getAttribute('id')}']")
     if firstNode
       secondNode = treeInstance._get_parent(firstNode)
