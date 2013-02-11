@@ -241,6 +241,7 @@ define (require) ->
       secondNode = treeInstance._get_parent(firstNode)
       treeInstance.open_node(secondNode)
       treeInstance.open_node(firstNode)
+      treeInstance.deselect_all()
       treeInstance.select_node(firstNode)
     ignoreNavigation = false
     return null
