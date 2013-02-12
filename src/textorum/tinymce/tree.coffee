@@ -21,7 +21,7 @@
 
 define (require) ->
   helper = require('../helper')
-  tinymce = require('tinymce')
+  tinymce = window.tinymce
   window.textorum ||= {}
   $ = window.jQuery
 

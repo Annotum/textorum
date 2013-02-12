@@ -38,14 +38,8 @@
     baseUrl: "lib",
 		// urlArgs: "bust=" + "18",
 		// urlArgs: (new Date()).getTime(),
-		shim: {
-			'tinymce': {
-				exports: 'tinymce'
-			}
-		},
 		paths: {
 			"text": "../vendor/text",
-			tinymce: '/tinymce/jscripts/tiny_mce/tiny_mce'
 		}
    });
   require( ["textorum/tinymce/plugin"], function() {

@@ -26,7 +26,7 @@ define (require) ->
   tree = require('./tree')
   #pathHelper = require('./pathhelper')
 
-  tinymce = require('tinymce')
+  tinymce = window.tinymce
 
   window.textorum ||= {}
   originalDTD = {}
