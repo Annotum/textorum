@@ -69,9 +69,11 @@ define (require) ->
         editor.getWin().scrollTo(0, editor.dom.getPos(nodeEl).y - 10);
         if id is previousNode
           editor.selection.select(nodeEl)
+          editor.nodeChanged()
         else
           editor.selection.setCursorLocation(nodeEl, 0)
-        editor.nodeChanged()
+          editor.nodeChanged()
+          $(node).effect("highlight", {}, 350)
 
         editor.focus()
         previousNode = id
