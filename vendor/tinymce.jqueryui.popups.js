@@ -1,6 +1,7 @@
 /*! tinymce-jqueryui-inline-popups - v0.1.0 - 2012-08-21
 * https://github.com/badsyntax/tinymce-custom-inlinepopups
-* Copyright (c) 2012 Richard Willis; Licensed MIT */
+* Copyright (c) 2012 Richard Willis; Licensed MIT 
+* Modified by Crowd Favorite to support current TinyMCE dialog titles */
 
 (function() {
 
@@ -182,7 +183,8 @@
 
 		setTitle : function(w, ti) {
 			var id = w.frameElement.id.replace(/_ifr$/, '');
-			$('#ui-dialog-title-dialog-' + id).html(ti);
+			//$('#ui-dialog-title-dialog-' + id).html(ti);
+			$('#dialog-' + id).siblings('.ui-dialog-titlebar').find('.ui-dialog-title').html(ti);
 		},
 
 		alert : function(txt, cb, s) {
