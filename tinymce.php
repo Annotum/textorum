@@ -42,14 +42,15 @@
 		// urlArgs: (new Date()).getTime(),
 		paths: {
 			"text": "../vendor/text",
+      "jqueryui-popups": "../vendor/tinymce.jqueryui.popups"
 		}
    });
-  require( ["textorum/tinymce/plugin"], function() {
+  require( ["textorum/tinymce/plugin", "jqueryui-popups"], function() {
     tinymce.init({
       mode: 'exact',
       theme: 'advanced',
       elements: 'editor1',
-      plugins: '-textorum,inlinepopups',
+      plugins: '-textorum,-jqueryinlinepopups',
       entity_encoding: 'raw',
       content_css: 'lib/textorum/tinymce/plugin.css',
 
