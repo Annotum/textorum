@@ -116,7 +116,7 @@ define (require) ->
           #id = $("#tree a.ui-state-active").closest("li").attr("name")
           id = $(obj).attr("name")
           console.log "change", id, "to", key
-          editor.execCommand "changeTag",
+          editor.execCommand "changeSchemaTag",
             key: key
             pos: pos
             id: id
@@ -197,12 +197,13 @@ define (require) ->
           label: "Edit Tag"
           icon: "img/tag_edit.png"
           action: (obj) ->
-
+            editor.execCommand "editSchemaTag", obj
 
         delete:
           label: "Remove Tag Only"
           icon: "img/tag_delete.png"
           action: (obj) ->
+            editor.execCommand "removeSchemaTag", obj
 
 
       if not parent.attr('data-xmlel')

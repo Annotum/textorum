@@ -25,13 +25,22 @@ define (require) ->
 
   class ElementHandler
   	constructor: (@editor) ->
-  		editor.addCommand 'addSchemaTag', @addSchemaTag
-  	addSchemaTag: (params) ->
-  		console.log "addSchemaTag", params
+  		editor.addCommand 'addSchemaTag', @addTag
+  		editor.addCommand 'changeSchemaTag', @changeTag
+  		editor.addCommand 'editSchemaTag', @editTag
+  		editor.addCommand 'removeSchemaTag', @removeTag
+  	addTag: (params) ->
+  		console.log 'addTag', params
+  	changeTag: (params) ->
+  		console.log 'changeTag', params
+  	editTag: (params) ->
+  		console.log 'editTag', params
+  	removeTag: (params) ->
+  		console.log 'removeTag', params
 
   init = (editor) ->
   	return new ElementHandler(editor)
 
   {
-  	init: init
+  	init: init  	
   }
