@@ -60,6 +60,17 @@ Clone this repository to a web-accessible directory.  The instructions below ass
 
 Tested to work in Chrome.  Probably works in Firefox; known not to work in IE.
 
+## Dependencies
+
+Textorum depends on several external javascript libraries, including:
+
+- TinyMCE
+- jQuery
+- jQuery UI
+- JSTree
+
+With the goal of tracking compatibility with (and potentially dependence on) the same versions as WordPress uses.  For development purposes, they will track WordPress trunk; releases will target versions available with the then-current WordPress release.
+
 ## Caveats
 
 Many.  This is currently a very incomplete 
