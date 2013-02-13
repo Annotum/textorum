@@ -103,44 +103,51 @@ define (require) ->
         holder.unshift holder[0]['children'][holder[0]['children'].length - 1]
       true
 
+  # Return a function that produces editor-specific context menu items
   _contextMenuItemsGenerator = (editor) ->
-    _getSubmenu = (keys) ->
-      inserts = {}
-      inserted = false
-      for key of keys
-        inserted = true
-        inserts[key] =
-          label: key
-          icon: "img/tag.png"
-          action: (obj) ->
-            actionType = obj.parents("li.submenu").children("a").attr("rel")
-            key = obj.text()
-            pos =
-              x: parseInt($("#tree_popup").css("left"))
-              y: parseInt($("#tree_popup").css("top"))
+    # Return a function suitable for use as a jstree contextmenu action, given 
+    # the action type ("before", "change") and key (target element name)
+    _submenuActionGenerator = (actionType, key) ->
+      (obj) ->        
+        pos =
+          x: parseInt($("#tree_popup").css("left"))
+          y: parseInt($("#tree_popup").css("top"))
+        if actionType is "change"
+          #id = $("#tree a.ui-state-active").closest("li").attr("name")
+          id = $(obj).attr("name")
+          console.log "change", id, "to", key
+          editor.execCommand "changeTag",
+            key: key
+            pos: pos
+            id: id
 
-            if actionType is "change"
-              id = $("#tree a.ui-state-active").closest("li").attr("name")
-              editor.execCommand "changeTag",
-                key: key
-                pos: pos
-                id: id
+        else
+          editor.currentBookmark = editor.selection.getBookmark(1)
+          editor.execCommand "addSchemaTag",
+            key: key
+            pos: pos
+            action: actionType
+    # Given a list of keys, return a function to generate a list of submenu
+    # items for a given action
+    _submenuItemsForAction = (keys) ->
+      (action) ->
+        inserts = {}
+        inserted = false
+        for key of keys
+          inserted = true
+          inserts["#{action}-#{key}"] =
+            label: key
+            icon: "img/tag.png"
+            action: _submenuActionGenerator(action, key)
 
-            else
-              editor.currentBookmark = editor.selection.getBookmark(1)
-              editor.execCommand "addSchemaTag",
-                key: key
-                pos: pos
-                action: actionType
+        unless inserted
+          inserts["no_tags"] =
+            label: "No tags available."
+            icon: "img/cross.png"
+            action: (obj) ->
+        inserts
 
-      unless inserted
-        inserts["no_tags"] =
-          label: "No tags available."
-          icon: "img/cross.png"
-          action: (obj) ->
-      inserts
-
-
+    # The returned function for _contextMenuItemsGenerator
     contextMenuItems = (node) ->
       schema = editor.plugins.textorum.schema
       if not node.attr('data-xmlel') 
@@ -158,33 +165,33 @@ define (require) ->
         else
           {}
       )
-      submenu = _getSubmenu(validNodes)
-      siblingSubmenu = _getSubmenu(siblingNodes)
+      submenu = _submenuItemsForAction(validNodes)
+      siblingSubmenu = _submenuItemsForAction(siblingNodes)
       items =
         before:
           label: "Insert Tag Before"
           icon: "img/tag_add.png"
           _class: "submenu"
-          submenu: siblingSubmenu
+          submenu: siblingSubmenu("before")
 
         after:
           label: "Insert Tag After"
           icon: "img/tag_add.png"
           _class: "submenu"
-          submenu: siblingSubmenu
+          submenu: siblingSubmenu("after")
 
         inside:
           label: "Insert Tag Inside"
           icon: "img/tag_add.png"
           _class: "submenu"
           separator_after: true
-          submenu: submenu
+          submenu: submenu("inside")
 
         change:
           label: "Change Tag"
           icon: "img/tag_edit.png"
           _class: "submenu"
-          submenu: siblingSubmenu
+          submenu: siblingSubmenu("change")
 
         edit:
           label: "Edit Tag"
