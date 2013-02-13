@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title></title>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
   <script src="/jstree/jquery.jstree.js"></script>
   <!-- <script src="/sarissa-full-0.9.9.6/gr/abiss/js/sarissa/sarissa.js"></script> -->
   <script src="/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
   <script src="vendor/require.js"></script>
+  <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/base/jquery-ui.css"/>
 </head>
 <body>
   <form id="mainform" action="post_test.php" method="post">
