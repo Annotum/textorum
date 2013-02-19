@@ -99,7 +99,7 @@
         </xsl:variable>
         <xsl:text>
                 "</xsl:text>
-        <xsl:value-of select="/*//rng:define[@name=$refname]/rng:element/rng:name/text()"/>
+        <xsl:value-of select="//rng:define[@name=$refname]/rng:element/rng:name/text()"/>
         <xsl:text>": </xsl:text>
         <xsl:choose>
             <xsl:when test="ancestor::rng:choice/rng:empty"><xsl:text>0</xsl:text></xsl:when>
@@ -130,9 +130,9 @@
         <xsl:value-of select="rng:name/text()"/>
         <xsl:text>": { </xsl:text>
         
-        <xsl:if test="rng:value"><xsl:text>"value": [</xsl:text>
-        <xsl:apply-templates select="rng:value" mode="attr-list"></xsl:apply-templates>
-        <xsl:text>],</xsl:text> 
+        <xsl:if test="descendant::rng:value"><xsl:text>"value": [</xsl:text>
+        <xsl:apply-templates select="descendant::rng:value" mode="attr-list"></xsl:apply-templates>
+        <xsl:text>], </xsl:text> 
         </xsl:if>
         <xsl:choose>
             <xsl:when test="rng:data">
