@@ -116,14 +116,15 @@ define (require) ->
           #id = $("#tree a.ui-state-active").closest("li").attr("name")
           id = $(obj).attr("name")
           console.log "change", id, "to", key
-          editor.execCommand "changeSchemaTag",
+          editor.execCommand "changeSchemaTag", true, 
             key: key
             pos: pos
             id: id
 
         else
           editor.currentBookmark = editor.selection.getBookmark(1)
-          editor.execCommand "addSchemaTag",
+          editor.execCommand "addSchemaTag", true,
+            id: $(obj).attr("name")
             key: key
             pos: pos
             action: actionType
@@ -197,13 +198,13 @@ define (require) ->
           label: "Edit Tag"
           icon: "img/tag_edit.png"
           action: (obj) ->
-            editor.execCommand "editSchemaTag", obj
+            editor.execCommand "editSchemaTag", true, obj
 
         delete:
           label: "Remove Tag Only"
           icon: "img/tag_delete.png"
           action: (obj) ->
-            editor.execCommand "removeSchemaTag", obj
+            editor.execCommand "removeSchemaTag", true, obj
 
 
       if not parent.attr('data-xmlel')
