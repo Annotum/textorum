@@ -1,7 +1,11 @@
 /*! tinymce-jqueryui-inline-popups - v0.1.0 - 2012-08-21
 * https://github.com/badsyntax/tinymce-custom-inlinepopups
 * Copyright (c) 2012 Richard Willis; Licensed MIT 
-* Modified by Crowd Favorite to support current TinyMCE dialog titles */
+* Modified by Crowd Favorite:
+*	- to support current TinyMCE dialog titles 
+*	- to support user-specified buttons
+*	- to support resizable windows
+*/
 
 (function() {
 
@@ -57,10 +61,11 @@
 				// Dialog config
 				config = {
 					title: f.title || '',
+					buttons: f.buttons || undefined,
 					width: 'auto',
 					height: 'auto',
 					modal: true,
-					resizable: false,
+					resizable: f.resizable || false,
 					draggable: true,
 					dialogClass: 'ui-dialog-tinymce',
 					// match the tinymce inlinepopups starting z-index (fixes #3)
