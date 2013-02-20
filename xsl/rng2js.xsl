@@ -127,9 +127,23 @@
     <xsl:template match="rng:attribute" mode="attr-list">
         <xsl:text>
               "</xsl:text>
+        <xsl:variable name="nsuri" select="rng:name/@ns"></xsl:variable>
+        <xsl:choose>
+            <xsl:when test="rng:name/@ns = 'http://www.w3.org/XML/1998/namespace'">
+                <xsl:text>xml:</xsl:text>
+            </xsl:when>
+            <xsl:when test="local-name(//namespace::node()[. = $nsuri]) != ''">
+                    <xsl:value-of select="local-name(//namespace::node()[. = $nsuri])"/>
+                    <xsl:text>:</xsl:text>
+            </xsl:when>      
+        </xsl:choose>
         <xsl:value-of select="rng:name/text()"/>
         <xsl:text>": { </xsl:text>
-        
+        <xsl:if test="rng:name/@ns != ''">
+            <xsl:text>"ns": "</xsl:text>
+            <xsl:value-of select="rng:name/@ns"/>
+            <xsl:text>", </xsl:text>
+        </xsl:if>
         <xsl:if test="descendant::rng:value"><xsl:text>"value": [</xsl:text>
         <xsl:apply-templates select="descendant::rng:value" mode="attr-list"></xsl:apply-templates>
         <xsl:text>], </xsl:text> 
