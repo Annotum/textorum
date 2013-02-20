@@ -76,3 +76,18 @@ With the goal of tracking compatibility with (and potentially dependence on) the
 Many.  This is currently a very incomplete 
 
 (this space intentionally left blank)
+
+### XML implementation
+
+The XML namespace handling is relatively naive: all namespaces are assumed to be global, and no scoping rules are used.  Therefore, a document which depends on complex or overlapping namespaces or namespace resets may be mishandled.  A simple example:
+
+    <foo xmlns:a="http://example.com/a">
+      <bar xmlns:a="http://example.com/b">
+      	<a:baz/>
+      </bar>
+    </foo>
+
+may be treated as though a:baz is either in the `/a` or the `/b` namespace (depending on the browser's XSLT behavior), rather than certainly being in the `/b` namespace by correct XML parsing.
+
+As a workaround, documents can be passed through a namespace normalizer (such as <http://lenzconsulting.com/namespace-normalizer/> or <https://github.com/wendellpiez/XMLNamespaceFixup/blob/master/XSLT/namespace-cleanup.xsl>) before loading.  Unfortunately, neither one is effectively compatible with running in current browsers; the first produces inconsistent and sometimes empty results, and the second is XSLT 2.0, which is not commonly supported.
+
