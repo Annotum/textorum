@@ -63,11 +63,20 @@ define (require) ->
     schema
 
   _treeAttributeFilter = (nodes, name) ->
-    i = nodes.length;
+    i = nodes.length
     snip = tree.id_prefix.length
     while (i--)
       if nodes[i].attr('id').substr(0, snip) is tree.id_prefix
         nodes[i].attr(name, null)
+
+  _nsurlAttributeFilterGenerator = (editor) ->
+    _nsurlAttributeFilter = (nodes, name, params) ->
+      i = nodes.length
+
+      while (i--)
+        node = nodes[i]
+        editor.plugins.textorum.nsmap[node.attributes.map['data-textorum-nsurl']] = node.attributes.map['data-textorum-nsprefix']
+        node.remove()
 
   tinymce.create 'tinymce.plugins.textorum.loader', {
     init: (editor, url) ->
@@ -77,8 +86,10 @@ define (require) ->
       editor.onSetContent.add (ed, o) ->
         tree.update '#editortree', ed
       editor.onNodeChange.add tree.navigate
-      editor.onInit.add (editor) ->
+      editor.onPreInit.add (editor) ->
+        editor.parser.addAttributeFilter 'data-textorum-nsurl', _nsurlAttributeFilterGenerator(editor)
         editor.serializer.addAttributeFilter 'id', _treeAttributeFilter
+      editor.onInit.add (editor) ->
         
       if editor.theme.onResolveName
         editor.theme.onResolveName.add (theme, path_object) ->
@@ -86,7 +97,7 @@ define (require) ->
             path_object.name = path_object.node.getAttribute('data-xmlel');
       elementHelper.init editor
 
-    getInfo : ->
+    getInfo: ->
       {
         longname : 'Textorum',
         author : 'NCBI / Crowd Favorite',
@@ -94,5 +105,6 @@ define (require) ->
         infourl : 'https://github.com/Annotum/textorum/',
         version : "0.1"
       }
+    nsmap: {}
   }
   tinymce.PluginManager.add('textorum', tinymce.plugins.textorum.loader)
