@@ -4,7 +4,32 @@
     <xsl:output method="html" standalone="no"/>
     <xsl:param name="inlineelements"><xsl:text>span</xsl:text></xsl:param>
     <xsl:param name="fixedelements"><xsl:text></xsl:text></xsl:param>
-    <xsl:template match="*">
+    <xsl:key name="kElemByNSURI"
+        match="*[namespace::*[not(. = ../../namespace::*)]]"
+        use="namespace::*[not(. = ../../namespace::*)]"/>
+    <xsl:template match="/">
+        <xsl:for-each select=
+            "//namespace::*[not(. = ../../namespace::*)]
+            [count(..|key('kElemByNSURI',.)[1])=1]">
+            <xsl:element name="div">
+                <xsl:attribute name="data-textorum-nsurl">
+                    <xsl:value-of select="."></xsl:value-of>
+                </xsl:attribute>
+                <xsl:attribute name="data-textorum-nsprefix">
+                    <xsl:value-of select="local-name(.)"></xsl:value-of>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:for-each>
+        <xsl:apply-templates select="node()|*" mode="go"></xsl:apply-templates>
+    </xsl:template>
+    <xsl:template match="@*">
+        <xsl:variable name="attrname" select="local-name(.)"></xsl:variable>
+        <xsl:variable name="attrns" select="namespace-uri(.)"></xsl:variable>
+        <xsl:attribute name="{$attrname}" namespace="{$attrns}">
+            <xsl:value-of select="."></xsl:value-of>
+        </xsl:attribute>
+    </xsl:template>
+    <xsl:template match="*" mode="go">
         <xsl:variable name="oldElement">
             <xsl:value-of select="local-name(.)"/>
         </xsl:variable>
@@ -31,6 +56,9 @@
                 <xsl:attribute name="data-nsbk">
                     <xsl:value-of select="$oldElementFull"></xsl:value-of>
                 </xsl:attribute>
+                <xsl:attribute name="data-nsuribk">
+                    <xsl:value-of select="namespace-uri(.)"></xsl:value-of>
+                </xsl:attribute>
             </xsl:if>
             <xsl:if test="boolean(@class)">
                 <xsl:attribute name="data-clsbk">
@@ -43,7 +71,7 @@
             <xsl:attribute name="data-xmlel">
                 <xsl:value-of select="$oldElement"/>
             </xsl:attribute>
-            <xsl:apply-templates/>
+            <xsl:apply-templates mode="go"/>
         </xsl:element>                
     </xsl:template>
 </xsl:stylesheet>
