@@ -50,7 +50,12 @@ define (require) ->
     # Delete a tag
     removeTag: (ui, params) ->
 
-    attrFormHTML: (name, params, node) ->
+    attrListElement: (name, params, node) ->
+      el = document.createElement("li")
+      el.appendChild(document.createTextNode(name))
+      el
+
+    attrFormElement: (name, params, node) ->
       node = $(node)
       node = @editor.dom.select("##{node.attr('name')}")[0]
       if params.ns
@@ -121,12 +126,23 @@ define (require) ->
       newtagname = $(node).attr("data-xmlel") || params['key']
       elementattrs = @editor.plugins.textorum.schema.defs[newtagname]?.attr
 
+      attrRequiredList = document.createElement("ul")
+      attrlist = document.createElement("ul")
       attrform = document.createElement("div")
+
+      attrwindow = document.createElement("div")
+      attrlists = document.createElement("div")
+      attrlists.appendChild(attrRequiredList)
+      attrlists.appendChild(attrlist)
+      attrwindow.appendChild(attrlists)
+      attrwindow.appendChild(attrform)
       for own attr of elementattrs
-        attrform.appendChild(@attrFormHTML(attr, elementattrs[attr], node))
+        attrform.appendChild(@attrFormElement(attr, elementattrs[attr], node))
         if elementattrs[attr].required
+          attrRequiredList.appendChild(@attrListElement(attr, elementattrs[attr], node))
           attroptional[attr] = elementattrs[attr]
         else
+          attrlist.appendChild(@attrListElement(attr, elementattrs[attr], node))
           attrrequired[attr] = elementattrs[attr]
       if attrform.childNodes.length
         wm = @editor.windowManager
@@ -134,7 +150,7 @@ define (require) ->
           inline: true
           resizable: true
           title: "Edit #{newtagname}"
-          content: attrform
+          content: attrwindow
           buttons: [{
             text: 'Ok'
             click: (e) -> 
