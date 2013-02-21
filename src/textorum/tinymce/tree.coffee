@@ -167,6 +167,10 @@ define (require) ->
       )
       submenu = _submenuItemsForAction(validNodes)
       siblingSubmenu = _submenuItemsForAction(siblingNodes)
+      if (x for own x of schema.defs?[node.attr('data-xmlel')]?.attr).length
+        editDisabled = false
+      else
+        editDisabled = true
       items =
         before:
           label: "Insert Tag Before"
@@ -194,8 +198,9 @@ define (require) ->
           submenu: siblingSubmenu("change")
 
         edit:
-          label: "Edit Tag"
+          label: "Edit Attributes"
           icon: "img/tag_edit.png"
+          _disabled: editDisabled
           action: (obj) ->
             editor.execCommand "editSchemaTag", true, obj
 
