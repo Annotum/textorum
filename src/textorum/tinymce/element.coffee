@@ -126,7 +126,8 @@ define (require) ->
         else
           attrrequired[attr] = elementattrs[attr]
       if attrform.childNodes.length
-        w = @editor.windowManager.open {
+        wm = @editor.windowManager
+        w = wm.open {
           inline: true
           resizable: true
           title: "Edit #{newtagname}"
@@ -135,12 +136,12 @@ define (require) ->
             text: 'Ok'
             click: (e) -> 
               console.log "OK button clicked:", e, w
-              w.element.dialog("close")
+              wm.close(null, w.id)
           }, {
             text: 'Cancel'
             click: (e) -> 
               console.log "Cancel button clicked:", e, w
-              w.element.dialog("close")
+              wm.close(null, w.id)
           }]
         }
       else
