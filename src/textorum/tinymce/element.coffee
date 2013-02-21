@@ -59,7 +59,8 @@ define (require) ->
           prefix = "txtns#{@namespaceIdx}"
           @editor.plugins.textorum.nsmap[params.ns] = prefix
           @namespaceIdx += 1
-          # Better way to get the actual base document element?
+          # TODO: Better way to get the actual base document element?
+          # TODO: Only set this when necessary, maybe?
           @editor.dom.select("body")[0].firstElementChild.setAttribute("xmlns:#{prefix}", params.ns)
           attrValue = node.getAttributeNS(params.ns, name)
           if attrValue
@@ -72,7 +73,7 @@ define (require) ->
       else
         attrValue = node.getAttribute(name)
 
-      if params.required or attrValue isnt undefined
+      if params.required or attrValue?
         display = "block"
       else
         display = "none"
@@ -102,11 +103,13 @@ define (require) ->
       else if params.data isnt undefined
         sel = document.createElement("input")
         sel.type = "text"
-        sel.value = attrValue
+        if attrValue?
+          sel.value = attrValue
         out.appendChild(sel)
       else if params.$?
         sel = document.createElement("textarea")
-        sel.appendChild(document.createTextNode(attrValue))
+        if attrValue?
+          sel.appendChild(document.createTextNode(attrValue))
         out.appendChild(sel)
 
       out
