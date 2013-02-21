@@ -247,6 +247,8 @@ define (require) ->
     ignoreNavigation = true
     treeInstance = $(treeSelector).jstree('get_instance')
     #treeInstance.close_all(-1, false)
+    if not node.getAttribute
+      return null
     firstNode = treeInstance._get_node("[name='#{node.getAttribute('id')}']")
     if firstNode
       secondNode = treeInstance._get_parent(firstNode)

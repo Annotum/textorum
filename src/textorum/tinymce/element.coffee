@@ -25,6 +25,7 @@ define (require) ->
   $ = window.jQuery
 
   class ElementHandler
+    namespaceIdx: 0
     constructor: (@editor) ->
       editor.addCommand 'addSchemaTag', @addTag, this
       editor.addCommand 'changeSchemaTag', @changeTag, this
@@ -32,8 +33,6 @@ define (require) ->
       editor.addCommand 'removeSchemaTag', @removeTag, this
     # Create a new tag, bring up editing window
     addTag: (ui, params) ->
-      console.log 'addTag', params
-      console.log 'this', this
       newtagname = params['key']
       if not @editor.plugins.textorum.schema.defs[newtagname]
         console.log "error", "no such tag in schema: #{newtagname}"
@@ -41,22 +40,38 @@ define (require) ->
       @editWindow params
     # Bring up editing window for existing tag
     editTag: (ui, params) ->
-      console.log 'editTag', params
       @editWindow {}, params
     # Replace a tag with another one
     changeTag: (ui, params) ->
-      console.log 'changeTag', params
       newtagname = params['key']
       if not @editor.plugins.textorum.schema.defs[newtagname]
         console.log "error", "no such tag in schema: #{newtagname}"
         return
     # Delete a tag
     removeTag: (ui, params) ->
-      console.log 'removeTag', params
 
     attrFormHTML: (name, params, node) ->
-      console.log name, params
-      attrValue = $(node).attr(name)
+      node = $(node)
+      node = @editor.dom.select("##{node.attr('name')}")[0]
+      if params.ns
+        prefix = @editor.plugins.textorum.nsmap[params.ns]
+        if prefix is undefined
+          prefix = "txtns#{@namespaceIdx}"
+          @editor.plugins.textorum.nsmap[params.ns] = prefix
+          @namespaceIdx += 1
+          # Better way to get the actual base document element?
+          @editor.dom.select("body")[0].firstElementChild.setAttribute("xmlns:#{prefix}", params.ns)
+          attrValue = node.getAttributeNS(params.ns, name)
+          if attrValue
+            node.removeAttributeNS(params.ns, name)
+            node.setAttribute("#{prefix}:#{name}", attrValue)
+          else
+        if prefix
+          name = "#{prefix}:#{name}"
+          attrValue = node.getAttribute(name)
+      else
+        attrValue = node.getAttribute(name)
+
       if params.required or attrValue isnt undefined
         display = "block"
       else
@@ -65,11 +80,10 @@ define (require) ->
       out.setAttribute("style", """display: #{display};""")
       out.class = "attr_#{name}"
       label = document.createElement("label")
-      label.appendChild(document.createTextNode("#{name} - #{display}"))
+      label.appendChild(document.createTextNode("#{name}"))
       out.appendChild(label)
 
       if params.value?.length
-
         sel = document.createElement("select")
         sel.name = "attr_#{name}"
         if not params.required
@@ -88,9 +102,11 @@ define (require) ->
       else if params.data isnt undefined
         sel = document.createElement("input")
         sel.type = "text"
+        sel.value = attrValue
         out.appendChild(sel)
       else if params.$?
         sel = document.createElement("textarea")
+        sel.appendChild(document.createTextNode(attrValue))
         out.appendChild(sel)
 
       out
@@ -100,20 +116,32 @@ define (require) ->
       attrrequired = {}
       attrgroups = {}
       newtagname = $(node).attr("data-xmlel") || params['key']
-      elementattrs = @editor.plugins.textorum.schema.defs[newtagname].attr
+      elementattrs = @editor.plugins.textorum.schema.defs[newtagname]?.attr
 
       attrform = document.createElement("div")
       for own attr of elementattrs
-        attrform.appendChild(@attrFormHTML(attr, elementattrs[attr]))
+        attrform.appendChild(@attrFormHTML(attr, elementattrs[attr], node))
         if elementattrs[attr].required
           attroptional[attr] = elementattrs[attr]
         else
           attrrequired[attr] = elementattrs[attr]
       if attrform.childNodes.length
-        @editor.windowManager.open {
+        w = @editor.windowManager.open {
           inline: true
-          title: "Element Editor"
+          resizable: true
+          title: "Edit #{newtagname}"
           content: attrform
+          buttons: [{
+            text: 'Ok'
+            click: (e) -> 
+              console.log "OK button clicked:", e, w
+              w.element.dialog("close")
+          }, {
+            text: 'Cancel'
+            click: (e) -> 
+              console.log "Cancel button clicked:", e, w
+              w.element.dialog("close")
+          }]
         }
       else
         console.log "no attributes"

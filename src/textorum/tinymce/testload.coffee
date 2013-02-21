@@ -98,6 +98,7 @@ define (require) ->
   setDataHandler = (event) ->
     # console.log "setdata", event
     if event.editor.mode isnt "source"
+      event.editor.plugins.textorum.nsmap = {}
       event.data.dataValue = loadFromText(event.data.dataValue)
 
   bindHandler = (editor) ->
