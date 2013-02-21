@@ -1,6 +1,6 @@
 # xslt.coffee - Transforms an XML document to CKE format and back
 #
-# Copyright (C) 2012 Crowd Favorite, Ltd. All rights reserved.
+# Copyright (C) 2013 Crowd Favorite, Ltd. All rights reserved.
 #
 # This file is part of Textorum.
 #

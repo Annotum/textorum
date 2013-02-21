@@ -114,7 +114,10 @@ task 'watch', 'Automatically recompile CoffeeScript files to JavaScript, SASS to
     data = data.replace /^\s*/, ' - '
     if /^\s*-\serror\s/.test data
       err = data.match /(.*)\s+\((Line \d+: .*)\)/
-      process.stdout.write "#{err[1].red}\n     #{err[2].red}\n"
+      if err
+        process.stdout.write "#{err[1].red}\n     #{err[2].red}\n"
+      else
+        process.stdout.write ">>> #{data.red}"
     else
       process.stdout.write data.green
   sassWriterCallback = (error, stdout, stderr) ->

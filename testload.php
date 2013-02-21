@@ -49,7 +49,25 @@
   require( ["textorum/ckeditor/plugin", "textorum/ckeditor/testload"], function() {
     CKEDITOR.replace('editor1',
     {
-     extraPlugins: 'textorum,showblocks,fakeobjects,devtools'
+     extraPlugins: 'textorum,showblocks,fakeobjects,devtools',
+     removePlugins: 'elementspath',
+     toolbarGroups: [
+      { name: 'document',    groups: [ 'mode', 'document' ] }, //, 'doctools' ] },
+      { name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
+      { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
+      //{ name: 'forms' },
+      //'/',
+      //{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+      //{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align' ] },
+      //{ name: 'links' },
+      //{ name: 'insert' },
+      '/',
+      //{ name: 'styles' },
+      //{ name: 'colors' },
+      { name: 'tools' },
+      { name: 'others' },
+      { name: 'about' }
+    ]
     });
     CKEDITOR.on('instanceReady', function() { jQuery('#loaddata').click() });
 

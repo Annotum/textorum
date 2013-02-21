@@ -1,0 +1,1226 @@
+{
+  "$root":
+    [
+      "article",
+      "hr"
+    ],
+        
+  "defs": 
+    {
+        "article": {
+            "contains": { 
+                "front": 1,
+                "body": 1,
+                "back": 0,
+                "response": 1
+            },
+            "attr": {
+                "article-type": 0,
+                "lang": 0
+            }
+        },
+        "front": {
+            "contains": { 
+                "journal-meta": 1,
+                "article-meta": 1
+            },
+            "attr": {}
+        },
+        "journal-meta": {
+            "contains": { 
+                "journal-id": 1,
+                "journal-title-group": 1,
+                "issn": 1,
+                "publisher": 0
+            },
+            "attr": {}
+        },
+        "journal-id": {
+            "$": 1, 
+            "contains": { },
+            "attr": {
+                "journal-id-type": 0
+            }
+        },
+        "journal-title-group": {
+            "contains": { 
+                "journal-title": 1
+            },
+            "attr": {}
+        },
+        "journal-title": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "issn": {
+            "$": 1, 
+            "contains": { },
+            "attr": {
+                "pub-type": 0
+            }
+        },
+        "publisher": {
+            "contains": { 
+                "publisher-name": 1,
+                "publisher-loc": 0
+            },
+            "attr": {}
+        },
+        "publisher-name": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "publisher-loc": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "article-meta": {
+            "contains": { 
+                "article-id": 1,
+                "article-categories": 0,
+                "title-group": 1,
+                "contrib-group": 1,
+                "pub-date": 1,
+                "volume": 0,
+                "issue": 0,
+                "issue-title": 1,
+                "elocation-id": 0,
+                "history": 0,
+                "permissions": 0,
+                "self-uri": 0,
+                "related-article": 1,
+                "abstract": 0,
+                "kwd-group": 1,
+                "funding-group": 1
+            },
+            "attr": {}
+        },
+        "article-id": {
+            "$": 1, 
+            "contains": { },
+            "attr": {
+                "pub-id-type": 0
+            }
+        },
+        "article-categories": {
+            "contains": { 
+                "subj-group": 1
+            },
+            "attr": {}
+        },
+        "subj-group": {
+            "contains": { 
+                "subject": 1,
+                "subj-group": 1
+            },
+            "attr": {
+                "subj-group-type": 0
+            }
+        },
+        "subject": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1
+            },
+            "attr": {}
+        },
+        "title-group": {
+            "contains": { 
+                "article-title": 1,
+                "subtitle": 1
+            },
+            "attr": {}
+        },
+        "article-title": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1
+            },
+            "attr": {}
+        },
+        "subtitle": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1
+            },
+            "attr": {}
+        },
+        "contrib-group": {
+            "contains": { 
+                "contrib": 1,
+                "author-comment": 0
+            },
+            "attr": {}
+        },
+        "contrib": {
+            "contains": { 
+                "collab": 1,
+                "name": 1,
+                "degrees": 1,
+                "email": 0,
+                "aff": 1,
+                "bio": 1,
+                "ext-link": 1
+            },
+            "attr": {
+                "contrib-type": 0,
+                "corresp": 0,
+                "equal-contrib": 0
+            }
+        },
+        "collab": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1
+            },
+            "attr": {
+                "collab-type": 0
+            }
+        },
+        "name": {
+            "contains": { 
+                "surname": 1,
+                "given-names": 0,
+                "prefix": 0,
+                "suffix": 0
+            },
+            "attr": {
+                "content-type": 0,
+                "name-style": 0
+            }
+        },
+        "surname": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "given-names": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "prefix": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "suffix": {
+            "$": 1, 
+            "contains": { },
+            "attr": {
+                "content-type": 0
+            }
+        },
+        "degrees": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "author-comment": {
+            "contains": { 
+                "p": 1
+            },
+            "attr": {}
+        },
+        "pub-date": {
+            "contains": { 
+                "day": 0,
+                "month": 0,
+                "season": 1,
+                "year": 1
+            },
+            "attr": {
+                "pub-type": 0
+            }
+        },
+        "date": {
+            "contains": { 
+                "day": 0,
+                "month": 0,
+                "season": 1,
+                "year": 1
+            },
+            "attr": {
+                "date-type": 0
+            }
+        },
+        "day": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "month": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "season": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "year": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "volume": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "issue": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "issue-title": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "elocation-id": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "history": {
+            "contains": { 
+                "date": 1
+            },
+            "attr": {}
+        },
+        "copyright-holder": {
+            "$": 1, 
+            "contains": { 
+                "sup": 1,
+                "sub": 1
+            },
+            "attr": {}
+        },
+        "copyright-statement": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1
+            },
+            "attr": {}
+        },
+        "copyright-year": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "license": {
+            "contains": { 
+                "license-p": 1
+            },
+            "attr": {
+                "license-type": 0,
+                "type": 0,
+                "href": 0
+            }
+        },
+        "license-p": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1,
+                "named-content": 1,
+                "ext-link": 1,
+                "inline-graphic": 1,
+                "inline-formula": 1,
+                "xref": 1
+            },
+            "attr": {}
+        },
+        "permissions": {
+            "contains": { 
+                "copyright-statement": 1,
+                "copyright-year": 1,
+                "copyright-holder": 1,
+                "license": 1
+            },
+            "attr": {}
+        },
+        "related-article": {
+            "$": 1, 
+            "contains": { },
+            "attr": {
+                "id": 0,
+                "related-article-type": 1,
+                "ext-link-type": 0,
+                "vol": 0,
+                "page": 0,
+                "issue": 0,
+                "elocation-id": 0,
+                "journal-id": 0,
+                "journal-id-type": 0,
+                "type": 0,
+                "href": 0
+            }
+        },
+        "abstract": {
+            "contains": { 
+                "title": 0,
+                "p": 1,
+                "sec": 1
+            },
+            "attr": {}
+        },
+        "kwd-group": {
+            "contains": { 
+                "kwd": 1
+            },
+            "attr": {
+                "kwd-group-type": 0
+            }
+        },
+        "kwd": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1
+            },
+            "attr": {}
+        },
+        "funding-group": {
+            "contains": { 
+                "award-group": 1,
+                "funding-statement": 1,
+                "open-access": 0
+            },
+            "attr": {}
+        },
+        "funding-statement": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1
+            },
+            "attr": {
+                "rid": 0
+            }
+        },
+        "open-access": {
+            "contains": { 
+                "p": 1
+            },
+            "attr": {}
+        },
+        "award-group": {
+            "contains": { 
+                "funding-source": 1,
+                "award-id": 1,
+                "principal-award-recipient": 1,
+                "principal-investigator": 1
+            },
+            "attr": {
+                "id": 0,
+                "rid": 0,
+                "award-type": 0,
+                "type": 0,
+                "href": 0
+            }
+        },
+        "funding-source": {
+            "$": 1, 
+            "contains": { },
+            "attr": {
+                "id": 0,
+                "rid": 0,
+                "source-type": 0,
+                "country": 0,
+                "type": 0,
+                "href": 0
+            }
+        },
+        "award-id": {
+            "$": 1, 
+            "contains": { },
+            "attr": {
+                "rid": 0
+            }
+        },
+        "principal-award-recipient": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "principal-investigator": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "self-uri": {
+            "$": 1, 
+            "contains": { },
+            "attr": {
+                "content-type": 0
+            }
+        },
+        "body": {
+            "contains": { 
+                "fig": 1,
+                "media": 1,
+                "preformat": 1,
+                "supplementary-material": 1,
+                "table-wrap": 1,
+                "disp-formula": 1,
+                "p": 1,
+                "list": 1,
+                "disp-quote": 1,
+                "sec": 1
+            },
+            "attr": {}
+        },
+        "p": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1,
+                "named-content": 1,
+                "ext-link": 1,
+                "inline-graphic": 1,
+                "inline-formula": 1,
+                "list": 1,
+                "disp-formula": 1,
+                "disp-quote": 1,
+                "fig": 1,
+                "table-wrap": 1,
+                "preformat": 1,
+                "media": 1,
+                "supplementary-material": 1,
+                "xref": 1
+            },
+            "attr": {
+                "id": 0
+            }
+        },
+        "sec": {
+            "contains": { 
+                "title": 1,
+                "p": 1,
+                "list": 1,
+                "disp-formula": 1,
+                "disp-quote": 1,
+                "fig": 1,
+                "table-wrap": 1,
+                "preformat": 1,
+                "media": 1,
+                "supplementary-material": 1,
+                "sec": 1
+            },
+            "attr": {
+                "id": 0,
+                "sec-type": 0
+            }
+        },
+        "title": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1,
+                "named-content": 1,
+                "ext-link": 1,
+                "inline-graphic": 1,
+                "inline-formula": 1
+            },
+            "attr": {}
+        },
+        "fig": {
+            "contains": { 
+                "label": 0,
+                "caption": 0,
+                "media": 1,
+                "preformat": 1,
+                "permissions": 0
+            },
+            "attr": {
+                "id": 0,
+                "position": 0,
+                "fig-type": 0
+            }
+        },
+        "caption": {
+            "contains": { 
+                "title": 0,
+                "p": 1
+            },
+            "attr": {
+                "id": 0,
+                "content-type": 0,
+                "style": 0
+            }
+        },
+        "media": {
+            "contains": { 
+                "alt-text": 0,
+                "long-desc": 0,
+                "uri": 1,
+                "permissions": 0
+            },
+            "attr": {
+                "mimetype": 0,
+                "mime-subtype": 0,
+                "type": 0,
+                "href": 1
+            }
+        },
+        "uri": {
+            "contains": { },
+            "attr": {
+                "type": 0,
+                "href": 0,
+                "content-type": 0
+            }
+        },
+        "inline-graphic": {
+            "contains": { 
+                "alt-text": 0
+            },
+            "attr": {
+                "type": 0,
+                "href": 1
+            }
+        },
+        "preformat": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "supplementary-material": {
+            "contains": { 
+                "label": 0,
+                "caption": 0,
+                "media": 1,
+                "preformat": 1,
+                "permissions": 0
+            },
+            "attr": {
+                "id": 0,
+                "position": 0,
+                "content-type": 0
+            }
+        },
+        "table-wrap": {
+            "contains": { 
+                "label": 0,
+                "caption": 0,
+                "media": 1,
+                "table": 1,
+                "table-wrap-foot": 0,
+                "permissions": 0
+            },
+            "attr": {
+                "id": 0,
+                "position": 0
+            }
+        },
+        "table-wrap-foot": {
+            "contains": { 
+                "p": 1
+            },
+            "attr": {}
+        },
+        "th": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1,
+                "named-content": 1,
+                "ext-link": 1,
+                "inline-graphic": 1,
+                "inline-formula": 1,
+                "xref": 1,
+                "break": 1
+            },
+            "attr": {
+                "id": 0,
+                "content-type": 0,
+                "style": 0,
+                "abbr": 0,
+                "axis": 0,
+                "headers": 0,
+                "scope": 0,
+                "rowspan": 0,
+                "colspan": 0,
+                "align": 0,
+                "char": 0,
+                "charoff": 0,
+                "valign": 0,
+                "bgcolor": 0
+            }
+        },
+        "td": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1,
+                "named-content": 1,
+                "ext-link": 1,
+                "inline-graphic": 1,
+                "inline-formula": 1,
+                "xref": 1,
+                "break": 1
+            },
+            "attr": {
+                "id": 0,
+                "content-type": 0,
+                "style": 0,
+                "abbr": 0,
+                "axis": 0,
+                "headers": 0,
+                "scope": 0,
+                "rowspan": 0,
+                "colspan": 0,
+                "align": 0,
+                "char": 0,
+                "charoff": 0,
+                "valign": 0,
+                "bgcolor": 0
+            }
+        },
+        "hr": {
+            "contains": { },
+            "attr": {}
+        },
+        "break": {
+            "contains": { },
+            "attr": {}
+        },
+        "list": {
+            "contains": { 
+                "label": 0,
+                "title": 0,
+                "list-item": 1
+            },
+            "attr": {
+                "id": 0,
+                "list-type": 0
+            }
+        },
+        "list-item": {
+            "contains": { 
+                "p": 1,
+                "list": 1
+            },
+            "attr": {
+                "id": 0
+            }
+        },
+        "inline-formula": {
+            "contains": { 
+                "tex-math": 1
+            },
+            "attr": {}
+        },
+        "disp-formula": {
+            "contains": { 
+                "label": 0,
+                "tex-math": 1
+            },
+            "attr": {
+                "id": 0
+            }
+        },
+        "tex-math": {
+            "$": 1, 
+            "contains": { },
+            "attr": {
+                "id": 0
+            }
+        },
+        "disp-quote": {
+            "contains": { 
+                "label": 0,
+                "title": 0,
+                "p": 1,
+                "attrib": 0,
+                "permissions": 0
+            },
+            "attr": {
+                "id": 0
+            }
+        },
+        "alt-text": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "long-desc": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "label": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "attrib": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "back": {
+            "contains": { 
+                "ack": 0,
+                "app-group": 0,
+                "ref-list": 1,
+                "sec": 1
+            },
+            "attr": {}
+        },
+        "ref-list": {
+            "contains": { 
+                "label": 0,
+                "title": 0,
+                "p": 1,
+                "ref": 1
+            },
+            "attr": {
+                "id": 0
+            }
+        },
+        "ref": {
+            "contains": { 
+                "label": 0,
+                "mixed-citation": 1,
+                "note": 1
+            },
+            "attr": {
+                "id": 0,
+                "content-type": 0
+            }
+        },
+        "note": {
+            "contains": { 
+                "p": 1
+            },
+            "attr": {}
+        },
+        "mixed-citation": {
+            "$": 1, 
+            "contains": { 
+                "pub-id": 1,
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1,
+                "named-content": 1,
+                "ext-link": 1,
+                "inline-graphic": 1,
+                "inline-formula": 1
+            },
+            "attr": {
+                "id": 0,
+                "publication-type": 0,
+                "publisher-type": 0,
+                "publication-format": 0
+            }
+        },
+        "pub-id": {
+            "$": 1, 
+            "contains": { },
+            "attr": {
+                "pub-id-type": 1
+            }
+        },
+        "ack": {
+            "contains": { 
+                "title": 0,
+                "p": 1,
+                "sec": 1
+            },
+            "attr": {}
+        },
+        "app-group": {
+            "contains": { 
+                "title": 0,
+                "app": 1
+            },
+            "attr": {}
+        },
+        "app": {
+            "contains": { 
+                "title": 1,
+                "fig": 1,
+                "media": 1,
+                "preformat": 1,
+                "supplementary-material": 1,
+                "table-wrap": 1,
+                "disp-formula": 1,
+                "p": 1,
+                "list": 1,
+                "disp-quote": 1,
+                "sec": 1
+            },
+            "attr": {
+                "id": 0
+            }
+        },
+        "response": {
+            "contains": { 
+                "front-stub": 1,
+                "body": 1,
+                "back": 0
+            },
+            "attr": {
+                "response-type": 0,
+                "id": 0
+            }
+        },
+        "front-stub": {
+            "contains": { 
+                "article-id": 1,
+                "title-group": 0,
+                "contrib-group": 1,
+                "pub-date": 1,
+                "elocation-id": 0,
+                "history": 0,
+                "permissions": 0,
+                "abstract": 0,
+                "kwd-group": 1,
+                "funding-group": 1
+            },
+            "attr": {}
+        },
+        "email": {
+            "$": 1, 
+            "contains": { },
+            "attr": {}
+        },
+        "aff": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1,
+                "named-content": 1,
+                "ext-link": 1,
+                "inline-graphic": 1,
+                "inline-formula": 1
+            },
+            "attr": {}
+        },
+        "bio": {
+            "contains": { 
+                "p": 1
+            },
+            "attr": {}
+        },
+        "sup": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1,
+                "named-content": 1,
+                "ext-link": 1,
+                "inline-graphic": 1,
+                "inline-formula": 1,
+                "xref": 1
+            },
+            "attr": {}
+        },
+        "sub": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1,
+                "named-content": 1,
+                "ext-link": 1,
+                "inline-graphic": 1,
+                "inline-formula": 1,
+                "xref": 1
+            },
+            "attr": {}
+        },
+        "bold": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1,
+                "named-content": 1,
+                "ext-link": 1,
+                "inline-graphic": 1,
+                "inline-formula": 1,
+                "xref": 1
+            },
+            "attr": {}
+        },
+        "italic": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1,
+                "named-content": 1,
+                "ext-link": 1,
+                "inline-graphic": 1,
+                "inline-formula": 1,
+                "xref": 1
+            },
+            "attr": {}
+        },
+        "monospace": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1,
+                "named-content": 1,
+                "ext-link": 1,
+                "inline-graphic": 1,
+                "inline-formula": 1,
+                "xref": 1
+            },
+            "attr": {}
+        },
+        "underline": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1,
+                "named-content": 1,
+                "ext-link": 1,
+                "inline-graphic": 1,
+                "inline-formula": 1,
+                "xref": 1
+            },
+            "attr": {}
+        },
+        "ext-link": {
+            "$": 1, 
+            "contains": { },
+            "attr": {
+                "ext-link-type": 0,
+                "type": 0,
+                "href": 0
+            }
+        },
+        "xref": {
+            "$": 1, 
+            "contains": { },
+            "attr": {
+                "ref-type": 0,
+                "rid": 0
+            }
+        },
+        "named-content": {
+            "$": 1, 
+            "contains": { 
+                "bold": 1,
+                "italic": 1,
+                "monospace": 1,
+                "underline": 1,
+                "sup": 1,
+                "sub": 1,
+                "named-content": 1,
+                "ext-link": 1,
+                "inline-graphic": 1,
+                "inline-formula": 1,
+                "xref": 1
+            },
+            "attr": {
+                "id": 0,
+                "content-type": 1,
+                "type": 0,
+                "href": 0
+            }
+        },
+        "table": {
+            "contains": { 
+                "col": 1,
+                "colgroup": 1,
+                "thead": 0,
+                "tfoot": 0,
+                "tbody": 1,
+                "tr": 1
+            },
+            "attr": {
+                "id": 0,
+                "content-type": 0,
+                "style": 0,
+                "summary": 0,
+                "width": 0,
+                "border": 0,
+                "frame": 0,
+                "rules": 0,
+                "cellspacing": 0,
+                "cellpadding": 0,
+                "bgcolor": 0
+            }
+        },
+        "thead": {
+            "contains": { 
+                "tr": 1
+            },
+            "attr": {
+                "id": 0,
+                "content-type": 0,
+                "style": 0,
+                "align": 0,
+                "char": 0,
+                "charoff": 0,
+                "valign": 0
+            }
+        },
+        "tfoot": {
+            "contains": { 
+                "tr": 1
+            },
+            "attr": {
+                "id": 0,
+                "content-type": 0,
+                "style": 0,
+                "align": 0,
+                "char": 0,
+                "charoff": 0,
+                "valign": 0
+            }
+        },
+        "tbody": {
+            "contains": { 
+                "tr": 1
+            },
+            "attr": {
+                "id": 0,
+                "content-type": 0,
+                "style": 0,
+                "align": 0,
+                "char": 0,
+                "charoff": 0,
+                "valign": 0
+            }
+        },
+        "colgroup": {
+            "contains": { 
+                "col": 1
+            },
+            "attr": {
+                "id": 0,
+                "content-type": 0,
+                "style": 0,
+                "span": 0,
+                "width": 0,
+                "align": 0,
+                "char": 0,
+                "charoff": 0,
+                "valign": 0
+            }
+        },
+        "col": {
+            "contains": { },
+            "attr": {
+                "id": 0,
+                "content-type": 0,
+                "style": 0,
+                "span": 0,
+                "width": 0,
+                "align": 0,
+                "char": 0,
+                "charoff": 0,
+                "valign": 0
+            }
+        },
+        "tr": {
+            "contains": { 
+                "th": 1,
+                "td": 1
+            },
+            "attr": {
+                "id": 0,
+                "content-type": 0,
+                "style": 0,
+                "align": 0,
+                "char": 0,
+                "charoff": 0,
+                "valign": 0,
+                "bgcolor": 0
+            }
+        }
+    } 
+} 

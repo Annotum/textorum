@@ -53,6 +53,11 @@ permission notices:
   http://code.google.com/p/jing-trang/
   Copyright (c) 2001-2003 Thai Open Source Software Center Ltd
   Released under the Modified BSD license
+
+  https://github.com/badsyntax/tinymce-custom-inlinepopups
+  Copyright (c) 2012 Richard Willis
+  Released under the MIT license
+  
   --
 
   MIT license:

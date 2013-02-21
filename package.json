@@ -16,7 +16,8 @@
 		"kexec": ""
 	},
 	"scripts": {
-		"watch": "cake watch"
+		"watch": "cake watch",
+		"build": "cake build"
 	},
 	"private": true
 }

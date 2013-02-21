@@ -1,7 +1,7 @@
 ###
 # testload.coffee - Test XSLT loading/saving
 # 
-# Copyright (C) 2012 Crowd Favorite, Ltd. All rights reserved.
+# Copyright (C) 2013 Crowd Favorite, Ltd. All rights reserved.
 # 
 # This file is part of Textorum.
 # 
@@ -55,11 +55,16 @@ define (require) ->
 
   loadFromText = (text) ->
     xmlDoc = (new DOMParser()).parseFromString(text, "text/xml")
+    if xmlDoc.getElementsByTagName('parsererror').length
+      return (new XMLSerializer()).serializeToString(xmlDoc)
     newDoc = processor.transformToDocument(xmlDoc)
     (new XMLSerializer()).serializeToString(newDoc)
     
   saveFromText = (text) ->
     xmlDoc = (new DOMParser()).parseFromString(text, "text/xml")
+    if xmlDoc.getElementsByTagName('parsererror').length
+      window.parserErrorText = text
+      return (new XMLSerializer()).serializeToString(xmlDoc)
     revNewDoc = revprocessor.transformToDocument(xmlDoc)
     (new XMLSerializer()).serializeToString(revNewDoc)
 
@@ -74,10 +79,12 @@ define (require) ->
     $('#mainform').submit()
 
   getDataHandler = (event) ->
+    # console.log "getdata", event
     if event.editor.mode isnt "source"
       event.data.dataValue = saveFromText(event.data.dataValue)
 
   setDataHandler = (event) ->
+    # console.log "setdata", event
     if event.editor.mode isnt "source"
       event.data.dataValue = loadFromText(event.data.dataValue)
 
