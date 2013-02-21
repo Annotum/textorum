@@ -50,14 +50,15 @@ define (require) ->
     # Delete a tag
     removeTag: (ui, params) ->
 
-    attrListElement: (name, params, node) ->
-      el = document.createElement("li")
-      el.appendChild(document.createTextNode(name))
-      el
-
-    attrFormElement: (name, params, node) ->
+    editorNodeFromListNode: (node) ->
       node = $(node)
-      node = @editor.dom.select("##{node.attr('name')}")[0]
+      if node.length
+        return $(@editor.dom.select("##{node.attr('name')}"))
+      else
+        return node
+
+
+    nameWithPrefix: (name, params, editorNode) ->
       if params.ns
         prefix = @editor.plugins.textorum.nsmap[params.ns]
         if prefix is undefined
@@ -67,55 +68,79 @@ define (require) ->
           # TODO: Better way to get the actual base document element?
           # TODO: Only set this when necessary, maybe?
           @editor.dom.select("body")[0].firstElementChild.setAttribute("xmlns:#{prefix}", params.ns)
-          attrValue = node.getAttributeNS(params.ns, name)
+          attrValue = editorNode[0].getAttributeNS params.ns, name
           if attrValue
-            node.removeAttributeNS(params.ns, name)
-            node.setAttribute("#{prefix}:#{name}", attrValue)
+            editorNode[0].removeAttributeNS params.ns, name
+            editorNode.attr "#{prefix}:#{name}", attrValue
           else
         if prefix
-          name = "#{prefix}:#{name}"
-          attrValue = node.getAttribute(name)
-      else
-        attrValue = node.getAttribute(name)
+          return "#{prefix}:#{name}"
+      return name
+
+    attrListElement: (name, params, node) ->
+      origname = name
+      node = @editorNodeFromListNode(node)
+      name = @nameWithPrefix(name, params, node)
+      attrValue = node.attr name
+      el = $(document.createElement("li"))
+      el.addClass "attr_#{origname.replace(/:/, '__')}"
+      el.data "target", "attr_#{origname.replace(/:/, '__')}"
+      el.append(document.createTextNode(name))
+      if not params.required
+        el.addClass "optional"
+      if attrValue?
+        el.addClass "visible"
+      el
+
+    attrFormElement: (name, params, node) ->
+      origname = name
+      node = @editorNodeFromListNode(node)
+      name = @nameWithPrefix(name, params, node)
+      attrValue = node.attr name
 
       if params.required or attrValue?
         display = "block"
       else
         display = "none"
-      out = document.createElement("div")
-      out.setAttribute("style", """display: #{display};""")
-      out.class = "attr_#{name}"
-      label = document.createElement("label")
-      label.appendChild(document.createTextNode("#{name}"))
-      out.appendChild(label)
+      out = $(document.createElement("div"))
+      out.attr "style", """display: #{display};"""
+      out.addClass "attr_#{origname.replace(/:/, '__')}"
+      out.data 'attribute_name', name
+      out.addClass "attrform"
+      label = $(document.createElement("label"))
+      label.append document.createTextNode("#{name}")
+      out.append label
 
       if params.value?.length
-        sel = document.createElement("select")
+        sel = $(document.createElement("select"))
+        sel.addClass "attrinput"
         sel.name = "attr_#{name}"
         if not params.required
-          opt = document.createElement("option")
-          opt.value = ""
-          opt.appendChild(document.createTextNode(" -- empty -- "))
-          sel.appendChild(opt)
+          opt = $(document.createElement("option"))
+          opt.val ""
+          opt.append document.createTextNode(" -- empty -- ")
+          sel.append opt
         for value in params.value
-          opt = document.createElement("option")
-          opt.value = value
+          opt = $(document.createElement("option"))
+          opt.val value
           if value is attrValue
-            opt.setAttribute("selected", "selected")
-          opt.appendChild(document.createTextNode(value))
-          sel.appendChild(opt)
-        out.appendChild(sel)
+            opt.prop "selected", true
+          opt.append document.createTextNode(value)
+          sel.append opt
+        out.append sel
       else if params.data isnt undefined
-        sel = document.createElement("input")
-        sel.type = "text"
+        sel = $(document.createElement("input"))
+        sel.addClass "attrinput"
+        sel.prop "type", "text"
         if attrValue?
-          sel.value = attrValue
-        out.appendChild(sel)
+          sel.val attrValue
+        out.append sel
       else if params.$?
-        sel = document.createElement("textarea")
+        sel = $(document.createElement("textarea"))
+        sel.addClass "attrinput"
         if attrValue?
-          sel.appendChild(document.createTextNode(attrValue))
-        out.appendChild(sel)
+          sel.append document.createTextNode(attrValue)
+        out.append sel
 
       out
 
@@ -123,28 +148,37 @@ define (require) ->
       attroptional = {}
       attrrequired = {}
       attrgroups = {}
-      newtagname = $(node).attr("data-xmlel") || params['key']
+      editorNode = @editorNodeFromListNode node
+      newtagname = $(editorNode).attr("data-xmlel") || params['key']
       elementattrs = @editor.plugins.textorum.schema.defs[newtagname]?.attr
 
-      attrRequiredList = document.createElement("ul")
-      attrlist = document.createElement("ul")
-      attrform = document.createElement("div")
+      attrRequiredList = $(document.createElement("ul"))
+      attrlist = $(document.createElement("ul"))
+      attrform = $(document.createElement("div"))
 
-      attrwindow = document.createElement("div")
-      attrlists = document.createElement("div")
-      attrlists.appendChild(attrRequiredList)
-      attrlists.appendChild(attrlist)
-      attrwindow.appendChild(attrlists)
-      attrwindow.appendChild(attrform)
+      attrwindow = $(document.createElement("div"))
+      attrwindow.addClass "textorum_attributewindow"
+      attrlists = $(document.createElement("div"))
+      attrlists.append attrRequiredList
+      attrlists.append attrlist
+      attrwindow.append attrlists
+      attrwindow.append attrform
+      
+      attrlists.on 'click', 'li.optional', (e) ->
+        el = $(this)
+        window.foo = el
+        el.parents(".textorum_attributewindow").find("div.#{el.data('target')}").toggle()
+
       for own attr of elementattrs
-        attrform.appendChild(@attrFormElement(attr, elementattrs[attr], node))
+        attrform.append @attrFormElement(attr, elementattrs[attr], node)
         if elementattrs[attr].required
-          attrRequiredList.appendChild(@attrListElement(attr, elementattrs[attr], node))
+          attrRequiredList.append @attrListElement(attr, elementattrs[attr], node)
           attroptional[attr] = elementattrs[attr]
         else
-          attrlist.appendChild(@attrListElement(attr, elementattrs[attr], node))
+          attrlist.append @attrListElement(attr, elementattrs[attr], node)
           attrrequired[attr] = elementattrs[attr]
-      if attrform.childNodes.length
+      if attrform.children().length
+        window.attrform = attrform
         wm = @editor.windowManager
         w = wm.open {
           inline: true
@@ -154,7 +188,12 @@ define (require) ->
           buttons: [{
             text: 'Ok'
             click: (e) -> 
-              console.log "OK button clicked:", e, w
+              attrform.find("div.attrform:hidden").each (e) ->
+                console.log "removing", $(this).data('attribute_name')
+                editorNode.removeAttr $(this).data('attribute_name')
+              attrform.find("div.attrform:visible").each (e) ->
+                console.log "setting", $(this).data('attribute_name'), "to", $(this).find('.attrinput').val()
+                editorNode.attr $(this).data('attribute_name'), $(this).find('.attrinput').val()
               wm.close(null, w.id)
           }, {
             text: 'Cancel'
@@ -165,10 +204,6 @@ define (require) ->
         }
       else
         console.log "no attributes"
-      console.log "attrform", attrform
-      console.log "Required:", attrrequired
-      console.log "Optional:", attroptional
-
 
   init = (editor) ->
     return new ElementHandler(editor)
