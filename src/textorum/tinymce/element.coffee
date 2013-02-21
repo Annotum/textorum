@@ -68,20 +68,20 @@ define (require) ->
           # TODO: Better way to get the actual base document element?
           # TODO: Only set this when necessary, maybe?
           @editor.dom.select("body")[0].firstElementChild.setAttribute("xmlns:#{prefix}", params.ns)
-          attrValue = editorNode[0].getAttributeNS params.ns, name
-          if attrValue
-            editorNode[0].removeAttributeNS params.ns, name
-            editorNode.attr "#{prefix}:#{name}", attrValue
+          if editorNode.length
+            attrValue = editorNode[0].getAttributeNS params.ns, name
+            if attrValue
+              editorNode[0].removeAttributeNS params.ns, name
+              editorNode.attr "#{prefix}:#{name}", attrValue
           else
         if prefix
           return "#{prefix}:#{name}"
       return name
 
-    attrListElement: (name, params, node) ->
+    attrListElement: (name, params, editorNode) ->
       origname = name
-      node = @editorNodeFromListNode(node)
-      name = @nameWithPrefix(name, params, node)
-      attrValue = node.attr name
+      name = @nameWithPrefix(name, params, editorNode)
+      attrValue = editorNode.attr name
       el = $(document.createElement("li"))
       el.addClass "attr_#{origname.replace(/:/, '__')}"
       el.data "target", "attr_#{origname.replace(/:/, '__')}"
@@ -92,11 +92,10 @@ define (require) ->
         el.addClass "visible"
       el
 
-    attrFormElement: (name, params, node) ->
+    attrFormElement: (name, params, editorNode) ->
       origname = name
-      node = @editorNodeFromListNode(node)
-      name = @nameWithPrefix(name, params, node)
-      attrValue = node.attr name
+      name = @nameWithPrefix(name, params, editorNode)
+      attrValue = editorNode.attr name
 
       if params.required or attrValue?
         display = "block"
@@ -149,6 +148,11 @@ define (require) ->
       attrrequired = {}
       attrgroups = {}
       editorNode = @editorNodeFromListNode node
+      creating = false
+      if not node or not editorNode.length
+        creating = true
+
+
       newtagname = $(editorNode).attr("data-xmlel") || params['key']
       elementattrs = @editor.plugins.textorum.schema.defs[newtagname]?.attr
 
@@ -170,16 +174,17 @@ define (require) ->
         el.parents(".textorum_attributewindow").find("div.#{el.data('target')}").toggle()
 
       for own attr of elementattrs
-        attrform.append @attrFormElement(attr, elementattrs[attr], node)
+        attrform.append @attrFormElement(attr, elementattrs[attr], editorNode)
         if elementattrs[attr].required
-          attrRequiredList.append @attrListElement(attr, elementattrs[attr], node)
+          attrRequiredList.append @attrListElement(attr, elementattrs[attr], editorNode)
           attroptional[attr] = elementattrs[attr]
         else
-          attrlist.append @attrListElement(attr, elementattrs[attr], node)
+          attrlist.append @attrListElement(attr, elementattrs[attr], editorNode)
           attrrequired[attr] = elementattrs[attr]
       if attrform.children().length
         window.attrform = attrform
         wm = @editor.windowManager
+        thiseditor = @editor
         w = wm.open {
           inline: true
           resizable: true
@@ -188,12 +193,34 @@ define (require) ->
           buttons: [{
             text: 'Ok'
             click: (e) -> 
+              if creating
+                console.log "creating node"
+                console.log "params", params
+                editorNode = $(document.createElement(thiseditor.plugins.textorum.translateElement(newtagname)))
+                editorNode.attr 'data-xmlel', newtagname
+                editorNode.addClass newtagname
+
               attrform.find("div.attrform:hidden").each (e) ->
                 console.log "removing", $(this).data('attribute_name')
                 editorNode.removeAttr $(this).data('attribute_name')
               attrform.find("div.attrform:visible").each (e) ->
                 console.log "setting", $(this).data('attribute_name'), "to", $(this).find('.attrinput').val()
                 editorNode.attr $(this).data('attribute_name'), $(this).find('.attrinput').val()
+              if creating
+                target = $(thiseditor.dom.select("##{params.id}"))
+                console.log "inserting", editorNode, params.action, target
+                switch params.action
+                  when "before"
+                    editorNode.insertBefore(target)
+                  when "after"
+                    editorNode.insertAfter(target)
+                  when "inside"
+                    editorNode.appendTo(target)
+              thiseditor.undoManager.add()
+              thiseditor.execCommand('mceRepaint')
+              thiseditor.plugins.textorum.updateTree()
+
+              thiseditor.focus()
               wm.close(null, w.id)
           }, {
             text: 'Cancel'
@@ -204,6 +231,26 @@ define (require) ->
         }
       else
         console.log "no attributes"
+        if creating
+          console.log "creating node"
+          editorNode = $(document.createElement(@editor.plugins.textorum.translateElement(newtagname)))
+          editorNode.attr 'data-xmlel', newtagname
+          editorNode.addClass newtagname
+          target = $(@editor.dom.select("##{params.id}"))
+          console.log "inserting", editorNode, params.action, target
+          switch params.action
+            when "before"
+              editorNode.insertBefore(target)
+            when "after"
+              editorNode.insertAfter(target)
+            when "inside"
+              editorNode.appendTo(target)
+        @editor.undoManager.add()
+        @editor.execCommand('mceRepaint')
+        @editor.plugins.textorum.updateTree()
+
+        @editor.focus()
+
 
   init = (editor) ->
     return new ElementHandler(editor)

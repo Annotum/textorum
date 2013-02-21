@@ -115,7 +115,6 @@ define (require) ->
         if actionType is "change"
           #id = $("#tree a.ui-state-active").closest("li").attr("name")
           id = $(obj).attr("name")
-          console.log "change", id, "to", key
           editor.execCommand "changeSchemaTag", true, 
             key: key
             pos: pos

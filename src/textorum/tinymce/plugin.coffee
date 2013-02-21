@@ -23,7 +23,7 @@ define (require) ->
   pluginCss = require('text!./plugin.css')
   testload = require('./testload')
   helper = require('../helper')
-  tree = require('./tree')
+  editortree = require('./tree')
   elementHelper = require('./element')
   #pathHelper = require('./pathhelper')
 
@@ -62,12 +62,13 @@ define (require) ->
         schema.containedBy[containedElement][element] = 1
     schema
 
-  _treeAttributeFilter = (nodes, name) ->
-    i = nodes.length
-    snip = tree.id_prefix.length
-    while (i--)
-      if nodes[i].attr('id').substr(0, snip) is tree.id_prefix
-        nodes[i].attr(name, null)
+  _treeAttributeFilterGenerator = (id_prefix) ->
+    _treeAttributeFilter = (nodes, name) ->
+       i = nodes.length
+       snip = id_prefix.length
+       while (i--)
+         if nodes[i].attr('id').substr(0, snip) is id_prefix
+           nodes[i].attr(name, null)
 
   _nsurlAttributeFilterGenerator = (editor) ->
     _nsurlAttributeFilter = (nodes, name, params) ->
@@ -79,16 +80,28 @@ define (require) ->
         node.remove()
 
   tinymce.create 'tinymce.plugins.textorum.loader', {
-    init: (editor, url) ->
+    elementMap: {
+      inlineelements: "bold,italic,monospace,underline,sub,sup,named-content,ext-link,inline-graphic,inline-formula".split(',')
+      fixedelements: "table,thead,tbody,td,tr,th".split(',')
+    }
+    updateTree: () ->
+      @tree.update '#editortree', @editor
+    schema: {}
+    nsmap: {}
+
+
+    init: (@editor, url) ->
+      that = this
       @schema = _getSchema("test/rng/kipling-jp3-xsl.srng")
-      tree.create '#editortree', editor
+      @tree = editortree
+      @tree.create '#editortree', editor
       testload.bindHandler editor
       editor.onSetContent.add (ed, o) ->
-        tree.update '#editortree', ed
-      editor.onNodeChange.add tree.navigate
+        that.tree.update '#editortree', editor
+      editor.onNodeChange.add that.tree.navigate
       editor.onPreInit.add (editor) ->
         editor.parser.addAttributeFilter 'data-textorum-nsurl', _nsurlAttributeFilterGenerator(editor)
-        editor.serializer.addAttributeFilter 'id', _treeAttributeFilter
+        editor.serializer.addAttributeFilter 'id', _treeAttributeFilterGenerator(that.tree.id_prefix)
       editor.onInit.add (editor) ->
         
       if editor.theme.onResolveName
@@ -105,6 +118,14 @@ define (require) ->
         infourl : 'https://github.com/Annotum/textorum/',
         version : "0.1"
       }
-    nsmap: {}
+    translateElement: (elementName) ->
+      if elementName in @elementMap.fixedelements
+        elementName
+      else if elementName in @elementMap.inlineelements
+        "span"
+      else
+        "div"
+
+
   }
   tinymce.PluginManager.add('textorum', tinymce.plugins.textorum.loader)

@@ -29,6 +29,7 @@ define (require) ->
   processor = new XSLTProcessor()
   forwardStylesheet = helper.getXML "xsl/xml2cke.xsl"
   processor.importStylesheet(forwardStylesheet)
+  # TODO: Switch to class setup, get these params from main textorum plugin
   # Elements to bring across as <span> rather than <div>
   processor.setParameter(null, "inlineelements", "bold,italic,monospace,underline,sub,sup,named-content,ext-link,inline-graphic,inline-formula")
   # Elements to bring over without changing their element name
