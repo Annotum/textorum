@@ -1,0 +1,3 @@
+<IfModule headers_module>
+Header set Cache-control "private, max-age=0, must-revaliate"
+</IfModule>

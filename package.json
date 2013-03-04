@@ -1,0 +1,23 @@
+{
+	"name": "textorum",
+	"version": "0.1.0",
+	"devDependencies": {},
+	"dependencies": {
+		"requirejs": "",
+		"coffee-script": "",
+		"coffeelint": "",
+
+		"uglify-js": "",
+		"wrench": "",
+		"colors": "",
+		"docco": ""
+	},
+	"optionalDependencies": {
+		"kexec": ""
+	},
+	"scripts": {
+		"watch": "cake watch",
+		"build": "cake build"
+	},
+	"private": true
+}
