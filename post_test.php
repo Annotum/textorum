@@ -22,7 +22,7 @@
 		}
 		th, td {
 			border: 1px solid black;
-			
+
 		}
 		pre {
 			font-family: monospace,monospace;
@@ -39,6 +39,9 @@
 		}
 
 	</style>
+	<title>Sample &mdash; TinyMCE Outpu</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link type="text/css" rel="stylesheet" href="sample.css" />
 </head>
 <body>
 	<table>
