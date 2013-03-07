@@ -7,7 +7,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>Sample &mdash; CKEditor</title>
+	<title>Sample &mdash; TinyMCE Outpu</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link type="text/css" rel="stylesheet" href="sample.css" />
 </head>
