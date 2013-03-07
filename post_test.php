@@ -39,7 +39,7 @@
 		}
 
 	</style>
-	<title>Sample &mdash; TinyMCE Outpu</title>
+	<title>Sample &mdash; TinyMCE Output</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link type="text/css" rel="stylesheet" href="sample.css" />
 </head>
