@@ -43,7 +43,7 @@
         <xsl:text>
   "$root":
     [</xsl:text>
-        <xsl:apply-templates select="descendant::rng:ref" mode="rootelements"></xsl:apply-templates>
+        <xsl:apply-templates select="descendant::rng:ref" mode="rootelements"/>
         <xsl:text>
     ],
         </xsl:text>
@@ -63,7 +63,7 @@
     </xsl:template>
     
     <xsl:template match="rng:define" mode="ingrammar">
-        <xsl:apply-templates select="rng:element" mode="indefine"></xsl:apply-templates>
+        <xsl:apply-templates select="rng:element" mode="indefine"/>
         <xsl:if test="position() != last()">
             <xsl:text>,</xsl:text>
         </xsl:if>
@@ -78,11 +78,11 @@
             "$": 1, </xsl:text></xsl:if>
             <xsl:text>
             "contains": { </xsl:text>
-            <xsl:apply-templates select="descendant::rng:ref" mode="inelement"></xsl:apply-templates>
+            <xsl:apply-templates select="descendant::rng:ref" mode="inelement"/>
             <xsl:if test="descendant::rng:ref"><xsl:text>
             </xsl:text></xsl:if><xsl:text>},
             "attr": {</xsl:text>
-            <xsl:apply-templates select="descendant::rng:attribute" mode="attr-list"></xsl:apply-templates>
+            <xsl:apply-templates select="descendant::rng:attribute" mode="attr-list"/>
             <xsl:if test="descendant::rng:attribute"><xsl:text>
             </xsl:text></xsl:if> 
             <xsl:text>}
@@ -93,7 +93,9 @@
     </xsl:template>
     
     <xsl:template match="rng:ref" mode="inelement">
-        <xsl:variable name="groupcounter"><xsl:value-of select="generate-id()"></xsl:value-of></xsl:variable>
+        <xsl:variable name="groupcounter">
+            <xsl:value-of select="generate-id()"/>
+        </xsl:variable>
         <xsl:variable name="refname">
             <xsl:value-of select="@name"/>
         </xsl:variable>
@@ -104,16 +106,24 @@
         <xsl:choose>
             <xsl:when test="ancestor::rng:oneOrMore">
                 <xsl:text>{ "group": "</xsl:text>
-                <xsl:value-of select="generate-id(ancestor::rng:oneOrMore)"></xsl:value-of>
+                <xsl:value-of select="generate-id(ancestor::rng:oneOrMore)"/>
                 <xsl:text>", "required": </xsl:text>
                 <xsl:choose>
-                    <xsl:when test="ancestor::rng:choice/rng:empty"><xsl:text>0</xsl:text></xsl:when>
-                    <xsl:otherwise><xsl:text>1</xsl:text></xsl:otherwise>
+                    <xsl:when test="ancestor::rng:choice/rng:empty">
+                        <xsl:text>0</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>1</xsl:text>
+                    </xsl:otherwise>
                 </xsl:choose>
                 <xsl:text> }</xsl:text>
             </xsl:when>
-            <xsl:when test="ancestor::rng:choice/rng:empty"><xsl:text>0</xsl:text></xsl:when>
-            <xsl:otherwise><xsl:text>{ "required": 1 }</xsl:text></xsl:otherwise>
+            <xsl:when test="ancestor::rng:choice/rng:empty">
+                <xsl:text>0</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>{ "required": 1 }</xsl:text>
+            </xsl:otherwise>
         </xsl:choose>
         <xsl:if test="position() != last()">
             <xsl:text>,</xsl:text>
@@ -122,7 +132,7 @@
     
     <xsl:template match="rng:value" mode="attr-list">
         <xsl:text>"</xsl:text>
-        <xsl:value-of select="text()"></xsl:value-of>
+        <xsl:value-of select="text()"/>
         <xsl:text>"</xsl:text>
         <xsl:if test="position() != last()">
             <xsl:text>, </xsl:text>
@@ -132,15 +142,15 @@
     <xsl:template match="rng:attribute" mode="attr-list">
         <xsl:text>
               "</xsl:text>
-        <xsl:variable name="nsuri" select="rng:name/@ns"></xsl:variable>
+        <xsl:variable name="nsuri" select="rng:name/@ns"/>
         <xsl:choose>
             <xsl:when test="rng:name/@ns = 'http://www.w3.org/XML/1998/namespace'">
                 <xsl:text>xml:</xsl:text>
             </xsl:when>
             <xsl:when test="local-name(//namespace::node()[. = $nsuri]) != ''">
-                    <xsl:value-of select="local-name(//namespace::node()[. = $nsuri])"/>
-                    <xsl:text>:</xsl:text>
-            </xsl:when>      
+                <xsl:value-of select="local-name(//namespace::node()[. = $nsuri])"/>
+                <xsl:text>:</xsl:text>
+            </xsl:when>
         </xsl:choose>
         <xsl:value-of select="rng:name/text()"/>
         <xsl:text>": { </xsl:text>
@@ -149,26 +159,29 @@
             <xsl:value-of select="rng:name/@ns"/>
             <xsl:text>", </xsl:text>
         </xsl:if>
-        <xsl:if test="descendant::rng:value"><xsl:text>"value": [</xsl:text>
-        <xsl:apply-templates select="descendant::rng:value" mode="attr-list"></xsl:apply-templates>
-        <xsl:text>], </xsl:text> 
+        <xsl:if test="descendant::rng:value">
+            <xsl:text>"value": [</xsl:text>
+            <xsl:apply-templates select="descendant::rng:value" mode="attr-list"/>
+            <xsl:text>], </xsl:text>
         </xsl:if>
         <xsl:choose>
             <xsl:when test="rng:data">
                 <xsl:text>"data": </xsl:text>
-                <xsl:apply-templates select="rng:data" mode="attr-list"></xsl:apply-templates>
+                <xsl:apply-templates select="rng:data" mode="attr-list"/>
                 <xsl:text>, </xsl:text>
             </xsl:when>
             <xsl:when test="rng:text">
-                <xsl:text>"$": 1, </xsl:text>
+                <xsl:text>"$": 1,</xsl:text>
             </xsl:when>
         </xsl:choose>
         <xsl:text>"required": </xsl:text>
         <xsl:choose>
-            <xsl:when test="ancestor::rng:choice/rng:empty"><xsl:text>0</xsl:text></xsl:when>
+            <xsl:when test="ancestor::rng:choice/rng:empty">
+                <xsl:text>0</xsl:text>
+            </xsl:when>
             <xsl:otherwise>1</xsl:otherwise>
         </xsl:choose>
-        
+
         <xsl:text> }</xsl:text>
         <xsl:if test="position() != last()">
             <xsl:text>,</xsl:text>
@@ -177,7 +190,7 @@
     
     <xsl:template match="rng:data" mode="attr-list">
         <xsl:text>"Type: </xsl:text>
-        <xsl:value-of select="@type"></xsl:value-of>
+        <xsl:value-of select="@type"/>
         <xsl:text>"</xsl:text>
     </xsl:template>
     
