@@ -21,7 +21,7 @@ Advanced, validating, structured text (XML) editing component. Part of the Annot
 
 ## Installation Instructions
 
-Clone this repository to a web-accessible directory.  The instructions below assume textorum is being installed in a webroot; `tinymce.php` may need to be edited to reflect the location of tinymce and similar otherwise.
+Clone this repository to a web-accessible directory.  The instructions below assume textorum is being installed in a webroot; `tinymce.html` may need to be edited to reflect the location of tinymce and similar otherwise.
 
 ### Using OS X:
 
@@ -36,10 +36,35 @@ Clone this repository to a web-accessible directory.  The instructions below ass
 
 	npm install
 	bundle install
-	
-	git clone -b v.pre1.0 https://github.com/vakata/jstree.git
 
-	git clone --depth=1 https://github.com/tinymce/tinymce.git	
+### In the webroot (if tinymce.html is unmodified):
+
+#### Install jstree v.pre1.0
+
+From an archive:
+
+	curl -LO https://github.com/vakata/jstree/archive/v.pre1.0.zip
+	unzip v.pre1.0.zip
+	mv jstree-v.pre1.0 jstree
+
+Or from git: 
+
+Known good revision: `9c41e435d5aee9647e26500200e30b359bb96ae0`; tracking v.pre1.0 release branch in development
+
+	git clone -b v.pre1.0 https://github.com/vakata/jstree.git
+	cd jstree
+	git checkout 9c41e435d5aee9647e26500200e30b359bb96ae0
+
+#### Install tinymce
+
+From an archive:
+
+    curl -LO http://github.com/downloads/tinymce/tinymce/tinymce_3.5.8.zip
+    unzip tinymce_3.5.8.zip
+
+Or from git (tracking master branch until Textorum release):
+
+	git clone https://github.com/tinymce/tinymce.git	
 	cd tinymce
 	ant
 	cd ..
@@ -54,7 +79,7 @@ Clone this repository to a web-accessible directory.  The instructions below ass
 
 ## Example instructions
 
-- Open <http://textorum.example.com/tinymce.php> (adjusted for where you installed Textorum)
+- Open <http://textorum.example.com/tinymce.html> (adjusted for where you installed Textorum)
 - Enter an absolute or relative path to a Textorum-compatible XML document in the input box and click Load
 - Toggling source view or pressing "Save" will submit the re-assembled XML to a test script that echos it back
 
