@@ -29,7 +29,7 @@ Clone this repository to a web-accessible directory.  The instructions below ass
 
 ### Otherwise:
 
-- Install node.js and npm (using a package manager or from the [download page](http://nodejs.org/download/))
+- Install node.js (v0.8.16 or later is known to work) and npm (v1.1.70 or later is known to work), using a package manager or from the [download page](http://nodejs.org/download/)
 - Install Ruby (1.9.3-p194 is known to work; later patchlevels may have problems) and RubyGems (using a package manager or from [ruby](http://www.ruby-lang.org/en/downloads/), [rubygems](https://rubygems.org/pages/download))
 
 ### In the textorum dir:
