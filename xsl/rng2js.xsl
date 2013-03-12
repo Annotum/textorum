@@ -102,13 +102,18 @@
         <xsl:value-of select="//rng:define[@name=$refname]/rng:element/rng:name/text()"/>
         <xsl:text>": </xsl:text>
         <xsl:choose>
-            <xsl:when test="ancestor::rng:choice/rng:empty"><xsl:text>0</xsl:text></xsl:when>
             <xsl:when test="ancestor::rng:oneOrMore">
-                <xsl:text>"</xsl:text>
+                <xsl:text>{ "group": "</xsl:text>
                 <xsl:value-of select="generate-id(ancestor::rng:oneOrMore)"></xsl:value-of>
-                <xsl:text>"</xsl:text>
+                <xsl:text>", "required": </xsl:text>
+                <xsl:choose>
+                    <xsl:when test="ancestor::rng:choice/rng:empty"><xsl:text>0</xsl:text></xsl:when>
+                    <xsl:otherwise><xsl:text>1</xsl:text></xsl:otherwise>
+                </xsl:choose>
+                <xsl:text> }</xsl:text>
             </xsl:when>
-            <xsl:otherwise><xsl:text>1</xsl:text></xsl:otherwise>
+            <xsl:when test="ancestor::rng:choice/rng:empty"><xsl:text>0</xsl:text></xsl:when>
+            <xsl:otherwise><xsl:text>{ "required": 1 }</xsl:text></xsl:otherwise>
         </xsl:choose>
         <xsl:if test="position() != last()">
             <xsl:text>,</xsl:text>
@@ -155,7 +160,7 @@
                 <xsl:text>, </xsl:text>
             </xsl:when>
             <xsl:when test="rng:text">
-                <xsl:text>"$": 1,</xsl:text>
+                <xsl:text>"$": 1, </xsl:text>
             </xsl:when>
         </xsl:choose>
         <xsl:text>"required": </xsl:text>
