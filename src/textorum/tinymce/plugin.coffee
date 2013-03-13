@@ -76,6 +76,9 @@ define (require) ->
 
       while (i--)
         node = nodes[i]
+        # Some browsers don't record the (fixed) xml prefix for the namespace during xsl transforms
+        if node.attributes.map['data-textorum-nsurl'] == "http://www.w3.org/XML/1998/namespace"
+          node.attributes.map['data-textorum-nsprefix'] = "xml"
         editor.plugins.textorum.nsmap[node.attributes.map['data-textorum-nsurl']] = node.attributes.map['data-textorum-nsprefix']
         node.remove()
 
