@@ -26,11 +26,11 @@
         <xsl:text>{</xsl:text>
         <xsl:apply-templates select="rng:start" mode="ingrammar"/>
         <xsl:text>
-  "defs": 
+  "defs":
     {</xsl:text>
         <xsl:apply-templates select="rng:define" mode="ingrammar"/>
         <xsl:text>
-    } 
+    }
 } </xsl:text>
     </xsl:template>
 
@@ -65,14 +65,19 @@
     </xsl:template>
 
     <xsl:template match="rng:element" mode="indefine">
+        <!-- Element name -->
         <xsl:text>
         "</xsl:text>
         <xsl:value-of select="rng:name/text()"/>
         <xsl:text>": {</xsl:text>
+
+        <!-- If element accepts text node content -->
         <xsl:if test=".//rng:text[not(parent::rng:attribute)]">
             <xsl:text>
             "$": 1, </xsl:text>
         </xsl:if>
+
+        <!-- Elements this element can contain (always present) -->
         <xsl:text>
             "contains": { </xsl:text>
         <xsl:apply-templates select="descendant::rng:ref" mode="inelement"/>
@@ -80,7 +85,10 @@
             <xsl:text>
             </xsl:text>
         </xsl:if>
-        <xsl:text>},
+        <xsl:text>},</xsl:text>
+
+        <!-- Attributes this element can contain (always present) -->
+        <xsl:text>
             "attr": {</xsl:text>
         <xsl:apply-templates select="descendant::rng:attribute" mode="attr-list"/>
         <xsl:if test="descendant::rng:attribute">
@@ -88,6 +96,8 @@
             </xsl:text>
         </xsl:if>
         <xsl:text>}</xsl:text>
+
+        <!-- Strict ordering of descendants -->
         <xsl:if test="descendant::rng:group/rng:ref">
             <xsl:text>,
             "order": [</xsl:text>
@@ -138,8 +148,12 @@
             </xsl:for-each>
             <xsl:text>]</xsl:text>
         </xsl:if>
+
+        <!-- Close element object -->
         <xsl:text>
         }</xsl:text>
+
+        <!-- Trailing comma -->
         <xsl:if test="position() != last()">
             <xsl:text>,</xsl:text>
         </xsl:if>
