@@ -9,6 +9,8 @@
 
     <xsl:strip-space elements="*"/>
 
+    <xsl:variable name="nsset" select="//namespace::*[not(. = ../../namespace::*)]"/>
+
     <xsl:template match="/">
         <xsl:apply-templates/>
     </xsl:template>
@@ -87,7 +89,8 @@
         </xsl:if>
         <xsl:text>}</xsl:text>
         <xsl:if test="descendant::rng:group/rng:ref">
-            <xsl:text>, "order": [</xsl:text>
+            <xsl:text>,
+            "order": [</xsl:text>
             <xsl:for-each select="descendant::rng:group">
                 <xsl:sort select="position()" data-type="number" order="descending"/>
                 <xsl:if test="child::rng:ref">
@@ -151,7 +154,7 @@
         </xsl:variable>
         <xsl:text>
                 "</xsl:text>
-        <xsl:value-of select="//rng:define[@name=$refname]/rng:element/rng:name/text()"/>
+        <xsl:value-of select="/rng:grammar/rng:define[@name=$refname]/rng:element/rng:name/text()"/>
         <xsl:text>": </xsl:text>
         <xsl:choose>
             <xsl:when test="ancestor::rng:oneOrMore">
@@ -192,13 +195,13 @@
     <xsl:template match="rng:attribute" mode="attr-list">
         <xsl:text>
               "</xsl:text>
-        <xsl:variable name="nsuri" select="rng:name/@ns"/>
+        <xsl:variable name="nsuri">
+            <xsl:value-of select="rng:name/@ns"/>
+        </xsl:variable>
         <xsl:choose>
-            <xsl:when test="rng:name/@ns = 'http://www.w3.org/XML/1998/namespace'">
-                <xsl:text>xml:</xsl:text>
-            </xsl:when>
-            <xsl:when test="local-name(//namespace::node()[. = $nsuri]) != ''">
-                <xsl:value-of select="local-name(//namespace::node()[. = $nsuri])"/>
+
+            <xsl:when test="local-name($nsset[. = $nsuri]) != ''">
+                <xsl:value-of select="local-name($nsset[. = $nsuri])"/>
                 <xsl:text>:</xsl:text>
             </xsl:when>
         </xsl:choose>
