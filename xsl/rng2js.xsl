@@ -108,7 +108,7 @@
                     <xsl:if test="child::rng:ref">
                         <xsl:text>, </xsl:text>
                     </xsl:if>
-                    <xsl:for-each select="child::rng:choice">
+                    <xsl:for-each select="child::rng:choice[descendant::rng:ref]">
                         <xsl:text>[</xsl:text>
                         <xsl:for-each select="descendant::rng:ref">
                             <xsl:variable name="refname">
