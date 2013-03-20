@@ -177,26 +177,41 @@ define (require) ->
         dom.documentElement.namespaceURI == errorNS or
         (dom.getElementsByTagName("parsererror").length > 0)
       )
-      
 
-    depthFirstWalk: (node, callback) ->
+    # Iteratively traverse a DOM fragment via depth first pre-order
+    #
+    # @overload depthFirstIterativePreorderEvents(root, handlerFunction)
+    #   Calls handlerFunction once at the start of visiting every node, with 'this' set to the node
+    #   @param [Function] handler Function to call with 'this' set to every node as it is entered; one argument (depth)
+    #
+    # @overload depthFirstIterativePreorderEvents(root, handlerObject)
+    #   Calls handlerObject.startTag when entering a node and handlerObject.endTag when leaving a node
+    #   @param [Object] handler Handler object; startTag and endTag methods are called with two arguments (node, depth)
+    #
+    # @note To prune all children of a node (and not visit them), return 'false' from the handler function or startTag
+    #
+    depthFirstIterativePreorder: (root, handler) ->
+      node = root
       depth = 0
-      skip = false
-      done = false
-      tmp = undefined
-      while depth >= 0 and not done
-        if not skip
-          skip = (callback.call(node, depth) == false)
-        if not skip and tmp = node.firstChild
-          depth += 1
-        else if tmp = node.nextSibling
-          skip = false
+      while node isnt null
+        if handler.startTag
+          processChildren = handler.startTag(node, depth)
+        else if typeof handler is 'function'
+          processChildren = handler.call(node, depth)
         else
-          tmp = node.parentNode
-          depth -= 1
-          if depth == 0
-            done = true
-          skip = true
-        node = tmp
-      undefined
+          processChildren = true
+        if node.hasChildNodes() and processChildren isnt false
+          depth += 1
+          node = node.firstChild
+        else
+          while node.nextSibling is null
+            node = node.parentNode
+            depth -= 1
+            if handler.endTag
+              handler.endTag(node, depth)
+            if node is root
+              return
+          node = node.nextSibling
+
+
   new Helpers()

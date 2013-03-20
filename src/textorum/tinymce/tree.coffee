@@ -231,7 +231,7 @@ define (require) ->
     holder = []
     holder.unshift top
 
-    helper.depthFirstWalk body, _depthWalkCallbackGenerator(holder)
+    helper.depthFirstIterativePreorder body, _depthWalkCallbackGenerator(holder)
 
     $(selector).jstree(
       json_data:
