@@ -58,6 +58,10 @@ permission notices:
   Copyright (c) 2012 Richard Willis
   Released under the MIT license
   
+  https://github.com/janl/mustache.js
+  Copyright (c) 2010 Jan Lehnardt
+  Released under the MIT license
+  
   --
 
   MIT license:
