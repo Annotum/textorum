@@ -78,7 +78,7 @@ define (require) ->
         editor.focus()
         previousNode = id
 
-  _depthWalkCallbackGenerator = (holder) ->
+  _depthWalkCallbackGenerator = (holder, nodeTitleCallback) ->
     depthWalkCallback = (depth) ->
       node = this
       if not node.getAttribute?
@@ -90,6 +90,10 @@ define (require) ->
       while depth < (holder.length - 1)
         holder.shift()
       title = node.getAttribute('data-xmlel') || ("[" + node.localName + "]")
+      if nodeTitleCallback
+        additional = nodeTitleCallback(node, title)
+        if additional
+          title = title + ": " + helper.escapeHtml(additional)
       holder[0]['children'] ||= []
       holder[0]['state'] ||= 'closed'
       holder[0]['children'].push
@@ -218,6 +222,20 @@ define (require) ->
         delete items["around"]
       items
 
+  # TODO: This should be passed in as part of the tree initialization
+  _makeNodeTitle = (node, title) ->
+    switch title
+      when "ref" then $(node).children('[data-xmlel="label"]').text() || false
+      when "article"
+        $(node).children('[data-xmlel="front"]')
+          .find('[data-xmlel="article-title"]')
+          .map((idx, ele) -> $(ele).text()).get().join(", ")
+      when "title", "article-id" then $(node).text()
+      when "journal-id", "issn", "publisher" then $(node).text()
+      when "sec", "ack", "ref-list" then $(node).children('[data-xmlel="title"]').text()
+      when "p" then $(node).text().substr(0, 20) + "..."
+
+      
   updateTree = (selector, editor) ->
     body = editor.dom.getRoot()
 
@@ -231,11 +249,11 @@ define (require) ->
     holder = []
     holder.unshift top
 
-    helper.depthFirstIterativePreorder body, _depthWalkCallbackGenerator(holder)
+    helper.depthFirstIterativePreorder body, _depthWalkCallbackGenerator(holder, _makeNodeTitle)
 
     $(selector).jstree(
       json_data:
-        data: [top]
+        data: [top['children']]
       ui: 
         select_limit: 1
       core:
