@@ -93,7 +93,7 @@ define (require) ->
       if nodeTitleCallback
         additional = nodeTitleCallback(node, title)
         if additional
-          title = title + ": " + helper.escapeHtml(additional)
+          title = helper.escapeHtml(additional.replace("%TITLE%", title))
       holder[0]['children'] ||= []
       holder[0]['state'] ||= 'closed'
       holder[0]['children'].push
@@ -210,7 +210,8 @@ define (require) ->
 
   # TODO: This should be passed in as part of the tree initialization
   _makeNodeTitle = (node, title) ->
-    switch title
+    autotitle = true
+    newtitle = switch title
       when "ref" then $(node).children('[data-xmlel="label"]').text() || false
       when "article"
         $(node).children('[data-xmlel="front"]')
@@ -220,6 +221,23 @@ define (require) ->
       when "journal-id", "issn", "publisher" then $(node).text()
       when "sec", "ack", "ref-list" then $(node).children('[data-xmlel="title"]').text()
       when "p" then $(node).text().substr(0, 20) + "..."
+      when "table-wrap", "fig"
+        jqnode = $(node)
+        label = jqnode.children('[data-xmlel="label"]').text()
+        caption = jqnode.children('[data-xmlel="caption"]').text()
+        if caption.length > 15
+          caption = caption.substr(0, 15) + "..."
+        if label.length > 0 and caption.length > 0
+          label = label + " "
+        output = [label, caption].join("")
+        if output.length > 0
+          autotitle = false
+          output = output + " [%TITLE%]"
+        output
+    if autotitle and newtitle and newtitle.indexOf("%TITLE%") is -1
+      newtitle = "%TITLE%: " + newtitle
+    newtitle
+
 
       
   updateTree = (selector, editor) ->
