@@ -28,7 +28,6 @@ define (require) ->
     namespaceIdx: 0
     constructor: (@editor) ->
       editor.addCommand 'addSchemaTag', @addTag, this
-      editor.addCommand 'changeSchemaTag', @changeTag, this
       editor.addCommand 'editSchemaTag', @editTag, this
       editor.addCommand 'removeSchemaTag', @removeTag, this
     # Create a new tag, bring up editing window
@@ -41,12 +40,6 @@ define (require) ->
     # Bring up editing window for existing tag
     editTag: (ui, params) ->
       @editWindow {}, params
-    # Replace a tag with another one
-    changeTag: (ui, params) ->
-      newtagname = params['key']
-      if not @editor.plugins.textorum.schema.defs[newtagname]
-        console.log "error", "no such tag in schema: #{newtagname}"
-        return
     # Delete a tag
     removeTag: (ui, params) ->
 

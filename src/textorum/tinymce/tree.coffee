@@ -116,21 +116,13 @@ define (require) ->
         pos =
           x: parseInt($("#tree_popup").css("left"))
           y: parseInt($("#tree_popup").css("top"))
-        if actionType is "change"
-          #id = $("#tree a.ui-state-active").closest("li").attr("name")
-          id = $(obj).attr("name")
-          editor.execCommand "changeSchemaTag", true, 
-            key: key
-            pos: pos
-            id: id
 
-        else
-          editor.currentBookmark = editor.selection.getBookmark(1)
-          editor.execCommand "addSchemaTag", true,
-            id: $(obj).attr("name")
-            key: key
-            pos: pos
-            action: actionType
+        editor.currentBookmark = editor.selection.getBookmark(1)
+        editor.execCommand "addSchemaTag", true,
+          id: $(obj).attr("name")
+          key: key
+          pos: pos
+          action: actionType
     # Given a list of keys, return a function to generate a list of submenu
     # items for a given action
     _submenuItemsForAction = (keys) ->
@@ -194,12 +186,6 @@ define (require) ->
           _class: "submenu"
           separator_after: true
           submenu: submenu("inside")
-
-        change:
-          label: "Change Tag"
-          icon: "img/tag_edit.png"
-          _class: "submenu"
-          submenu: siblingSubmenu("change")
 
         edit:
           label: "Edit Attributes"
