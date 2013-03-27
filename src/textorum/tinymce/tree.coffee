@@ -219,7 +219,13 @@ define (require) ->
           .map((idx, ele) -> $(ele).text()).get().join(", ")
       when "title", "article-id" then $(node).text()
       when "journal-id", "issn", "publisher" then $(node).text()
-      when "sec", "ack", "ref-list" then $(node).children('[data-xmlel="title"]').text()
+      when "body"
+        nodecount = $(node).children('[data-xmlel="sec"]').length
+        "#{nodecount} section" + (if nodecount == 1 then "" else "s")
+      when "sec", "ack" then $(node).children('[data-xmlel="title"]').text()
+      when "ref-list"
+        nodecount = $(node).children('[data-xmlel="ref"]').length
+        $(node).children('[data-xmlel="title"]').text() + " - #{nodecount} reference" + (if nodecount == 1 then "" else "s") 
       when "p" then $(node).text().substr(0, 20) + "..."
       when "table-wrap", "fig"
         jqnode = $(node)
@@ -262,6 +268,7 @@ define (require) ->
         select_limit: 1
       core:
         animation: 0
+        html_titles: true
       contextmenu:
         select_node: true
         show_at_node: true
