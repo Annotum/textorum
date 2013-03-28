@@ -23,31 +23,41 @@
 $dark: #006b94;
 $mid: #99d1dd;
 $light: #f0f0f0;
-$highlight: #ddf556;
+$black: #333;
 
 $defaultback: #444444;
 $defaultfront: #cccccc;
 
-$smalltext: 85%;
-$normaltext: 100%;
-$largetext: 120%;
+$normaltext: 80%;
+$largetext: 85%;
 
 $border: 1px dashed #333;
+$highlight: 1px dotted #ddf556;
+$lowlight: 1px dotted #589dac;
+
+body {
+	font-size: 75%;
+	color: $black;
+	line-height: 1.5em;}
 
 div[data-xmlel] {
   margin: 3px 0;
 }
 
 div[data-xmlel]:before {
-  background-color: $defaultback;
-  color: $defaultfront;
-  content: attr(data-xmlel);
-  font-size: $smalltext;
-  font-weight: bold;
-  margin: 0 4px;
-  padding: 2px 4px;
-  text-transform: capitalize;
+	background-color: $defaultback;
+	color: $defaultfront;
+	content: attr(data-xmlel);
+	font-size: $normaltext;
+	font-weight: bold;
+	margin: 0 4px;
+	padding: 2px 4px;
+	text-transform: capitalize;
 }
+
+//------------------------------------------------------------
+// Header Data
+//------------------------------------------------------------
 
 div[data-xmlel="article"]:before,
 div[data-xmlel="front"]:before {
@@ -78,7 +88,6 @@ div[data-xmlel="journal-id"] {
   // using imporant to override inline style
   display: inline-block !important;
   font-size: $normaltext;
-  border: 1px dotted $highlight;
 }
 
 div[data-xmlel="journal-id"]:before {
@@ -96,20 +105,17 @@ div[data-xmlel="journal-title"]:before {
 }
 
 div[data-xmlel="journal-title"] {
-  font-size: $largetext;
   font-weight: bold;
-  // border: 1px dotted $highlight;
 }
 
 div[data-xmlel="journal-title"]:before {
-  color: #333;
+  color: $black;
   content: "Journal Title:";
   font-size: inherit;
   font-weight: bold;
 }
 
 div[data-xmlel="issn"] {
-  border: 1px dotted $highlight;
   // using important to override inline style
   display: inline-block !important;
   font-size: $normaltext;
@@ -126,7 +132,7 @@ div[data-xmlel="issn"]:before {
 div[data-xmlel="publisher"]:before {
   background-color: inherit;
   font-size: inherit;
-  color: inherit;
+  color: $black;
   content: "Published:";
 }
 
@@ -139,7 +145,6 @@ div[data-xmlel^="publisher-"]:before {
 
 div[data-xmlel^="publisher-"] {
   display: inline;
-  border: 1px dotted $highlight;
 }
 
 div[data-xmlel="publisher-name"]:before {
@@ -165,7 +170,6 @@ div[data-xmlel="article-meta"]:before {
 
 div[data-xmlel="article-id"] {
   // using !important to override inline style
-  border: 1px dotted $highlight;
   display: inline-block !important;
   font-size: $normaltext;
 }
@@ -174,7 +178,6 @@ div[data-xmlel="article-id"]:before {
   background: none;
   color: #333;
   content: "Article ID:";
-  font-size: $normaltext;
   margin-left: 0;
 }
 
@@ -205,10 +208,6 @@ div[data-xmlel="article-title"]:before {
   content: "Article Title:";
 }
 
-div[data-xmlel="contrib"] {
-  border-bottom: $border;
-}
-
 div[data-xmlel="title-group"]:before,
 div[data-xmlel="contrib"]:before,
 div[data-xmlel="subj-group"]:before {
@@ -235,8 +234,7 @@ div[data-xmlel="month"]:before,
 div[data-xmlel="year"]:before,
 div[data-xmlel="copyright-statement"]:before,
 div[data-xmlel="copyright-year"]:before,
-div[data-xmlel="license"]:before,
-div[data-xmlel="abstract"]:before {
+div[data-xmlel="license"]:before {
   background: none;
   color: #333;
   content: "Last Name:";
@@ -251,7 +249,7 @@ div[data-xmlel="given-names"]:before {
 }
 
 div[data-xmlel="aff"] {
-  font-size: $smalltext;
+  font-size: $normaltext;
   padding-left: 10px;
 }
 
@@ -260,9 +258,16 @@ div[data-xmlel="aff"]:before {
   padding: 0;
 }
 
+ div[data-xmlel="author-comment"] {
+	border-bottom: $border;
+	padding-bottom: 4px;
+	padding-left: 4px;
+}
+
 div[data-xmlel="author-comment"]:before {
   content: "Author Comment:";
   display: inline;
+  padding: 2px 4px 2px 0;
 }
 
 div[data-xmlel="author-comment"] .p {
@@ -302,8 +307,13 @@ div[data-xmlel="copyright-year"]:before {
   content: "Copyright Year:";
 }
 
+div[data-xmlel="license"] {
+  padding-left: 4px;
+}
+
 div[data-xmlel="license"]:before {
   content: "License:";
+  padding: 0;
 }
 
 div[data-xmlel="license-p"] {
@@ -317,8 +327,10 @@ div[data-xmlel="license-p"]:before {
 }
 
 div[data-xmlel="permissions"],
-div[data-xmlel="abstract"] {
+div[data-xmlel="abstract"],
+div[data-xmlel="kwd-group"] {
   border-top: $border;
+  padding-top: 4px;
 }
 
 div[data-xmlel="date"] {
@@ -335,6 +347,10 @@ div[date-type="rev-recd"][data-xmlel="date"]:before {
 
 div[date-type="accepted"][data-xmlel="date"]:before {
   content: "Date Accepted";
+}
+
+div[data-xmlel="kwd-group"]:before {
+  content: "Keywords";
 }
 
 div[data-xmlel="permissions"] {
@@ -366,7 +382,9 @@ div[data-xmlel="kwd"]:last-child:after {
   content: "";
 }
 
+//-------------------------------------------------------
 // BODY CONTENT
+//-------------------------------------------------------
 
 div[data-xmlel="body"] {
   margin-top: 20px;
@@ -391,11 +409,13 @@ div[data-xmlel="front"]:before {
 div[data-xmlel="xref"] {
   color: $dark;
   display: inline;
+  font-weight: bold;
 }
 
 div[data-xmlel="title"] {
   background: $mid;
   color: $defaultback;
+  font-weight: bold;
   margin-bottom: 6px;
   padding: 1px 4px 0;
 }
@@ -409,7 +429,9 @@ div[data-xmlel="sec"] {
   margin-bottom: 20px;
 }
 
+//-------------------------------------------------------
 // Inline Styles
+//-------------------------------------------------------
 
 span[data-xmlel="bold"]:before,
 span[data-xmlel="italic"]:before {
@@ -429,7 +451,10 @@ span[data-xmlel="italic"] {
   font-style: italic;
 }
 
+//-------------------------------------------------------
 // Lists
+//-------------------------------------------------------
+
 div[data-xmlel="list"] {
   padding-left: 10px;
   display: block;
@@ -437,37 +462,59 @@ div[data-xmlel="list"] {
   counter-reset: item;
 }
 
-div[data-xmlel="list"]:before, div[data-xmlel="list-item"]:before {
+div[data-xmlel="list-item"] {
+	clear: both;
+	padding-left: 20px;
+}
+
+div[data-xmlel="list"]:before,
+div[data-xmlel="list-item"]:before {
   content: "";
   background-color: inherit;
+  font-size: $normaltext;
+  margin-left: -20px;
   margin-right: 0px;
   padding: 0px;
 }
 
+div[data-xmlel="list-item"]:before {
+  display: block;
+  float: left;
+  margin-right: 3px;
+}
+
 div[data-xmlel="list"] div[data-xmlel="list-item"] {
+  counter-increment: item;
   display: list-item;
   list-style-type: disc;
-  counter-increment: item;
 }
 
 div[data-xmlel="list"][list-type="order"] div[data-xmlel="list-item"]:before {
   color: inherit;
-  background-color: inherit;
-  display: inline;
   content: counter(item, decimal) ". ";
+  background-color: inherit;
 }
 
 div[data-xmlel="list"][list-type="order"] div[data-xmlel="list-item"] {
   list-style-type: none;
 }
 
+div[data-xmlel="list-item"] div[data-xmlel="p"] {
+  font-size: $normaltext;
+}
+
+//-------------------------------------------------------
 // Tables
+//-------------------------------------------------------
+
 th {
   background: $dark;
   color: $light;
 }
 
+//-------------------------------------------------------
 // Footer References
+//-------------------------------------------------------
 
 div[data-xmlel="ref"] {
   div[data-xmlel="label"],
@@ -495,8 +542,11 @@ div[data-xmlel="ref-list"] {
 div[data-xmlel="ref"] {
   border-bottom: $border;
   padding: 5px 0;
+
   div[data-xmlel="label"] {
+  	font-weight: bold;
     margin-left: 0;
+    margin-right: 6px;
   }
 }
 
@@ -507,4 +557,53 @@ div[data-xmlel="pub-id"]:before {
   font-size: inherit;
   font-weight: bold;
   margin-left: 0;
+}
+
+//------------------------------------------------------------
+// Hover Highlighting
+//------------------------------------------------------------
+
+// Light Highlight on Colored Background
+
+div[data-xmlel="journal-title"]:hover,
+div[data-xmlel="journal-id"]:hover,
+div[data-xmlel="issn"]:hover,
+div[data-xmlel^="publisher-"]:hover,
+div[data-xmlel="article-id"]:hover,
+div[data-xmlel="subject"]:hover,
+div[data-xmlel="article-title"]:hover,
+div[data-xmlel="surname"]:hover,
+div[data-xmlel="given-names"]:hover,
+div[data-xmlel="day"]:hover,
+div[data-xmlel="month"]:hover,
+div[data-xmlel="year"]:hover,
+div[data-xmlel="aff"]:hover,
+div[data-xmlel="volume"]:hover,
+div[data-xmlel="issue"]:hover,
+div[data-xmlel="author-comment"]:hover .p,
+div[data-xmlel="copyright-statement"]:hover,
+div[data-xmlel="copyright-year"]:hover,
+div[data-xmlel="license"]:hover div[data-xmlel="license-p"],
+div[data-xmlel="abstract"]:hover .p,
+div[data-xmlel="kwd"]:hover {
+    outline: $highlight;
+}
+
+// Dark Highlight on White (content area)
+
+.sec .p:hover,
+div[data-xmlel="mixed-citation"]:hover {
+    background: $light;
+    outline: $lowlight;
+}
+
+div[data-xmlel="mixed-citation"] div[data-xmlel="pub-id"]:hover {
+    background: #ccc;
+}
+
+// Reference Highlights
+
+.sec .p div[data-xmlel="xref"]:hover {
+    background: $dark;
+    color: $light;
 }
