@@ -464,7 +464,7 @@ div[data-xmlel="list"] {
 
 div[data-xmlel="list-item"] {
 	clear: both;
-	padding-left: 20px;
+	padding-left: 15px;
 }
 
 div[data-xmlel="list"]:before,
@@ -472,7 +472,7 @@ div[data-xmlel="list-item"]:before {
   content: "";
   background-color: inherit;
   font-size: $normaltext;
-  margin-left: -20px;
+  margin-left: -15px;
   margin-right: 0px;
   padding: 0px;
 }
@@ -499,17 +499,30 @@ div[data-xmlel="list"][list-type="order"] div[data-xmlel="list-item"] {
   list-style-type: none;
 }
 
-div[data-xmlel="list-item"] div[data-xmlel="p"] {
-  font-size: $normaltext;
-}
-
 //-------------------------------------------------------
 // Tables
 //-------------------------------------------------------
 
+
 th {
   background: $dark;
   color: $light;
+  font-size: $normaltext;
+  padding: 5px;
+}
+
+td {
+  font-size: $normaltext;
+  padding: 3px;
+}
+
+//overriding tinymce table styles
+.mceItemTable,
+.mceItemTable td,
+.mceItemTable th,
+.mceItemTable caption,
+.mceItemVisualAid {
+	border: 1px solid $light;
 }
 
 //-------------------------------------------------------
