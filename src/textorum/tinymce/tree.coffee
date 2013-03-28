@@ -219,6 +219,9 @@ define (require) ->
           .map((idx, ele) -> $(ele).text()).get().join(", ")
       when "title", "article-id" then $(node).text()
       when "journal-id", "issn", "publisher" then $(node).text()
+      when "kwd" then $(node).text()
+      when "kwd-group" then $(node).children('[data-xmlel="kwd"]')
+        .map((idx, ele) -> $(ele).text()).get().join(", ")
       when "body"
         nodecount = $(node).children('[data-xmlel="sec"]').length
         "#{nodecount} section" + (if nodecount == 1 then "" else "s")
