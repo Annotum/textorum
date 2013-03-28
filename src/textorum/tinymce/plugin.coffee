@@ -103,7 +103,27 @@ define (require) ->
       testload.bindHandler editor
       editor.onSetContent.add (ed, o) ->
         that.tree.update '#editortree', editor
-      editor.onNodeChange.add that.tree.navigate
+      editor.onKeyUp.add (editor, evt) ->
+        if that.removePlaceholderTag
+          editor.$('[class="textorum_placeholder"]').remove();
+        if evt.which > 36 and evt.which < 41
+          return
+        if editor.currentNode
+          schema = editor.plugins.textorum.schema.defs
+          schemaElement = schema[editor.currentNode.getAttribute('data-xmlel')]
+          if not schemaElement or not schemaElement.$
+            console.log "no text allowed in", editor.currentNode.getAttribute('data-xmlel')
+            $(editor.currentNode).contents().filter(->
+              return this.nodeType == 3
+            ).remove()
+      editor.onChange.add (editor, evt) ->
+        if editor.isDirty()
+          that.tree.update '#editortree', editor
+
+      editor.onNodeChange.add (editor, controlManager, element, collapsed, extra) ->
+        editor.currentNode = element
+        that.tree.navigate(editor, controlManager, element, collapsed, extra)
+
       editor.onPreInit.add (editor) ->
         editor.parser.addAttributeFilter 'data-textorum-nsurl', _nsurlAttributeFilterGenerator(editor)
         editor.serializer.addAttributeFilter 'id', _treeAttributeFilterGenerator(that.tree.id_prefix)
