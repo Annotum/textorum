@@ -48,10 +48,12 @@
 		// urlArgs: (new Date()).getTime(),
 		paths: {
 			"text": "../vendor/text",
-      "jqueryui-popups": "../vendor/tinymce.jqueryui.popups"
+      "jqueryui-popups": "../vendor/tinymce.jqueryui.popups",
+      "tinymce-jquery": "../vendor/tinymce_jquery/jquery.tinymce",
+      "tinymce-jquery-adapter": "../vendor/tinymce_jquery/adapter"
 		}
    });
-  require( ["textorum/tinymce/plugin", "jqueryui-popups"], function() {
+  require( ["textorum/tinymce/plugin", "jqueryui-popups", "tinymce-jquery", "tinymce-jquery-adapter"], function() {
     tinymce.init({
       mode: 'exact',
       theme: 'advanced',

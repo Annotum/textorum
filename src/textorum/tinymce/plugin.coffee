@@ -95,6 +95,8 @@ define (require) ->
 
     init: (@editor, url) ->
       that = this
+      if tinymce.adapter
+        tinymce.adapter.patchEditor(editor)
       @schema = _getSchema("test/rng/kipling-jp3-xsl.srng")
       @tree = editortree
       @tree.create '#editortree', editor
