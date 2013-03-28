@@ -89,6 +89,8 @@ define (require) ->
         id = node.getAttribute('id')
       while depth < (holder.length - 1)
         holder.shift()
+      if not node.getAttribute('data-xmlel') && node.localName == "br"
+        return false
       title = node.getAttribute('data-xmlel') || ("[" + node.localName + "]")
       if nodeTitleCallback
         additional = nodeTitleCallback(node, title)
