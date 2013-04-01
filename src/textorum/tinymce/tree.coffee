@@ -104,17 +104,17 @@ define (require) ->
           name: id
           class: node.getAttribute('class')
           'data-xmlel': node.getAttribute('data-xmlel')
-        
+
       if (depth) <= holder.length - 1
         holder.unshift holder[0]['children'][holder[0]['children'].length - 1]
       true
 
   # Return a function that produces editor-specific context menu items
   _contextMenuItemsGenerator = (editor) ->
-    # Return a function suitable for use as a jstree contextmenu action, given 
+    # Return a function suitable for use as a jstree contextmenu action, given
     # the action type ("before", "change") and key (target element name)
     _submenuActionGenerator = (actionType, key) ->
-      (obj) ->        
+      (obj) ->
         pos =
           x: parseInt($("#tree_popup").css("left"))
           y: parseInt($("#tree_popup").css("top"))
@@ -135,7 +135,8 @@ define (require) ->
           inserted = true
           inserts["#{action}-#{key}"] =
             label: key
-            icon: "img/tag.png"
+            # icon: "img/tag.png"
+            _class: "tag"
             action: _submenuActionGenerator(action, key)
 
         unless inserted
@@ -148,7 +149,7 @@ define (require) ->
     # The returned function for _contextMenuItemsGenerator
     contextMenuItems = (node) ->
       schema = editor.plugins.textorum.schema
-      if not node.attr('data-xmlel') 
+      if not node.attr('data-xmlel')
         return {}
       editorNode = editor.dom.select("##{node.attr('name')}")
       validNodes = schema.defs?[node.attr('data-xmlel')]?.contains
@@ -172,33 +173,33 @@ define (require) ->
       items =
         before:
           label: "Insert Tag Before"
-          icon: "img/tag_add.png"
-          _class: "submenu"
+          # icon: "img/tag_add.png"
+          _class: "submenu insert-tag"
           submenu: siblingSubmenu("before")
 
         after:
           label: "Insert Tag After"
-          icon: "img/tag_add.png"
-          _class: "submenu"
+          _class: "submenu insert-tag"
           submenu: siblingSubmenu("after")
 
         inside:
           label: "Insert Tag Inside"
-          icon: "img/tag_add.png"
-          _class: "submenu"
+          _class: "submenu insert-tag"
           separator_after: true
           submenu: submenu("inside")
 
         edit:
           label: "Edit Attributes"
-          icon: "img/tag_edit.png"
+          # icon: "img/tag_edit.png"
+          _class: "edit-tag"
           _disabled: editDisabled
           action: (obj) ->
             editor.execCommand "editSchemaTag", true, obj
 
         delete:
           label: "Remove Tag Only"
-          icon: "img/tag_delete.png"
+          # icon: "img/tag_delete.png"
+          _class: "remove-tag"
           action: (obj) ->
             editor.execCommand "removeSchemaTag", true, obj
 
@@ -230,7 +231,7 @@ define (require) ->
       when "sec", "ack" then $(node).children('[data-xmlel="title"]').text()
       when "ref-list"
         nodecount = $(node).children('[data-xmlel="ref"]').length
-        $(node).children('[data-xmlel="title"]').text() + " - #{nodecount} reference" + (if nodecount == 1 then "" else "s") 
+        $(node).children('[data-xmlel="title"]').text() + " - #{nodecount} reference" + (if nodecount == 1 then "" else "s")
       when "p" then $(node).text().substr(0, 20) + "..."
       when "table-wrap", "fig"
         jqnode = $(node)
@@ -250,7 +251,7 @@ define (require) ->
     newtitle
 
 
-      
+
   updateTree = (selector, editor) ->
     body = editor.dom.getRoot()
 
@@ -269,7 +270,7 @@ define (require) ->
     $(selector).jstree(
       json_data:
         data: [top['children']]
-      ui: 
+      ui:
         select_limit: 1
       core:
         animation: 0
@@ -280,7 +281,7 @@ define (require) ->
         items: _contextMenuItemsGenerator(editor)
       plugins: ['json_data', 'ui', 'themes', 'contextmenu']
       ).on('select_node.jstree', _selectNodeHandlerGenerator(editor))
-    
+
   navigateTree = (editor, controlmanager, node) ->
     ignoreNavigation = true
     treeInstance = $(treeSelector).jstree('get_instance')
@@ -304,5 +305,5 @@ define (require) ->
     navigate: navigateTree
     id_prefix: treeIDPrefix
   }
-    
+
 

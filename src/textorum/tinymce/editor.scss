@@ -1,8 +1,115 @@
+$light: #f0f0f0;
+$mid: #99d1dd;
+
+@font-face {
+	font-family: 'FontAwesome';
+	src: url('/src/textorum/tinymce/fonts/fontawesome/fontawesome-webfont.eot?v=3.0.1');
+	src: url('/src/textorum/tinymce/fonts/fontawesome/fontawesome-webfont.eot?#iefix&v=3.0.1') format('embedded-opentype'),
+		 url('/src/textorum/tinymce/fonts/fontawesome/fontawesome-webfont.woff?v=3.0.1') format('woff'),
+		 url('/src/textorum/tinymce/fonts/fontawesome/fontawesome-webfont.ttf?v=3.0.1') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
 .treewrapper {
-  float: left;
-  max-height: 400px;
-  overflow-y: auto;
-  overflow-x: auto;
-  padding-bottom: 15px;
-  width: 29%;
+	background: $light;
+	border: 1px solid #ccc;
+	float: left;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 20px;
+	max-height: 400px;
+	min-height: 825px;
+	overflow-y: auto;
+	overflow-x: auto;
+	width: 29%;
+
+	.jstree-default.jstree-focused {
+		background-color: transparent;
+	}
+
+	.jstree a {
+		height: 20px;
+	}
+}
+
+#vakata-contextmenu {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 20px;
+}
+
+#vakata-contextmenu.jstree-default-context,
+#vakata-contextmenu.jstree-default-context li ul {
+	//can't win w/specificty so forced to use !important
+	background-color: #f6f6f6 !important;
+	border-color: #ccc !important;
+	padding: 8px 10px;
+}
+
+#vakata-contextmenu.jstree-default-context ul li.vakata-separator {
+	margin: 8px 0;
+}
+
+#vakata-contextmenu.jstree-default-context ins {
+	display: none;
+}
+
+.jstree.jstree-default li,
+.jstree.jstree-default ins {
+	background-image: none;
+}
+
+.jstree.jstree-default li a:before,
+.insert-tag:before,
+.remove-tag:before,
+.edit-tag:before,
+.tag:before {
+	color: #2e5a63;
+	content: '\f067';
+	display: block;
+	float: left;
+	font-family: FontAwesome;
+	font-size: 14px;
+	-webkit-font-smoothing: antialiased;
+	width: 20px;
+}
+
+.jstree.jstree-default li a:before,
+.jstree.jstree-default li.jstree-open li.jstree-closed a:before {
+	content: '\f07b';
+}
+
+.jstree.jstree-default li.jstree-open a:before {
+	content: '\f07c';
+}
+
+	.jstree.jstree-default li a .jstree-icon {
+		display: none;
+	}
+
+.jstree.jstree-default li.jstree-leaf a:before,
+.jstree.jstree-default li.jstree-open li.jstree-leaf a:before {
+	content: '\f104  \f105';
+}
+
+.remove-tag:before {
+	content: '\f068';
+}
+
+.edit-tag:before {
+	content: '\f044';
+}
+
+.tag:before {
+	content: '\f02b';
+}
+
+.jstree-contextmenu-disabled:before {
+	color: silver;
+}
+
+.jstree.jstree-default .jstree-clicked {
+	background-color: $mid;
+	border-color: darken($mid, 10%);
 }
