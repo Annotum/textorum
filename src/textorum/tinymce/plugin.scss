@@ -61,8 +61,7 @@ div[data-xmlel]:before {
 
 div[data-xmlel="article"]:before,
 div[data-xmlel="front"]:before {
-  content: "";
-  padding: 0;
+  display: none;
 }
 
 div[data-xmlel="front"],
@@ -97,11 +96,13 @@ div[data-xmlel="journal-id"]:before {
   content: "JID: ";
 }
 
-div[data-xmlel="journal-title-group"]:before,
+div[data-xmlel="journal-title-group"]:before {
+  display: none;
+}
+
 div[data-xmlel="journal-title"]:before {
+  background: transparent;
   content: "";
-  background-color: inherit;
-  margin-right: 0px;
 }
 
 div[data-xmlel="journal-title"] {
@@ -137,10 +138,7 @@ div[data-xmlel="publisher"]:before {
 }
 
 div[data-xmlel^="publisher-"]:before {
-  background-color: inherit;
-  color: inherit;
-  font-size: inherit;
-  content: "";
+  display: none;
 }
 
 div[data-xmlel^="publisher-"] {
@@ -211,7 +209,7 @@ div[data-xmlel="article-title"]:before {
 div[data-xmlel="title-group"]:before,
 div[data-xmlel="contrib"]:before,
 div[data-xmlel="subj-group"]:before {
-  content: "";
+  display: none;
 }
 
 div[data-xmlel="name"]:before {
@@ -254,8 +252,7 @@ div[data-xmlel="aff"] {
 }
 
 div[data-xmlel="aff"]:before {
-  content: "";
-  padding: 0;
+  display: none;
 }
 
  div[data-xmlel="author-comment"] {
@@ -321,9 +318,7 @@ div[data-xmlel="license-p"] {
 }
 
 div[data-xmlel="license-p"]:before {
-  content: "";
-  margin: 0;
-  padding: 0;
+  display: none;
 }
 
 div[data-xmlel="permissions"],
@@ -370,8 +365,7 @@ div[data-xmlel="kwd"] {
 }
 
 div[data-xmlel="kwd"]:before {
-  content: "";
-  padding: 0;
+  display: none;
 }
 
 div[data-xmlel="kwd"]:after {
@@ -379,7 +373,7 @@ div[data-xmlel="kwd"]:after {
 }
 
 div[data-xmlel="kwd"]:last-child:after {
-  content: "";
+  display: none;
 }
 
 //-------------------------------------------------------
@@ -395,9 +389,7 @@ div[data-xmlel="sec"]:before,
 div[data-xmlel="xref"]:before,
 div[data-xmlel="p"]:before,
 div[data-xmlel="title"]:before {
-  content: "";
-  margin: 0;
-  padding: 0;
+  display: none;
 }
 
 div[data-xmlel="article"]:before,
@@ -435,10 +427,7 @@ div[data-xmlel="sec"] {
 
 span[data-xmlel="bold"]:before,
 span[data-xmlel="italic"]:before {
-  content: "";
-  background-color: inherit;
-  margin-right: 0px;
-  padding: 0px;
+  display: none;
 }
 
 span[data-xmlel="bold"] {
@@ -469,12 +458,13 @@ div[data-xmlel="list-item"] {
 
 div[data-xmlel="list"]:before,
 div[data-xmlel="list-item"]:before {
-  content: "";
-  background-color: inherit;
-  font-size: $normaltext;
-  margin-left: -15px;
-  margin-right: 0px;
-  padding: 0px;
+	display: none;
+  // content: "";
+  // background-color: inherit;
+  // font-size: $normaltext;
+  // margin-left: -15px;
+  // margin-right: 0px;
+  // padding: 0px;
 }
 
 div[data-xmlel="list-item"]:before {
@@ -543,9 +533,7 @@ div[data-xmlel="ref-list"]:before,
 div[data-xmlel="ref"]:before,
 div[data-xmlel="label"]:before,
 div[data-xmlel="mixed-citation"]:before {
-  content: "";
-  margin: 0;
-  padding: 0;
+  display: none;
 }
 
 div[data-xmlel="ref-list"] {
