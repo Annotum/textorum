@@ -28,6 +28,7 @@ $black: #333;
 $defaultback: #444444;
 $defaultfront: #cccccc;
 
+$smalltext: 70%;
 $normaltext: 80%;
 $largetext: 85%;
 
@@ -497,12 +498,12 @@ div[data-xmlel="list"][list-type="order"] div[data-xmlel="list-item"] {
 th {
   background: $dark;
   color: $light;
-  font-size: $normaltext;
+  font-size: $smalltext;
   padding: 5px;
 }
 
 td {
-  font-size: $normaltext;
+  font-size: $smalltext;
   padding: 3px;
 }
 
@@ -513,6 +514,37 @@ td {
 .mceItemTable caption,
 .mceItemVisualAid {
 	border: 1px solid $light;
+}
+
+div[data-xmlel="table-wrap"]:before,
+div[data-xmlel="table-wrap-foot"]:before,
+div[data-xmlel="caption"]:before {
+	display: none;
+}
+
+.label {
+	font-weight: bold;
+	padding: 0 4px;
+}
+
+.table-wrap {
+	padding-top: 30px;
+}
+
+	.table {
+		margin-bottom: 10px;
+	}
+
+//-------------------------------------------------------
+// Figures
+//-------------------------------------------------------
+
+div[data-xmlel="fig"]:before {
+	display: none;
+}
+
+.fig {
+	padding-bottom: 30px;
 }
 
 //-------------------------------------------------------
@@ -593,7 +625,8 @@ div[data-xmlel="kwd"]:hover {
 // Dark Highlight on White (content area)
 
 .sec .p:hover,
-div[data-xmlel="mixed-citation"]:hover {
+div[data-xmlel="mixed-citation"]:hover,
+.label:hover {
     background: $light;
     outline: $lowlight;
 }
