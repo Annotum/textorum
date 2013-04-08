@@ -35,13 +35,16 @@ define (require) ->
       @treeIDPrefix = 'tmp_tree_'
       @ignoreNavigation = false
       @jsTree = $(@treeSelector)
+
       @jsTree.jstree @_jstreeOptions()
       if makeNodeTitle?
         @makeNodeTitle = makeNodeTitle
       @previousNode = null
       @elementHandler = new ElementHandler(@editor)
 
-    _jstreeOptions: (jsonData) ->
+    _jstreeOptions: (jsonData, initiallyOpen) ->
+      if not initiallyOpen?
+        initiallyOpen = []
       if not jsonData?
         jsonData =
           data:
@@ -57,6 +60,7 @@ define (require) ->
         core:
           animation: 0
           html_titles: true
+          initially_open: initiallyOpen
         contextmenu:
           select_node: true
           show_at_node: true
@@ -84,6 +88,7 @@ define (require) ->
       @holder[0]['children'].push
         'data': title
         'attr':
+          id: "jstree_node_" + id
           name: id
           class: node.getAttribute('class')
           'data-xmlel': node.getAttribute('data-xmlel')
@@ -258,6 +263,11 @@ define (require) ->
       body = @editor.dom.getRoot()
       treeInstance = @jsTree.jstree('get_instance')
 
+      openNodes = @jsTree.find('.jstree-open').map( (index, domElement) ->
+        if not $(domElement).parentsUntil('.jstree', '.jstree-closed').length
+          return domElement.getAttribute "id"
+        return null
+      ).get()
       top = {
         data: 'Document',
         state: 'open',
@@ -268,7 +278,8 @@ define (require) ->
 
       helper.depthFirstIterativePreorder body, @depthWalkCallback
 
-      @jsTree.jstree(@_jstreeOptions([top['children']]))
+      # jstree removes all .jstree-related hooks when destroying
+      @jsTree.jstree(@_jstreeOptions([top['children']], openNodes))
         .on('select_node.jstree', @selectNodeCallback)
         .on('click.jstree', 'li.jstree-leaf > ins', (event) ->
             $(event.currentTarget).siblings('a').click()
