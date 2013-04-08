@@ -66,6 +66,10 @@ permission notices:
   Copyright (c) 2010 Jan Lehnardt
   Released under the MIT license
   
+  https://github.com/allmarkedup/jQuery-URL-Parser
+  Copyright (c) 2012 Mark Perkins, http://allmarkedup.com/
+  Released under the MIT license
+  
   --
 
   MIT license:
