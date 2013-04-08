@@ -181,14 +181,14 @@ define (require) ->
           # icon: "img/tag_edit.png"
           _class: "edit-tag"
           _disabled: editDisabled
-          action: (obj) ->
+          action: (obj) =>
             @editor.execCommand "editSchemaTag", true, obj
 
         delete:
           label: "Remove Tag and Contents"
           # icon: "img/tag_delete.png"
           _class: "remove-tag"
-          action: (obj) ->
+          action: (obj) =>
             @editor.execCommand "removeSchemaTag", true, obj
 
       if not parent.attr('data-xmlel')
