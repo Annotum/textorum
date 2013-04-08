@@ -67,7 +67,7 @@ $mid: #99d1dd;
 }
 
 // Default icon - large "+" cross
-.jstree.jstree-default li ins:before,
+.jstree li ins:before,
 .insert-tag:before,
 .remove-tag:before,
 .edit-tag:before,
@@ -84,23 +84,28 @@ $mid: #99d1dd;
 
 
 // Closed-folder icon
-.jstree.jstree-default li ins:before,
-.jstree.jstree-default li.jstree-open li.jstree-closed ins:before {
+.jstree li ins:before,
+.jstree li.jstree-open li.jstree-closed ins:before {
 	content: '\f07b';
 }
 
 // Open-folder icon
-.jstree.jstree-default li.jstree-open ins:before {
+.jstree li.jstree-open ins:before {
 	content: '\f07c';
 }
 
-	.jstree.jstree-default li a .jstree-icon {
-		display: none;
-	}
+.jstree li a > ins:before {
+	content: '';
+}
+
+.jstree li a > ins, 
+.jstree li a .jstree-icon {
+	display: none;
+}
 
 // < > icon for leaves
-.jstree.jstree-default li.jstree-leaf ins:before,
-.jstree.jstree-default li.jstree-open li.jstree-leaf ins:before {
+.jstree li.jstree-leaf ins:before,
+.jstree li.jstree-open li.jstree-leaf ins:before {
 	content: '\f104  \f105';
 }
 
