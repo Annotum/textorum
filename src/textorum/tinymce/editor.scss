@@ -24,6 +24,7 @@ $mid: #99d1dd;
 	overflow-x: auto;
 	width: 29%;
 
+	padding: 4px;
 	.jstree-default.jstree-focused {
 		background-color: transparent;
 	}
@@ -55,12 +56,18 @@ $mid: #99d1dd;
 	display: none;
 }
 
-.jstree.jstree-default li,
+// Remove the vertical lines on jstree list items
+.jstree.jstree-default li {
+	background-image: none;
+}
+
+// Remove the default open/closed arrows on jstree list item icons
 .jstree.jstree-default ins {
 	background-image: none;
 }
 
-.jstree.jstree-default li a:before,
+// Default icon - large "+" cross
+.jstree.jstree-default li ins:before,
 .insert-tag:before,
 .remove-tag:before,
 .edit-tag:before,
@@ -75,12 +82,15 @@ $mid: #99d1dd;
 	width: 20px;
 }
 
-.jstree.jstree-default li a:before,
-.jstree.jstree-default li.jstree-open li.jstree-closed a:before {
+
+// Closed-folder icon
+.jstree.jstree-default li ins:before,
+.jstree.jstree-default li.jstree-open li.jstree-closed ins:before {
 	content: '\f07b';
 }
 
-.jstree.jstree-default li.jstree-open a:before {
+// Open-folder icon
+.jstree.jstree-default li.jstree-open ins:before {
 	content: '\f07c';
 }
 
@@ -88,8 +98,9 @@ $mid: #99d1dd;
 		display: none;
 	}
 
-.jstree.jstree-default li.jstree-leaf a:before,
-.jstree.jstree-default li.jstree-open li.jstree-leaf a:before {
+// < > icon for leaves
+.jstree.jstree-default li.jstree-leaf ins:before,
+.jstree.jstree-default li.jstree-open li.jstree-leaf ins:before {
 	content: '\f104  \f105';
 }
 
@@ -157,6 +168,21 @@ $mid: #99d1dd;
 
 .defaultSkin span.mce_underline:before {
 	content: '\f0cd';
+	padding-top: 4px;
+}
+
+.defaultSkin span.mce_code:before {
+	content: '\f0f6';
+	padding-top: 4px;
+}
+
+.defaultSkin span.mce_fullscreen:before {
+	content: '\f0b2';
+	padding-top: 4px;
+}
+
+.defaultSkin span.mce_save:before {
+	content: '\f0c7';
 	padding-top: 4px;
 }
 
