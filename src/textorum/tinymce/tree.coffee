@@ -28,107 +28,86 @@ define (require) ->
   window.textorum.w ||= {}
   w = window.textorum.w
 
-  treeIDPrefix = 'tmp_tree_'
-  ignoreNavigation = false
-  w.structs = {}
-  w.deletedStructs = {}
-  treeSelector = undefined
-  createTree = (selector, editor) ->
-    treeSelector = selector
-    foo = $(selector).jstree({
-      core: {
-        animation: 0
-        },
-      themeroller: {},
-      ui: {
-        select_limit: 1
-      },
-      json_data: {
-        data: {
-          data: 'Document',
-          attr: {id: 'root'},
-          state: 'open'
-        }
-      },
-      plugins: ['json_data', 'ui', 'themeroller', 'contextmenu']
-      })
+  class TextorumTree
+    constructor: (@treeSelector, @editor, makeNodeTitle) ->
+      @treeIDPrefix = 'tmp_tree_'
+      @ignoreNavigation = false
+      @jsTree = $(@treeSelector)
+      @jsTree.jstree @_jstreeOptions()
+      if makeNodeTitle?
+        @makeNodeTitle = makeNodeTitle
+      @previousNode = null
 
-  _selectNodeHandlerGenerator = (editor) ->
-    previousNode = null
+    _jstreeOptions: (jsonData) ->
+      if not jsonData?
+        jsonData =
+          data:
+            data: 'Document'
+            attr:
+              id: 'root'
+            state: 'open'
+      returnData =
+        json_data:
+          data: jsonData
+        ui:
+          select_limit: 1
+        core:
+          animation: 0
+          html_titles: true
+        contextmenu:
+          select_node: true
+          show_at_node: true
+          items: @contextMenuItemsCallback
+        plugins: ['json_data', 'ui', 'themes', 'contextmenu']
 
-    selectNodeHandler = (event, data) ->
-      if ignoreNavigation
-        return
-      node = data.rslt.obj;
-      id = node.attr('name');
-      if (id)
-        node = editor.dom.select('#'+id);
-        #node.append('<span class="empty_tag_remove_me"></span>');
-
-        nodeEl = node[0]
-        editor.getWin().scrollTo(0, editor.dom.getPos(nodeEl).y - 10);
-        if id is previousNode
-          editor.selection.select(nodeEl)
-          editor.nodeChanged()
-        else
-          editor.selection.setCursorLocation(nodeEl, 0)
-          editor.nodeChanged()
-          $(node).effect("highlight", {}, 350)
-
-        editor.focus()
-        previousNode = id
-
-  _depthWalkCallbackGenerator = (holder, nodeTitleCallback) ->
-    depthWalkCallback = (depth) ->
-      node = this
+    depthWalkCallback: (depth, node) =>
       if not node.getAttribute?
         return false
       id = node.getAttribute('id')
       if not id
-        node.setAttribute('id', tinymce.DOM.uniqueId(treeIDPrefix))
+        node.setAttribute('id', tinymce.DOM.uniqueId(@treeIDPrefix))
         id = node.getAttribute('id')
-      while depth < (holder.length - 1)
-        holder.shift()
+      while depth < (@holder.length - 1)
+        @holder.shift()
       if not node.getAttribute('data-xmlel') && node.localName == "br"
         return false
       title = node.getAttribute('data-xmlel') || ("[" + node.localName + "]")
-      if nodeTitleCallback
-        additional = nodeTitleCallback(node, title)
+      if @makeNodeTitle
+        additional = @makeNodeTitle(node, title)
         if additional
           title = helper.escapeHtml(additional.replace("%TITLE%", title))
-      holder[0]['children'] ||= []
-      holder[0]['state'] ||= 'closed'
-      holder[0]['children'].push
+      @holder[0]['children'] ||= []
+      @holder[0]['state'] ||= 'closed'
+      @holder[0]['children'].push
         'data': title
         'attr':
           name: id
           class: node.getAttribute('class')
           'data-xmlel': node.getAttribute('data-xmlel')
 
-      if (depth) <= holder.length - 1
-        holder.unshift holder[0]['children'][holder[0]['children'].length - 1]
+      if (depth) <= @holder.length - 1
+        @holder.unshift @holder[0]['children'][@holder[0]['children'].length - 1]
       true
 
-  # Return a function that produces editor-specific context menu items
-  _contextMenuItemsGenerator = (editor) ->
     # Return a function suitable for use as a jstree contextmenu action, given
     # the action type ("before", "change") and key (target element name)
-    _submenuActionGenerator = (actionType, key) ->
-      (obj) ->
+    _submenuActionGenerator: (actionType, key) =>
+      (obj) =>
         pos =
           x: parseInt($("#tree_popup").css("left"))
           y: parseInt($("#tree_popup").css("top"))
 
-        editor.currentBookmark = editor.selection.getBookmark(1)
-        editor.execCommand "addSchemaTag", true,
+        @editor.currentBookmark = @editor.selection.getBookmark(1)
+        @editor.execCommand "addSchemaTag", true,
           id: $(obj).attr("name")
           key: key
           pos: pos
           action: actionType
+
     # Given a list of keys, return a function to generate a list of submenu
     # items for a given action
-    _submenuItemsForAction = (keys) ->
-      (action) ->
+    _submenuItemsForAction: (keys) =>
+      (action) =>
         inserts = {}
         inserted = false
         for key of keys
@@ -137,7 +116,7 @@ define (require) ->
             label: key
             # icon: "img/tag.png"
             _class: "tag"
-            action: _submenuActionGenerator(action, key)
+            action: @_submenuActionGenerator(action, key)
 
         unless inserted
           inserts["no_tags"] =
@@ -146,12 +125,12 @@ define (require) ->
             action: (obj) ->
         inserts
 
-    # The returned function for _contextMenuItemsGenerator
-    contextMenuItems = (node) ->
-      schema = editor.plugins.textorum.schema
+    # Given a node, produce a collection of context menu actions
+    contextMenuItemsCallback: (node) =>
+      schema = @editor.plugins.textorum.schema
       if not node.attr('data-xmlel')
         return {}
-      editorNode = editor.dom.select("##{node.attr('name')}")
+      editorNode = @editor.dom.select("##{node.attr('name')}")
       validNodes = schema.defs?[node.attr('data-xmlel')]?.contains
       siblingNodes = (
         parent = node.parents('li:first')
@@ -164,12 +143,13 @@ define (require) ->
         else
           {}
       )
-      submenu = _submenuItemsForAction(validNodes)
-      siblingSubmenu = _submenuItemsForAction(siblingNodes)
+      submenu = @_submenuItemsForAction(validNodes)
+      siblingSubmenu = @_submenuItemsForAction(siblingNodes)
       if (x for own x of schema.defs?[node.attr('data-xmlel')]?.attr).length
         editDisabled = false
       else
         editDisabled = true
+
       items =
         before:
           label: "Insert Tag Before"
@@ -194,15 +174,14 @@ define (require) ->
           _class: "edit-tag"
           _disabled: editDisabled
           action: (obj) ->
-            editor.execCommand "editSchemaTag", true, obj
+            @editor.execCommand "editSchemaTag", true, obj
 
         delete:
-          label: "Remove Tag Only"
+          label: "Remove Tag and Contents"
           # icon: "img/tag_delete.png"
           _class: "remove-tag"
           action: (obj) ->
-            editor.execCommand "removeSchemaTag", true, obj
-
+            @editor.execCommand "removeSchemaTag", true, obj
 
       if not parent.attr('data-xmlel')
         delete items["delete"]
@@ -211,99 +190,109 @@ define (require) ->
         delete items["around"]
       items
 
-  # TODO: This should be passed in as part of the tree initialization
-  _makeNodeTitle = (node, title) ->
-    autotitle = true
-    newtitle = switch title
-      when "ref" then $(node).children('[data-xmlel="label"]').text() || false
-      when "article"
-        $(node).children('[data-xmlel="front"]')
-          .find('[data-xmlel="article-title"]')
+    # TODO: This should be passed in as part of the tree initialization
+    makeNodeTitle: (node, title) ->
+      autotitle = true
+      newtitle = switch title
+        when "ref" then $(node).children('[data-xmlel="label"]').text() || false
+        when "article"
+          $(node).children('[data-xmlel="front"]')
+            .find('[data-xmlel="article-title"]')
+            .map((idx, ele) -> $(ele).text()).get().join(", ")
+        when "title", "article-id" then $(node).text()
+        when "journal-id", "issn", "publisher" then $(node).text()
+        when "kwd" then $(node).text()
+        when "kwd-group" then $(node).children('[data-xmlel="kwd"]')
           .map((idx, ele) -> $(ele).text()).get().join(", ")
-      when "title", "article-id" then $(node).text()
-      when "journal-id", "issn", "publisher" then $(node).text()
-      when "kwd" then $(node).text()
-      when "kwd-group" then $(node).children('[data-xmlel="kwd"]')
-        .map((idx, ele) -> $(ele).text()).get().join(", ")
-      when "body"
-        nodecount = $(node).children('[data-xmlel="sec"]').length
-        "#{nodecount} section" + (if nodecount == 1 then "" else "s")
-      when "sec", "ack" then $(node).children('[data-xmlel="title"]').text()
-      when "ref-list"
-        nodecount = $(node).children('[data-xmlel="ref"]').length
-        $(node).children('[data-xmlel="title"]').text() + " - #{nodecount} reference" + (if nodecount == 1 then "" else "s")
-      when "p" then $(node).text().substr(0, 20) + "..."
-      when "table-wrap", "fig"
-        jqnode = $(node)
-        label = jqnode.children('[data-xmlel="label"]').text()
-        caption = jqnode.children('[data-xmlel="caption"]').text()
-        if caption.length > 15
-          caption = caption.substr(0, 15) + "..."
-        if label.length > 0 and caption.length > 0
-          label = label + " "
-        output = [label, caption].join("")
-        if output.length > 0
-          autotitle = false
-          output = output + " [%TITLE%]"
-        output
-    if autotitle and newtitle and newtitle.indexOf("%TITLE%") is -1
-      newtitle = "%TITLE%: " + newtitle
-    newtitle
+        when "body"
+          nodecount = $(node).children('[data-xmlel="sec"]').length
+          "#{nodecount} section" + (if nodecount == 1 then "" else "s")
+        when "sec", "ack" then $(node).children('[data-xmlel="title"]').text()
+        when "ref-list"
+          nodecount = $(node).children('[data-xmlel="ref"]').length
+          $(node).children('[data-xmlel="title"]').text() + " - #{nodecount} reference" + (if nodecount == 1 then "" else "s")
+        when "p" then $(node).text().substr(0, 20) + "..."
+        when "table-wrap", "fig"
+          jqnode = $(node)
+          label = jqnode.children('[data-xmlel="label"]').text()
+          caption = jqnode.children('[data-xmlel="caption"]').text()
+          if caption.length > 15
+            caption = caption.substr(0, 15) + "..."
+          if label.length > 0 and caption.length > 0
+            label = label + " "
+          output = [label, caption].join("")
+          if output.length > 0
+            autotitle = false
+            output = output + " [%TITLE%]"
+          output
+      if autotitle and newtitle and newtitle.indexOf("%TITLE%") is -1
+        newtitle = "%TITLE%: " + newtitle
+      newtitle
 
+    selectNodeCallback: (event, data) =>
+      if @ignoreNavigation
+        return
+      node = data.rslt.obj;
+      id = node.attr('name');
+      if (id)
+        node = @editor.dom.select('#'+id);
+        #node.append('<span class="empty_tag_remove_me"></span>');
 
+        nodeEl = node[0]
+        @editor.getWin().scrollTo(0, @editor.dom.getPos(nodeEl).y - 10);
+        if id is @previousNode
+          @editor.selection.select(nodeEl)
+          @editor.nodeChanged()
+        else
+          @editor.selection.setCursorLocation(nodeEl, 0)
+          @editor.nodeChanged()
+          $(node).effect("highlight", {}, 350)
 
-  updateTree = (selector, editor) ->
-    body = editor.dom.getRoot()
+        @editor.focus()
+        @previousNode = id
 
-    treeInstance = $(selector).jstree('get_instance')
+    updateTreeCallback: =>
+      body = @editor.dom.getRoot()
+      treeInstance = @jsTree.jstree('get_instance')
 
-    top = {
-      data: 'Document',
-      state: 'open',
-      children: []
-    }
-    holder = []
-    holder.unshift top
+      top = {
+        data: 'Document',
+        state: 'open',
+        children: []
+      }
+      @holder = []
+      @holder.unshift top
 
-    helper.depthFirstIterativePreorder body, _depthWalkCallbackGenerator(holder, _makeNodeTitle)
+      helper.depthFirstIterativePreorder body, @depthWalkCallback
 
-    $(selector).jstree(
-      json_data:
-        data: [top['children']]
-      ui:
-        select_limit: 1
-      core:
-        animation: 0
-        html_titles: true
-      contextmenu:
-        select_node: true
-        show_at_node: true
-        items: _contextMenuItemsGenerator(editor)
-      plugins: ['json_data', 'ui', 'themes', 'contextmenu']
-      ).on('select_node.jstree', _selectNodeHandlerGenerator(editor))
+      @jsTree.jstree(@_jstreeOptions([top['children']]))
+        .on('select_node.jstree', @selectNodeCallback)
+        .on('click.jstree', 'li.jstree-leaf > ins', (event) ->
+            $(event.currentTarget).siblings('a').click()
+          )
 
-  navigateTree = (editor, controlmanager, node) ->
-    ignoreNavigation = true
-    treeInstance = $(treeSelector).jstree('get_instance')
-    #treeInstance.close_all(-1, false)
-    if not node.getAttribute
+    navigateTreeCallback: (node, collapsed, extra) =>
+      @ignoreNavigation = true
+      treeInstance = @jsTree.jstree('get_instance')
+      #treeInstance.close_all(-1, false)
+      if not node.getAttribute
+        return null
+      firstNode = treeInstance._get_node("[name='#{node.getAttribute('id')}']")
+      if firstNode
+        secondNode = treeInstance._get_parent(firstNode)
+        treeInstance.open_node(secondNode)
+        treeInstance.open_node(firstNode)
+        treeInstance.deselect_all()
+        treeInstance.select_node(firstNode)
+      @ignoreNavigation = false
       return null
-    firstNode = treeInstance._get_node("[name='#{node.getAttribute('id')}']")
-    if firstNode
-      secondNode = treeInstance._get_parent(firstNode)
-      treeInstance.open_node(secondNode)
-      treeInstance.open_node(firstNode)
-      treeInstance.deselect_all()
-      treeInstance.select_node(firstNode)
-    ignoreNavigation = false
-    return null
+
+    attributeFilterCallback: (nodes, name) =>
+       i = nodes.length
+       snip = @treeIDPrefix.length
+       while (i--)
+         if nodes[i].attr('id').substr(0, snip) is @treeIDPrefix
+           nodes[i].attr(name, null)
 
   # Module return
-  {
-    create: createTree
-    update: updateTree
-    navigate: navigateTree
-    id_prefix: treeIDPrefix
-  }
-
-
+  return TextorumTree

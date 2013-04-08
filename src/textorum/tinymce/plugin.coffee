@@ -23,7 +23,7 @@ define (require) ->
   pluginCss = require('text!./plugin.css')
   testload = require('./testload')
   helper = require('../helper')
-  editortree = require('./tree')
+  TextorumTree = require('./tree')
   elementHelper = require('./element')
   #pathHelper = require('./pathhelper')
 
@@ -62,14 +62,6 @@ define (require) ->
         schema.containedBy[containedElement][element] = 1
     schema
 
-  _treeAttributeFilterGenerator = (id_prefix) ->
-    _treeAttributeFilter = (nodes, name) ->
-       i = nodes.length
-       snip = id_prefix.length
-       while (i--)
-         if nodes[i].attr('id').substr(0, snip) is id_prefix
-           nodes[i].attr(name, null)
-
   _nsurlAttributeFilterGenerator = (editor) ->
     _nsurlAttributeFilter = (nodes, name, params) ->
       i = nodes.length
@@ -88,7 +80,7 @@ define (require) ->
       fixedelements: "table,thead,tbody,td,tr,th".split(',')
     }
     updateTree: () ->
-      @tree.update '#editortree', @editor
+      @tree.updateTreeCallback()
     schema: {}
     nsmap: {}
 
@@ -98,11 +90,10 @@ define (require) ->
       if tinymce.adapter
         tinymce.adapter.patchEditor(editor)
       @schema = _getSchema("test/rng/kipling-jp3-xsl.srng")
-      @tree = editortree
-      @tree.create '#editortree', editor
+      @tree = new TextorumTree '#editortree', editor
       testload.bindHandler editor
       editor.onSetContent.add (ed, o) ->
-        that.tree.update '#editortree', editor
+        that.tree.updateTreeCallback()
       editor.onKeyUp.add (editor, evt) ->
         if that.removePlaceholderTag
           editor.$('[class="textorum_placeholder"]').remove();
@@ -118,17 +109,17 @@ define (require) ->
             ).remove()
       editor.onChange.add (editor, evt) ->
         if editor.isDirty()
-          that.tree.update '#editortree', editor
+          that.tree.updateTreeCallback()
 
       editor.onNodeChange.add (editor, controlManager, element, collapsed, extra) ->
         editor.currentNode = element
-        that.tree.navigate(editor, controlManager, element, collapsed, extra)
+        that.tree.navigateTreeCallback(element, collapsed, extra)
 
       editor.onPreInit.add (editor) ->
         editor.parser.addAttributeFilter 'data-textorum-nsurl', _nsurlAttributeFilterGenerator(editor)
-        editor.serializer.addAttributeFilter 'id', _treeAttributeFilterGenerator(that.tree.id_prefix)
+        editor.serializer.addAttributeFilter 'id', that.tree.attributeFilterCallback
       editor.onInit.add (editor) ->
-        
+
       if editor.theme.onResolveName
         editor.theme.onResolveName.add (theme, path_object) ->
           if path_object.node.getAttribute?('data-xmlel')
