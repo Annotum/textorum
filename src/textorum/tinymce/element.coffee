@@ -27,9 +27,9 @@ define (require) ->
   class ElementHandler
     namespaceIdx: 0
     constructor: (@editor) ->
-      editor.addCommand 'addSchemaTag', @addTag, this
-      editor.addCommand 'editSchemaTag', @editTag, this
-      editor.addCommand 'removeSchemaTag', @removeTag, this
+      @editor.addCommand 'addSchemaTag', @addTag, this
+      @editor.addCommand 'editSchemaTag', @editTag, this
+      @editor.addCommand 'removeSchemaTag', @removeTag, this
     # Create a new tag, bring up editing window
     addTag: (ui, params) ->
       newtagname = params['key']
@@ -244,10 +244,4 @@ define (require) ->
 
         @editor.focus()
 
-
-  init = (editor) ->
-    return new ElementHandler(editor)
-
-  {
-    init: init
-  }
+  return ElementHandler

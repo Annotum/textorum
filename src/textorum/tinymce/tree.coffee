@@ -21,6 +21,8 @@
 
 define (require) ->
   helper = require('../helper')
+  ElementHandler = require('./element')
+
   tinymce = window.tinymce
   window.textorum ||= {}
   $ = window.jQuery
@@ -37,6 +39,7 @@ define (require) ->
       if makeNodeTitle?
         @makeNodeTitle = makeNodeTitle
       @previousNode = null
+      @elementHandler = new ElementHandler(@editor)
 
     _jstreeOptions: (jsonData) ->
       if not jsonData?

@@ -24,7 +24,6 @@ define (require) ->
   testload = require('./testload')
   helper = require('../helper')
   TextorumTree = require('./tree')
-  elementHelper = require('./element')
   #pathHelper = require('./pathhelper')
 
   tinymce = window.tinymce
@@ -124,7 +123,6 @@ define (require) ->
         editor.theme.onResolveName.add (theme, path_object) ->
           if path_object.node.getAttribute?('data-xmlel')
             path_object.name = path_object.node.getAttribute('data-xmlel');
-      elementHelper.init editor
 
     getInfo: ->
       {
