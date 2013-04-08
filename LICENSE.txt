@@ -69,7 +69,11 @@ permission notices:
   https://github.com/allmarkedup/jQuery-URL-Parser
   Copyright (c) 2012 Mark Perkins, http://allmarkedup.com/
   Released under the MIT license
-  
+
+  https://github.com/litera/jquery-scrollintoview
+  Copyright (c) 2011 Robert Koritnik
+  Released under the MIT license
+
   --
 
   MIT license:

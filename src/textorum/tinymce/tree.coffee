@@ -293,11 +293,14 @@ define (require) ->
         return null
       firstNode = treeInstance._get_node("[name='#{node.getAttribute('id')}']")
       if firstNode
-        secondNode = treeInstance._get_parent(firstNode)
-        treeInstance.open_node(secondNode)
+        # secondNode = treeInstance._get_parent(firstNode)
+        # treeInstance.open_node(secondNode)
         treeInstance.open_node(firstNode)
         treeInstance.deselect_all()
         treeInstance.select_node(firstNode)
+        $(firstNode[0]).scrollintoview(
+          direction: "vertical"
+        )
       @ignoreNavigation = false
       return null
 
