@@ -122,7 +122,7 @@ define (require) ->
     escapeHtml: (string) ->
       String(string).replace /[&<>"'\/]/g, (s) ->
         return entityMap[s]
-    
+
     getLocalName: (node) ->
       return "" if not node?
       if node?.localName?
@@ -180,7 +180,7 @@ define (require) ->
 
     parseJSON: (text) ->
       (window.jQuery?.parseJSON || window.tinymce?.util?.JSON?.parse)(text)
-      
+
     hasDomError: (dom) ->
       errorNS = "http://www.mozilla.org/newlayout/xml/parsererror.xml"
       (!dom or

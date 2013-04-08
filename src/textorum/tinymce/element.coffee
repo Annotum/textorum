@@ -160,7 +160,7 @@ define (require) ->
       attrlists.append attrlist
       attrwindow.append attrlists
       attrwindow.append attrform
-      
+
       attrlists.on 'click', 'li.optional', (e) ->
         el = $(this)
         window.foo = el
@@ -185,7 +185,7 @@ define (require) ->
           content: attrwindow
           buttons: [{
             text: 'Ok'
-            click: (e) -> 
+            click: (e) ->
               if creating
                 console.log "creating node"
                 console.log "params", params
@@ -217,7 +217,7 @@ define (require) ->
               wm.close(null, w.id)
           }, {
             text: 'Cancel'
-            click: (e) -> 
+            click: (e) ->
               console.log "Cancel button clicked:", e, w
               wm.close(null, w.id)
           }]
@@ -249,5 +249,5 @@ define (require) ->
     return new ElementHandler(editor)
 
   {
-    init: init    
+    init: init
   }

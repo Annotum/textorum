@@ -1,20 +1,20 @@
 ###
 # testload.coffee - Test XSLT loading/saving
-# 
+#
 # Copyright (C) 2013 Crowd Favorite, Ltd. All rights reserved.
-# 
+#
 # This file is part of Textorum.
-# 
+#
 # Textorum is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
 # Free Software Foundation; either version 2 of the License, or (at your
 # option) any later version.
-# 
+#
 # Textorum is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
@@ -34,7 +34,7 @@ define (require) ->
   processor.setParameter(null, "inlineelements", "bold,italic,monospace,underline,sub,sup,named-content,ext-link,inline-graphic,inline-formula")
   # Elements to bring over without changing their element name
   processor.setParameter(null, "fixedelements", "table,thead,tbody,td,tr,th")
-  
+
 
   revprocessor = new XSLTProcessor()
   revStylesheet = helper.getXML "xsl/cke2xml.xsl"
@@ -54,7 +54,7 @@ define (require) ->
       return serializeError(xmlDoc)
     newDoc = processor.transformToDocument(xmlDoc)
     (new XMLSerializer()).serializeToString(newDoc)
-    
+
   saveFromText = (text) ->
     xmlDoc = helper.parseXML text
     if helper.hasDomError(xmlDoc)
@@ -63,7 +63,7 @@ define (require) ->
     (new XMLSerializer()).serializeToString(revNewDoc)
       .replace(/\/\/TEXTORUM\/\/DOCTYPE-SYSTEM\/\//, "http://dtd.nlm.nih.gov/publishing/3.0/journalpublishing3.dtd") # XSLT 1.0 doesn't support params in <xsl:output>, so use a placeholder
       .replace(/^(<!DOCTYPE[^>]*>\s*<[^>]*?)[ ]?xmlns:xml="http:\/\/www.w3.org\/XML\/1998\/namespace"/g, "$1") # Chrome adds an unneeded xmlns:xml
-    
+
 
   loadDataHandler = ->
     uri = $('#datafile').val()
@@ -127,5 +127,5 @@ define (require) ->
   return {
     bindHandler: bindHandler
   }
-  
-  
+
+
