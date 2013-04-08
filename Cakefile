@@ -132,7 +132,7 @@ task 'watch', 'Automatically recompile CoffeeScript files to JavaScript, SASS to
   try
     kexec = require('kexec')
     console.log "Watching Cakefile for changes".yellow
-    fs.watchFile path.join(process.cwd, "Cakefile"), (curr, prev) ->
+    fs.watchFile path.join(process.cwd(), "Cakefile"), (curr, prev) ->
       if +curr.mtime isnt +prev.mtime
         console.log "Cakefile changed, restarting watch"
         sassWatcher.kill()
@@ -140,7 +140,7 @@ task 'watch', 'Automatically recompile CoffeeScript files to JavaScript, SASS to
         srcWatcher.kill() 
         kexec "npm run-script watch"
   catch ex
-    console.log "no kexec, not watching Cakefile".yellow
+    console.log "problem loading kexec, not watching Cakefile: ".yellow + ex
 
 
 task 'lint', 'Check CoffeeScript for lint', ->
