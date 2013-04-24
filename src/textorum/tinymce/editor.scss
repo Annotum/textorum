@@ -1,5 +1,7 @@
 $light: #f0f0f0;
 $mid: #99d1dd;
+$dark: #006b94;
+$black: #333;
 
 @font-face {
 	font-family: 'FontAwesome';
@@ -98,7 +100,7 @@ $mid: #99d1dd;
 	content: '';
 }
 
-.jstree li a > ins, 
+.jstree li a > ins,
 .jstree li a .jstree-icon {
 	display: none;
 }
@@ -203,20 +205,69 @@ $mid: #99d1dd;
 	background-color: #bee3eb;
 }
 
+// Edit Attributes Pop Up
+.ui-dialog {
+	border-color: $black;
+	border-radius: 0;
+	-webkit-box-shadow:  3px 3px 3px 0px rgba(0, 0, 0, .3);
+	box-shadow:  3px 3px 3px 0px rgba(0, 0, 0, .3);
+	font-size: .9em;
+	padding: 0;
 
-.attributewindow li.attr {
-	input,textarea,select {
-		display: none;
+	.attributewindow li.attr {
+		input,textarea,select {
+			display: none;
+		}
+	}
+
+	.attributewindow li.attr.open {
+		input,textarea,select {
+			display: block;
+		}
+	}
+
+	label {
+		float: left;
+		font-size: .9em;
+	}
+
+	textarea,
+	input[type=text] {
+		clear: left;
+		float: left;
+		margin-bottom: 10px;
+		width: 295px;
+	}
+
+	.ui-button {
+		background-color: $light;
+		border-radius: 0;
+		font-size: .9em;
+	}
+
+	.ui-dialog-buttonpane {
+		padding-right: 10px;
 	}
 }
 
-.attributewindow li.attr.open {
-	input,textarea,select {
-		display: block;
+
+.ui-dialog-titlebar {
+	background-color: $mid;
+	background-image: none;
+	border: 0;
+	border-radius: 0;
+	color: $black;
+
+	.ui-dialog-titlebar-close {
+		border-color: #888;
+		margin-top: -11px;
 	}
 }
 
-
-
+.ui-widget-overlay {
+	background-color: #000;
+	background-image: none;
+	opacity: .6;
+}
 
 
