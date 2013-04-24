@@ -80,7 +80,7 @@ define (require) ->
       if params.required or attrValue?
         out.addClass('open textorum-open')
 
-      out.addClass "textorum-attr textorum-attr-#{origname.replace(/:/, '--')}"
+      out.addClass "attr textorum-attr textorum-attr-#{origname.replace(/:/, '--')}"
       out.data 'textorum-attribute-name', name
 
       label = $(document.createElement("label"))
@@ -130,7 +130,7 @@ define (require) ->
       elementattrs = @editor.plugins.textorum.schema.defs[newtagname]?.attr
 
       attrwindow = $(document.createElement("div"))
-      attrwindow.addClass "textorum-attributewindow"
+      attrwindow.addClass "attributewindow textorum-attributewindow"
 
       attrRequiredList = $(document.createElement("ul"))
       attrRequiredList.addClass "required-attributes textorum-required-attributes"
