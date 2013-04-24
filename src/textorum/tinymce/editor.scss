@@ -204,6 +204,19 @@ $mid: #99d1dd;
 }
 
 
+.textorum-attributewindow li.textorum-attr {
+	input,textarea,select {
+		display: none;
+	}
+}
+
+.textorum-attributewindow li.textorum-attr.textorum-open {
+	input,textarea,select {
+		display: block;
+	}
+}
+
+
 
 
 

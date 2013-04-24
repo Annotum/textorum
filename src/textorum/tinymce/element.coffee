@@ -50,7 +50,6 @@ define (require) ->
       else
         return node
 
-
     nameWithPrefix: (name, params, editorNode) ->
       if params.ns
         prefix = @editor.plugins.textorum.nsmap[params.ns]
@@ -75,38 +74,23 @@ define (require) ->
       origname = name
       name = @nameWithPrefix(name, params, editorNode)
       attrValue = editorNode.attr name
-      el = $(document.createElement("li"))
-      el.addClass "attr_#{origname.replace(/:/, '__')}"
-      el.data "target", "attr_#{origname.replace(/:/, '__')}"
-      el.append(document.createTextNode(name))
-      if not params.required
-        el.addClass "optional"
-      if attrValue?
-        el.addClass "visible"
-      el
 
-    attrFormElement: (name, params, editorNode) ->
-      origname = name
-      name = @nameWithPrefix(name, params, editorNode)
-      attrValue = editorNode.attr name
+      out = $(document.createElement("li"))
 
       if params.required or attrValue?
-        display = "block"
-      else
-        display = "none"
-      out = $(document.createElement("div"))
-      out.attr "style", """display: #{display};"""
-      out.addClass "attr_#{origname.replace(/:/, '__')}"
-      out.data 'attribute_name', name
-      out.addClass "attrform"
+        out.addClass('open textorum-open')
+
+      out.addClass "textorum-attr textorum-attr-#{origname.replace(/:/, '--')}"
+      out.data 'textorum-attribute-name', name
+
       label = $(document.createElement("label"))
       label.append document.createTextNode("#{name}")
       out.append label
 
+      sel = undefined
+
       if params.value?.length
         sel = $(document.createElement("select"))
-        sel.addClass "attrinput"
-        sel.name = "attr_#{name}"
         if not params.required
           opt = $(document.createElement("option"))
           opt.val ""
@@ -119,63 +103,60 @@ define (require) ->
             opt.prop "selected", true
           opt.append document.createTextNode(value)
           sel.append opt
-        out.append sel
       else if params.data isnt undefined
         sel = $(document.createElement("input"))
-        sel.addClass "attrinput"
         sel.prop "type", "text"
         if attrValue?
           sel.val attrValue
-        out.append sel
       else if params.$?
         sel = $(document.createElement("textarea"))
-        sel.addClass "attrinput"
         if attrValue?
           sel.append document.createTextNode(attrValue)
+
+      if sel isnt undefined
+        sel.addClass "attrinput textorum-attrinput"
+        sel.name = "attr-#{name}"
         out.append sel
 
       out
 
     editWindow: (params, node) ->
-      attroptional = {}
-      attrrequired = {}
-      attrgroups = {}
       editorNode = @editorNodeFromListNode node
       creating = false
       if not node or not editorNode.length
         creating = true
 
-
       newtagname = $(editorNode).attr("data-xmlel") || params['key']
       elementattrs = @editor.plugins.textorum.schema.defs[newtagname]?.attr
 
-      attrRequiredList = $(document.createElement("ul"))
-      attrlist = $(document.createElement("ul"))
-      attrform = $(document.createElement("div"))
-
       attrwindow = $(document.createElement("div"))
-      attrwindow.addClass "textorum_attributewindow"
-      attrlists = $(document.createElement("div"))
-      attrlists.append attrRequiredList
-      attrlists.append attrlist
-      attrwindow.append attrlists
-      attrwindow.append attrform
+      attrwindow.addClass "textorum-attributewindow"
 
-      attrlists.on 'click', 'li.optional', (e) ->
+      attrRequiredList = $(document.createElement("ul"))
+      attrRequiredList.addClass "required-attributes textorum-required-attributes"
+      attrlist = $(document.createElement("ul"))
+      attrlist.addClass "textorum-optional-attributes"
+
+      attrlist.on 'click', 'li.textorum-attr label', (e) ->
         el = $(this)
-        window.foo = el
-        el.parents(".textorum_attributewindow").find("div.#{el.data('target')}").toggle()
+        el.parents("li").toggleClass('open textorum-open')
 
       for own attr of elementattrs
-        attrform.append @attrFormElement(attr, elementattrs[attr], editorNode)
         if elementattrs[attr].required
           attrRequiredList.append @attrListElement(attr, elementattrs[attr], editorNode)
-          attroptional[attr] = elementattrs[attr]
         else
           attrlist.append @attrListElement(attr, elementattrs[attr], editorNode)
-          attrrequired[attr] = elementattrs[attr]
-      if attrform.children().length
-        window.attrform = attrform
+
+      if attrlist.children().length or attrRequiredList.children().length
+        if attrRequiredList.children().length
+          heading = $(document.createElement("h2"))
+          heading.append document.createTextNode("Required Attributes")
+          attrwindow.append heading, attrRequiredList
+        if attrlist.children().length
+          heading = $(document.createElement("h2"))
+          heading.append document.createTextNode("Optional Attributes")
+          attrwindow.append heading, attrlist
+
         wm = @editor.windowManager
         thiseditor = @editor
         w = wm.open {
@@ -193,12 +174,15 @@ define (require) ->
                 editorNode.attr 'data-xmlel', newtagname
                 editorNode.addClass newtagname
 
-              attrform.find("div.attrform:hidden").each (e) ->
-                console.log "removing", $(this).data('attribute_name')
-                editorNode.removeAttr $(this).data('attribute_name')
-              attrform.find("div.attrform:visible").each (e) ->
-                console.log "setting", $(this).data('attribute_name'), "to", $(this).find('.attrinput').val()
-                editorNode.attr $(this).data('attribute_name'), $(this).find('.attrinput').val()
+              attrwindow.find("li.textorum-attr").each (e) ->
+                attrli = $(this)
+                if attrli.hasClass "textorum-open"
+                  console.log "setting", attrli.data('textorum-attribute-name'), "to", attrli.find('.attrinput').val()
+                  editorNode.attr attrli.data('textorum-attribute-name'), attrli.find('.attrinput').val()
+                else
+                  console.log "removing", attrli.data('textorum-attribute-name')
+                  editorNode.removeAttr attrli.data('textorum-attribute-name')
+
               if creating
                 target = $(thiseditor.dom.select("##{params.id}"))
                 console.log "inserting", editorNode, params.action, target
