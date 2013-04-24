@@ -227,7 +227,7 @@ $black: #333;
 	}
 
 	label {
-		float: left;
+		display: block;
 		font-size: .9em;
 	}
 
@@ -270,4 +270,43 @@ $black: #333;
 	opacity: .6;
 }
 
+.ui-button-icon-only .ui-icon {
+	margin-left: -9px;
+}
 
+.attributewindow {
+	h2 {
+		font-size: .9em;
+	}
+	ul {
+		list-style: none;
+		padding-left: 0;
+	}
+	li {
+		border-bottom: 1px solid #ccc;
+		margin-bottom: 3px;
+		padding-bottom: 5px;
+	}
+}
+
+.textorum-optional-attributes {
+	label {
+		cursor: pointer;
+	}
+
+	label:before {
+		content: '\f067';
+		float: left;
+		font-family: FontAwesome;
+		font-size: 12px;
+		-webkit-font-smoothing: antialiased;
+		height: 10px;
+		margin-top: 4px;
+		width: 15px;
+	}
+
+	.open label:before {
+		content: '\f068';
+		float: left;
+	}
+}
