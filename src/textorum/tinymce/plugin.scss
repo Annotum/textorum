@@ -39,10 +39,11 @@ $lowlight: 1px dotted #589dac;
 body {
 	font-size: 75%;
 	color: $black;
-	line-height: 1.5em;}
+	line-height: 1.5em;
+}
 
 div[data-xmlel] {
-  margin: 3px 0;
+	margin: 3px 0;
 }
 
 div[data-xmlel]:before {
@@ -62,159 +63,159 @@ div[data-xmlel]:before {
 
 div[data-xmlel="article"]:before,
 div[data-xmlel="front"]:before {
-  display: none;
+	display: none;
 }
 
 div[data-xmlel="front"],
 div[data-xmlel="back"] {
-  background-color: $light;
-  padding: .5em;
+	background-color: $light;
+	padding: .5em;
 }
 
 div[data-xmlel="journal-meta"] {
-  background-color: $mid;
-  border: 1px solid $defaultback;
-  margin: 0 0 6px;
+	background-color: $mid;
+	border: 1px solid $defaultback;
+	margin: 0 0 6px;
 }
 
 div[data-xmlel="journal-meta"]:before {
-  content: "Journal Meta";
-  display: block;
-  margin: 0 0 5px;
-  padding: 2px 5px;
+	content: "Journal Meta";
+	display: block;
+	margin: 0 0 5px;
+	padding: 2px 5px;
 }
 
 div[data-xmlel="journal-id"] {
-  // using imporant to override inline style
-  display: inline-block !important;
-  font-size: $normaltext;
+	// using imporant to override inline style
+	display: inline-block !important;
+	font-size: $normaltext;
 }
 
 div[data-xmlel="journal-id"]:before {
-  font-size: inherit;
-  background-color: inherit;
-  color: inherit;
-  content: "JID: ";
+	font-size: inherit;
+	background-color: inherit;
+	color: inherit;
+	content: "JID: ";
 }
 
 div[data-xmlel="journal-title-group"]:before {
-  display: none;
+	display: none;
 }
 
 div[data-xmlel="journal-title"]:before {
-  background: transparent;
-  content: "";
+	background: transparent;
+	content: "";
 }
 
 div[data-xmlel="journal-title"] {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 div[data-xmlel="journal-title"]:before {
-  color: $black;
-  content: "Journal Title:";
-  font-size: inherit;
-  font-weight: bold;
+	color: $black;
+	content: "Journal Title:";
+	font-size: inherit;
+	font-weight: bold;
 }
 
 div[data-xmlel="issn"] {
-  // using important to override inline style
-  display: inline-block !important;
-  font-size: $normaltext;
+	// using important to override inline style
+	display: inline-block !important;
+	font-size: $normaltext;
 }
 
 div[data-xmlel="issn"]:before {
-  font-size: inherit;
-  content: "ISSN:";
-  background-color: inherit;
-  color: inherit;
-  display: inline;
+	font-size: inherit;
+	content: "ISSN:";
+	background-color: inherit;
+	color: inherit;
+	display: inline;
 }
 
 div[data-xmlel="publisher"]:before {
-  background-color: inherit;
-  font-size: inherit;
-  color: $black;
-  content: "Published:";
+	background-color: inherit;
+	font-size: inherit;
+	color: $black;
+	content: "Published:";
 }
 
 div[data-xmlel^="publisher-"]:before {
-  display: none;
+	display: none;
 }
 
 div[data-xmlel^="publisher-"] {
-  display: inline;
+	display: inline;
 }
 
 div[data-xmlel="publisher-name"]:before {
-  content: "by";
-  font-weight: normal;
+	content: "by";
+	font-weight: normal;
 }
 
 div[data-xmlel="publisher-loc"]:before {
-  content: "at";
+	content: "at";
 }
 
 div[data-xmlel="article-meta"] {
-  background-color: $mid;
-  border: 1px solid $defaultback;
+	background-color: $mid;
+	border: 1px solid $defaultback;
 }
 
 div[data-xmlel="article-meta"]:before {
-  display: block;
-  content: "Article Meta";
-  margin: 0;
-  padding: 2px 5px;
+	display: block;
+	content: "Article Meta";
+	margin: 0;
+	padding: 2px 5px;
 }
 
 div[data-xmlel="article-id"] {
-  // using !important to override inline style
-  display: inline-block !important;
-  font-size: $normaltext;
+	// using !important to override inline style
+	display: inline-block !important;
+	font-size: $normaltext;
 }
 
 div[data-xmlel="article-id"]:before {
-  background: none;
-  color: #333;
-  content: "Article ID:";
-  margin-left: 0;
+	background: none;
+	color: #333;
+	content: "Article ID:";
+	margin-left: 0;
 }
 
 div[data-xmlel="article-categories"]:before {
-  content: "Article Categories";
+	content: "Article Categories";
 }
 
 div[data-xmlel="contrib-group"]:before {
-  content: "Contributors";
+	content: "Contributors";
 }
 
 div[data-xmlel="subject"],
 div[data-xmlel="article-title"] {
-  border: 1px dotted $highlight;
+	border: 1px dotted $highlight;
 }
 
 div[data-xmlel="subject"]:before,
 div[data-xmlel="article-title"]:before {
-  background: none;
-  color: #333;
-  content: "Subject:";
-  font-size: inherit;
-  font-weight: bold;
-  margin-left: 0;
+	background: none;
+	color: #333;
+	content: "Subject:";
+	font-size: inherit;
+	font-weight: bold;
+	margin-left: 0;
 }
 
 div[data-xmlel="article-title"]:before {
-  content: "Article Title:";
+	content: "Article Title:";
 }
 
 div[data-xmlel="title-group"]:before,
 div[data-xmlel="contrib"]:before,
 div[data-xmlel="subj-group"]:before {
-  display: none;
+	display: none;
 }
 
 div[data-xmlel="name"]:before {
-  display: none;
+	display: none;
 }
 
 div[data-xmlel="surname"],
@@ -222,7 +223,7 @@ div[data-xmlel="given-names"],
 div[data-xmlel="day"],
 div[data-xmlel="month"],
 div[data-xmlel="year"] {
-  display: inline;
+	display: inline;
 }
 
 div[data-xmlel="surname"]:before,
@@ -234,147 +235,147 @@ div[data-xmlel="year"]:before,
 div[data-xmlel="copyright-statement"]:before,
 div[data-xmlel="copyright-year"]:before,
 div[data-xmlel="license"]:before {
-  background: none;
-  color: #333;
-  content: "Last Name:";
-  font-size: inherit;
-  font-weight: bold;
-  margin-left: 0;
+	background: none;
+	color: #333;
+	content: "Last Name:";
+	font-size: inherit;
+	font-weight: bold;
+	margin-left: 0;
 }
 
 div[data-xmlel="given-names"]:before {
-  content: "First Name:";
-  padding-left: 10px;
+	content: "First Name:";
+	padding-left: 10px;
 }
 
 div[data-xmlel="aff"] {
-  font-size: $normaltext;
-  padding-left: 10px;
+	font-size: $normaltext;
+	padding-left: 10px;
 }
 
 div[data-xmlel="aff"]:before {
-  display: none;
+	display: none;
 }
 
- div[data-xmlel="author-comment"] {
+div[data-xmlel="author-comment"] {
 	border-bottom: $border;
 	padding-bottom: 4px;
 	padding-left: 4px;
 }
 
 div[data-xmlel="author-comment"]:before {
-  content: "Author Comment:";
-  display: inline;
-  padding: 2px 4px 2px 0;
+	content: "Author Comment:";
+	display: inline;
+	padding: 2px 4px 2px 0;
 }
 
 div[data-xmlel="author-comment"] .p {
-  display: inline;
-  padding: 0;
+	display: inline;
+	padding: 0;
 }
 
 div[pub-type="epub"][data-xmlel="pub-date"]:before {
-  content: "E-Pub";
+	content: "E-Pub";
 }
 
 div[pub-type="ppub"][data-xmlel="pub-date"]:before {
-  content: "Print Publication";
+	content: "Print Publication";
 }
 
 div[data-xmlel="day"]:before {
-  content: "Day:";
+	content: "Day:";
 }
 
 div[data-xmlel="month"]:before {
-  content: "Month:";
+	content: "Month:";
 }
 
 div[data-xmlel="year"]:before {
-  content: "Year:";
+	content: "Year:";
 }
 
 div[pub-type="collection"][data-xmlel="pub-date"]:before {
-  content: "Collection";
+	content: "Collection";
 }
 
 div[data-xmlel="copyright-statement"]:before {
-  content: "Copyright:";
+	content: "Copyright:";
 }
 
 div[data-xmlel="copyright-year"]:before {
-  content: "Copyright Year:";
+	content: "Copyright Year:";
 }
 
 div[data-xmlel="license"] {
-  padding-left: 4px;
+	padding-left: 4px;
 }
 
 div[data-xmlel="license"]:before {
-  content: "License:";
-  padding: 0;
+	content: "License:";
+	padding: 0;
 }
 
 div[data-xmlel="license-p"] {
-  display: inline;
+	display: inline;
 }
 
 div[data-xmlel="license-p"]:before {
-  display: none;
+	display: none;
 }
 
 div[data-xmlel="permissions"],
 div[data-xmlel="abstract"],
 div[data-xmlel="kwd-group"] {
-  border-top: $border;
-  padding-top: 4px;
+	border-top: $border;
+	padding-top: 4px;
 }
 
 div[data-xmlel="date"] {
-  padding-left: 10px;
+	padding-left: 10px;
 }
 
 div[date-type="received"][data-xmlel="date"]:before {
-  content: "Date Received";
+	content: "Date Received";
 }
 
 div[date-type="rev-recd"][data-xmlel="date"]:before {
-  content: "Date Revisions Received";
+	content: "Date Revisions Received";
 }
 
 div[date-type="accepted"][data-xmlel="date"]:before {
-  content: "Date Accepted";
+	content: "Date Accepted";
 }
 
 div[data-xmlel="kwd-group"]:before {
-  content: "Keywords";
+	content: "Keywords";
 }
 
 div[data-xmlel="permissions"] {
-  padding-top: 4px;
+	padding-top: 4px;
 }
 
 div[data-xmlel="abstract"]:before {
-  content: "Abstract:";
+	content: "Abstract:";
 }
 
 div[data-xmlel="kwd-group"]:before {
-  content: "Keywords";
+	content: "Keywords";
 }
 
 div[data-xmlel="kwd"] {
-  display: inline;
+	display: inline;
 }
 
 div[data-xmlel="kwd"]:before {
-  display: none;
+	display: none;
 }
 
 div[data-xmlel="kwd"]:after {
-  content: ",";
+	content: ",";
 }
 
 div[data-xmlel="kwd"]:last-child:after {
-  display: none;
+	display: none;
 }
 
 //-------------------------------------------------------
@@ -382,7 +383,7 @@ div[data-xmlel="kwd"]:last-child:after {
 //-------------------------------------------------------
 
 div[data-xmlel="body"] {
-  margin-top: 20px;
+	margin-top: 20px;
 }
 
 div[data-xmlel="body"]:before,
@@ -390,36 +391,36 @@ div[data-xmlel="sec"]:before,
 div[data-xmlel="xref"]:before,
 div[data-xmlel="p"]:before,
 div[data-xmlel="title"]:before {
-  display: none;
+	display: none;
 }
 
 div[data-xmlel="article"]:before,
 div[data-xmlel="front"]:before {
-  background: #999;
-  color: $light;
+	background: #999;
+	color: $light;
 }
 
 div[data-xmlel="xref"] {
-  color: $dark;
-  display: inline;
-  font-weight: bold;
+	color: $dark;
+	display: inline;
+	font-weight: bold;
 }
 
 div[data-xmlel="title"] {
-  background: $mid;
-  color: $defaultback;
-  font-weight: bold;
-  margin-bottom: 6px;
-  padding: 1px 4px 0;
+	background: $mid;
+	color: $defaultback;
+	font-weight: bold;
+	margin-bottom: 6px;
+	padding: 1px 4px 0;
 }
 
 div[data-xmlel="p"] {
-  margin-bottom: 10px;
-  padding: 0 4px;
+	margin-bottom: 10px;
+	padding: 0 4px;
 }
 
 div[data-xmlel="sec"] {
-  margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 //-------------------------------------------------------
@@ -428,17 +429,17 @@ div[data-xmlel="sec"] {
 
 span[data-xmlel="bold"]:before,
 span[data-xmlel="italic"]:before {
-  display: none;
+	display: none;
 }
 
 span[data-xmlel="bold"] {
-  display: inline;
-  font-weight: bold;
+	display: inline;
+	font-weight: bold;
 }
 
 span[data-xmlel="italic"] {
-  display: inline;
-  font-style: italic;
+	display: inline;
+	font-style: italic;
 }
 
 //-------------------------------------------------------
@@ -446,10 +447,10 @@ span[data-xmlel="italic"] {
 //-------------------------------------------------------
 
 div[data-xmlel="list"] {
-  padding-left: 10px;
-  display: block;
-  list-style-position: inside;
-  counter-reset: item;
+	padding-left: 10px;
+	display: block;
+	list-style-position: inside;
+	counter-reset: item;
 }
 
 div[data-xmlel="list-item"] {
@@ -460,34 +461,28 @@ div[data-xmlel="list-item"] {
 div[data-xmlel="list"]:before,
 div[data-xmlel="list-item"]:before {
 	display: none;
-  // content: "";
-  // background-color: inherit;
-  // font-size: $normaltext;
-  // margin-left: -15px;
-  // margin-right: 0px;
-  // padding: 0px;
 }
 
 div[data-xmlel="list-item"]:before {
-  display: block;
-  float: left;
-  margin-right: 3px;
+	display: block;
+	float: left;
+	margin-right: 3px;
 }
 
 div[data-xmlel="list"] div[data-xmlel="list-item"] {
-  counter-increment: item;
-  display: list-item;
-  list-style-type: disc;
+	counter-increment: item;
+	display: list-item;
+	list-style-type: disc;
 }
 
 div[data-xmlel="list"][list-type="order"] div[data-xmlel="list-item"]:before {
-  color: inherit;
-  content: counter(item, decimal) ". ";
-  background-color: inherit;
+	color: inherit;
+	content: counter(item, decimal) ". ";
+	background-color: inherit;
 }
 
 div[data-xmlel="list"][list-type="order"] div[data-xmlel="list-item"] {
-  list-style-type: none;
+	list-style-type: none;
 }
 
 //-------------------------------------------------------
@@ -496,15 +491,15 @@ div[data-xmlel="list"][list-type="order"] div[data-xmlel="list-item"] {
 
 
 th {
-  background: $dark;
-  color: $light;
-  font-size: $smalltext;
-  padding: 5px;
+	background: $dark;
+	color: $light;
+	font-size: $smalltext;
+	padding: 5px;
 }
 
 td {
-  font-size: $smalltext;
-  padding: 3px;
+	font-size: $smalltext;
+	padding: 3px;
 }
 
 //overriding tinymce table styles
@@ -552,11 +547,11 @@ div[data-xmlel="fig"]:before {
 //-------------------------------------------------------
 
 div[data-xmlel="ref"] {
-  div[data-xmlel="label"],
-  div[data-xmlel="mixed-citation"],
-  div[data-xmlel="pub-id"] {
-    display: inline;
-  }
+	div[data-xmlel="label"],
+	div[data-xmlel="mixed-citation"],
+	div[data-xmlel="pub-id"] {
+		display: inline;
+	}
 }
 
 div[data-xmlel="back"]:before,
@@ -565,31 +560,31 @@ div[data-xmlel="ref-list"]:before,
 div[data-xmlel="ref"]:before,
 div[data-xmlel="label"]:before,
 div[data-xmlel="mixed-citation"]:before {
-  display: none;
+	display: none;
 }
 
 div[data-xmlel="ref-list"] {
-  margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 div[data-xmlel="ref"] {
-  border-bottom: $border;
-  padding: 5px 0;
+	border-bottom: $border;
+	padding: 5px 0;
 
-  div[data-xmlel="label"] {
-  	font-weight: bold;
-    margin-left: 0;
-    margin-right: 6px;
-  }
+	div[data-xmlel="label"] {
+		font-weight: bold;
+		margin-left: 0;
+		margin-right: 6px;
+	}
 }
 
 div[data-xmlel="pub-id"]:before {
-  background: none;
-  color: #333;
-  content: "Pub ID:";
-  font-size: inherit;
-  font-weight: bold;
-  margin-left: 0;
+	background: none;
+	color: #333;
+	content: "Pub ID:";
+	font-size: inherit;
+	font-weight: bold;
+	margin-left: 0;
 }
 
 //------------------------------------------------------------
@@ -619,7 +614,7 @@ div[data-xmlel="copyright-year"]:hover,
 div[data-xmlel="license"]:hover div[data-xmlel="license-p"],
 div[data-xmlel="abstract"]:hover .p,
 div[data-xmlel="kwd"]:hover {
-    outline: $highlight;
+	outline: $highlight;
 }
 
 // Dark Highlight on White (content area)
@@ -627,17 +622,17 @@ div[data-xmlel="kwd"]:hover {
 .sec .p:hover,
 div[data-xmlel="mixed-citation"]:hover,
 .label:hover {
-    background: $light;
-    outline: $lowlight;
+	background: $light;
+	outline: $lowlight;
 }
 
 div[data-xmlel="mixed-citation"] div[data-xmlel="pub-id"]:hover {
-    background: #ccc;
+	background: #ccc;
 }
 
 // Reference Highlights
 
 .sec .p div[data-xmlel="xref"]:hover {
-    background: $dark;
-    color: $light;
+	background: $dark;
+	color: $light;
 }
