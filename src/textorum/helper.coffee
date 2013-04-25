@@ -146,6 +146,21 @@ define (require) ->
             result += child.nodeValue
       result
 
+    getXHR: (url) ->
+      resp = null
+      if window.tinymce?.util?.XHR?
+        tinymce.util.XHR.send {
+          url: url,
+          async: false,
+          success: (text, response) ->
+            resp = response
+        }
+        return resp
+      xmlhttp = new XMLHttpRequest()
+      xmlhttp.open("GET", url, false)
+      xmlhttp.send('')
+      return xmlhttp
+
     getXML: (url) ->
       xslDoc = null
       if window.tinymce?.util?.XHR?
