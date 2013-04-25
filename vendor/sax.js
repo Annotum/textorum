@@ -1,3 +1,4 @@
+define(function (require, exports, module) {
 // wrapper for non-node envs
 ;(function (sax) {
 
@@ -1313,3 +1314,5 @@ function write (chunk) {
 }
 
 })(typeof exports === "undefined" ? sax = {} : exports)
+
+});
