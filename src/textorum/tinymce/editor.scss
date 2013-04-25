@@ -13,6 +13,10 @@ $black: #333;
 	font-style: normal;
 }
 
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+
 .treewrapper {
 	background: $light;
 	border: 1px solid #ccc;
@@ -66,6 +70,7 @@ $black: #333;
 // Remove the default open/closed arrows on jstree list item icons
 .jstree.jstree-default ins {
 	background-image: none;
+	cursor: pointer;
 }
 
 // Default icon - large "+" cross
@@ -212,6 +217,7 @@ $black: #333;
 	-webkit-box-shadow:  3px 3px 3px 0px rgba(0, 0, 0, .3);
 	box-shadow:  3px 3px 3px 0px rgba(0, 0, 0, .3);
 	font-size: .9em;
+	min-width: 332px;
 	padding: 0;
 
 	.attributewindow li.attr {
@@ -239,14 +245,38 @@ $black: #333;
 		width: 295px;
 	}
 
-	.ui-button {
-		background-color: $light;
-		border-radius: 0;
-		font-size: .9em;
+	.ui-dialog-buttonpane {
+		border-top: 0;
+		padding: 0 10px 10px;
 	}
 
-	.ui-dialog-buttonpane {
-		padding-right: 10px;
+	.ui-state-default.ui-button-text-only {
+		background-color: darken($mid, 15%);
+		background-image: none;
+		border: 0;
+		-webkit-border-radius: 2px;
+		border-radius: 2px;
+		-moz-box-shadow: 0 2px 0 0 darken($mid, 30%);
+		-webkit-box-shadow: 0 2px 0 0 darken($mid, 30%);
+		box-shadow: 0 2px 0 0 darken($mid, 30%);
+		color: #fff;
+		font-size: .9em;
+		text-shadow: -1px -1px 1px rgba(0, 0, 0, .3);
+	}
+
+	.ui-state-default.ui-button-text-only:hover {
+		background-color: darken($mid, 5%);
+		-moz-box-shadow: 0 2px 0 0 darken($mid, 20%);
+		-webkit-box-shadow: 0 2px 0 0 darken($mid, 20%);
+		box-shadow: 0 2px 0 0 darken($mid, 20%);
+		text-shadow: -1px -1px 1px rgba(0, 0, 0, .4);
+	}
+
+	.ui-state-default.ui-dialog-titlebar-close {
+		background-color: transparent;
+		background-image: none;
+		border: 0;
+		margin-top: -11px;
 	}
 }
 
@@ -257,11 +287,6 @@ $black: #333;
 	border: 0;
 	border-radius: 0;
 	color: $black;
-
-	.ui-dialog-titlebar-close {
-		border-color: #888;
-		margin-top: -11px;
-	}
 }
 
 .ui-widget-overlay {
@@ -283,22 +308,29 @@ $black: #333;
 		padding-left: 0;
 	}
 	li {
-		border-bottom: 1px solid #ccc;
+		border-bottom: 1px solid $light;
 		margin-bottom: 3px;
 		padding-bottom: 5px;
 	}
 }
 
 .textorum-optional-attributes {
+	margin-bottom: 15px;
+}
+
+.textorum-optional-attributes {
+	margin-bottom: 0;
+
 	label {
 		cursor: pointer;
 	}
 
 	label:before {
+		color: #2e5a63;
 		content: '\f067';
 		float: left;
 		font-family: FontAwesome;
-		font-size: 12px;
+		font-size: 10px;
 		-webkit-font-smoothing: antialiased;
 		height: 10px;
 		margin-top: 4px;
