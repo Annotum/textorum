@@ -1,0 +1,84 @@
+<!DOCTYPE article SYSTEM "http://dtd.nlm.nih.gov/publishing/3.0/journalpublishing3.dtd">
+<article article-type="research-article" xml:lang="en" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="nlm-ta">Perspect Medicin Chem</journal-id>
+      <journal-title-group>
+        <journal-title>Perspectives in Medicinal Chemistry</journal-title>
+      </journal-title-group>
+      <issn pub-type="epub">1177-391X</issn>
+      <publisher>
+        <publisher-name>Libertas Academica</publisher-name>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="doi">10.4137/PMC.S6803</article-id>
+      <article-id pub-id-type="publisher-id">pmc-5-2011-019</article-id>
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Perspective</subject>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title>Low Molecular Weight Opioid Peptide Esters Could be Developed as a New Class of Analgesics</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author" corresp="yes">
+          <name name-style="western">
+            <surname>Goldberg</surname>
+            <given-names>Joel S.</given-names>
+          </name>
+        </contrib>
+        <author-comment>
+          <p>Corresponding author email: joel.goldberg2@va.gov.</p>
+        </author-comment>
+      </contrib-group>
+      <pub-date pub-type="epub">
+        <day>25</day>
+        <month>7</month>
+        <year>2011</year>
+      </pub-date>
+      <pub-date pub-type="collection">
+        <year>2011</year>
+      </pub-date>
+      <volume>5</volume>
+      <permissions>
+        <copyright-statement>© the author(s), publisher and licensee Libertas Academica Ltd.</copyright-statement>
+        <copyright-year>2011</copyright-year>
+        <license license-type="open-access">
+          <license-p>This is an open access article. Unrestricted non-commercial use is permitted provided the original work is properly cited.</license-p>
+        </license>
+      </permissions>
+      <abstract>
+        <p>Ullam volobore nonse nummy iuscipit nonsenibhiscinim psusto sis odionsequip, facin iril vullan. Rud ed vulputeisis elis landrem susto verostin si dolore. Eumsandre tatet loborper aut. Vivamus vulla illuptatie dionull. Lut dictum urna esting magniat, metus erit nulla core facidunt iliquiscipis feugiamet faccum adionse. Ipsumsan tionulla niam ulputat augue obor suscipit, issectem susciduipit veliquat, acipisl faccumsan ipis amconsendre. </p>
+      </abstract>
+      <kwd-group>
+        <kwd>opioid peptided esters</kwd>
+        <kwd>analgesics</kwd>
+      </kwd-group>
+      <related-article related-article-type="testing" id="test-related-article" xlink:type="simple" xlink:href="foo"/>
+    </article-meta>
+  </front>
+  <body>
+    <sec>
+      <title>Section Title</title>
+      <p>Section Body</p>
+    </sec>
+  </body>
+  <back>
+    <ack>
+      <p>The author would like to acknowledge acipisl leo te numsan numsandre facilisis iure lobor adipiscing ationullaoret conulluptat.</p>
+    </ack>
+    <ref-list>
+      <title>References</title>
+      <ref id="b1-pmc-5-2011-019">
+        <label>1.</label>
+        <mixed-citation>Furlan AD, Sandoval JA, Mailis-Gagnon A, Tunks E. Opioids for chronic noncancer pain: a meta-analysis of effectiveness and side effects. <italic>CMAJ</italic>. 5232006;<bold>174</bold>:(11)1589–94.<pub-id pub-id-type="pmid">16717269</pub-id></mixed-citation>
+      </ref>
+    </ref-list>
+    <sec sec-type="notes-group">
+      <title>Notes</title>
+      <p>Some notes go here: Sum aliquet am blam odio odipsumsan odolor od estio. </p>
+    </sec>
+  </back>
+</article>
