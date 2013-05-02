@@ -28,7 +28,7 @@ define (require) ->
       return node
     if not node
       return new NotAllowed()
-    foo = switch node.local
+    pattern = switch node.local
       when 'element' then new Element children[0], children[1]
       when 'define' then new Define _getAttr(node, "name"), children[0]
       when 'notAllowed' then new NotAllowed()
@@ -43,15 +43,15 @@ define (require) ->
       when 'choice' then new Choice children[0], children[1]
       when 'group' then new Group children[0], children[1]
       when 'interleave' then new Interleave children[0], children[1]
-      when "anyName" then new AnyName node, children[0]
-      when "nsName" then new NsName node, children[0]
-      when "name" then new Name node, children[0]
+      when "anyName" then new AnyName children[0]
+      when "nsName" then new NsName _getAttr(node, "ns"), children[0]
+      when "name" then new Name _getAttr(node, "ns"), children[0]
       when "choice" then new Choice children[0], children[1]
       when 'except' then getPattern children[0]
       when 'param' then new Param _getAttr(node, "name"), children[0]
       else
         throw new RNGException("can't parse pattern for #{node.local}")
-    foo
+    pattern
 
 
   class RNGException extends Error
@@ -73,7 +73,7 @@ define (require) ->
   class NameClass
 
   class AnyName extends NameClass
-    constructor: (nameClassNode, exceptPattern) ->
+    constructor: (exceptPattern) ->
       @except = getPattern exceptPattern
     toString: =>
       if @except instanceof NotAllowed
@@ -82,8 +82,7 @@ define (require) ->
         "* - #{@except}"
 
   class Name extends NameClass
-    constructor: (nameClassNode, @name) ->
-      @ns = _getAttr nameClassNode, "ns"
+    constructor: (@ns, @name) ->
     toString: =>
       if @ns
         "#{@ns}:#{@name}"
@@ -91,8 +90,7 @@ define (require) ->
         "#{@name}"
 
   class NsName extends NameClass
-    constructor: (nameClassNode, exceptPattern) ->
-      @ns = _getAttr nameClassNode, "ns"
+    constructor: (@ns, exceptPattern) ->
       @except = getPattern exceptPattern
     toString: =>
       if @except instanceof NotAllowed
@@ -219,29 +217,19 @@ define (require) ->
     toString: =>
       "#{@name} = #{@pattern}"
 
-
-  #** QName - label for elements and attributes
-
-  class QName
-    constructor: (@uri, @localName) ->
-
-  #** XML document classes
-
-  class ChildNode
-
-  class ElementNode extends ChildNode
-    constructor: (@qName, @context, @attributeNodes, @childNodes) ->
-
-  class TextNode extends ChildNode
-    constructor: (@string)
-
-  class AttributeNode
-    constructor: (@qName, @string) ->
-
-  { _getAttr, getPattern, AnyName, Attribute, AttributeNode,
-    ChildNode, Choice, Context, Data, Datatype, Define,
-    Empty,
-    Element, ElementNode, Group, Interleave, List, MissingContent,
+  { _getAttr, getPattern,
+    AnyName, Attribute,
+    Choice, Context,
+    Data, Datatype, Define,
+    Empty, Element,
+    Group,
+    Interleave,
+    List,
+    MissingContent,
     Name, NameClass, NotAllowed, NsName,
-    OneOrMore, Param, Pattern, QName, Ref, Text, TextNode,
-    Value }
+    OneOrMore,
+    Param, Pattern,
+    Ref,
+    Text,
+    Value
+  }
