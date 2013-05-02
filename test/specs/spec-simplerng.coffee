@@ -63,6 +63,18 @@ define (require) ->
         loader.process simpleRNG
         defines = ["__addressBook-elt-idp496", "__card-elt-idp1216", "__email-elt-idp2576", "__name-elt-idp2192"]
         for key, val of loader.defines
-          assert(defines.indexOf key).isNotEqualTo(-1, "defined an unknown define")
+          assert(defines.indexOf key).isNotEqualTo(-1, "found #{key}")
           defines.splice defines.indexOf(key), 1
-        assert(defines.length).equals 0, "did not find all of the required defines"
+        assert(defines.length).equals 0, "did not define anything extra"
+
+      it "stringifies properly", ->
+        loader.process simpleRNG
+        defines =
+          "__addressBook-elt-idp496": "__addressBook-elt-idp496 = element addressBook { (empty | __card-elt-idp1216+) }"
+          "__card-elt-idp1216": "__card-elt-idp1216 = element card { __name-elt-idp2192, __email-elt-idp2576 }"
+          "__name-elt-idp2192": "__name-elt-idp2192 = element name { text }"
+          "__email-elt-idp2576": "__email-elt-idp2576 = element email { text }"
+        for key, val of loader.defines
+          assert(defines[key].toString()).isEqualTo(val, "define #{key} properly stringified")
+
+        assert(loader.start.toString()).isEqualTo("__addressBook-elt-idp496", "start properly stringified")

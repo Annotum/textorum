@@ -34,7 +34,10 @@ define (require) ->
       when 'notAllowed' then new NotAllowed()
       when 'empty' then new Empty()
       when 'text' then new Text()
-      when 'data' then new Data _getAttr(node, "type"), _getAttr(node, "datatype"), children
+      when 'data'
+        if _getAttr(node, "type") is "NMTOKEN"
+          console.log "data note", node, children
+        new Data _getAttr(node, "datatypeLibrary"), _getAttr(node, "type"), children
       when 'value' then new Value _getAttr(node, "dataTypeLibrary"), _getAttr(node, "type"), _getAttr(node, "ns"), children[0]
       when 'list' then new List children[0]
       when 'attribute' then new Attribute children[0], children[1]
@@ -75,81 +78,152 @@ define (require) ->
   class AnyName extends NameClass
     constructor: (nameClassNode, exceptPattern) ->
       @except = getPattern exceptPattern
+    toString: =>
+      if @except instanceof NotAllowed
+        "*"
+      else
+        "* - #{@except}"
 
   class Name extends NameClass
     constructor: (nameClassNode, @name) ->
       @ns = _getAttr nameClassNode, "ns"
+    toString: =>
+      if @ns
+        "#{@ns}:#{@name}"
+      else
+        "#{@name}"
 
   class NsName extends NameClass
     constructor: (nameClassNode, exceptPattern) ->
       @ns = _getAttr nameClassNode, "ns"
       @except = getPattern exceptPattern
+    toString: =>
+      if @except instanceof NotAllowed
+        "#{@ns}:*"
+      else
+        "#{@ns}:* - #{@except}]"
 
   #** Pattern Classes
 
   class Pattern
 
   class Empty extends Pattern
-    constructor: () ->
+    constructor: ->
+    toString: =>
+      "empty"
 
   class NotAllowed extends Pattern
     constructor: (@message, @pattern, @childNode, @priority) ->
+    toString: =>
+      if @message
+        "notAllowed # #{@message}\n"
+      else
+        "notAllowed"
 
   class MissingContent extends NotAllowed
     constructor: (@message, @pattern, @childNode, @priority) ->
+    toString: =>
+      if @message
+        "missingContent # #{@message}\n"
+      else
+        "missingContent"
 
   class Text extends Pattern
+    toString: =>
+      "text"
 
   class Choice extends Pattern
     constructor: (pattern1, pattern2) ->
       @pattern1 = getPattern pattern1
       @pattern2 = getPattern pattern2
+    toString: =>
+      "(#{@pattern1} | #{@pattern2})"
 
   class Interleave extends Pattern
     constructor: (pattern1, pattern2) ->
       @pattern1 = getPattern pattern1
       @pattern2 = getPattern pattern2
+    toString: =>
+      "(#{@pattern1} & #{@pattern2})"
 
   class Group extends Pattern
     constructor: (pattern1, pattern2) ->
       @pattern1 = getPattern pattern1
       @pattern2 = getPattern pattern2
+    toString: =>
+      "#{@pattern1}, #{@pattern2}"
 
   class OneOrMore extends Pattern
     constructor: (pattern) ->
       @pattern = getPattern pattern
+    toString: =>
+      "#{@pattern}+"
 
   class List extends Pattern
     constructor: (pattern) ->
       @pattern = getPattern pattern
+    toString: =>
+      "list { #{@pattern} }"
 
   class Data extends Pattern
-    constructor: (@dataType, @paramList) ->
+    constructor: (@dataType, @type, paramList) ->
+      @params = []
+      @except = new NotAllowed()
+      for param in paramList
+        if param.local is "param"
+          @params.push getPattern param
+        else if param.local is "except"
+          @except = getPattern param
 
-  class DataExcept extends Pattern
-    constructor: (@dataType, @paramList, pattern) ->
-      if pattern
-        @pattern = getPattern pattern
+    toString: =>
+      output = ""
+      if @dataType
+        output += "#{@dataType}:"
+      output += "#{@type}"
+      if @paramList
+        output += " { #{@paramList} }"
+      unless @except instanceof NotAllowed
+        output += " - #{@except}"
+      output
 
   class Value extends Pattern
-    constructor: (@dataType, @string, @context) ->
+    constructor: (@dataType, @type, @ns, @string) ->
+    toString: =>
+      output = ""
+
+      if @dataType
+        output += "" + @dataType + ":"
+      if @type
+        output += "#{@type} "
+      output += '"' + @string + '"'
 
   class Attribute extends Pattern
     constructor: (@nameClass, pattern, @defaultValue = null) ->
       @pattern = getPattern pattern
+      if @nameClass.name is "lang"
+        console.log "defining attribute", @nameClass, @pattern
+        console.log @pattern.toString()
+    toString: =>
+      "attribute #{@nameClass} { #{@pattern} }"
 
   class Element extends Pattern
     constructor: (@name, pattern) ->
       @pattern = getPattern pattern
+    toString: =>
+      "element #{@name} { #{@pattern} }"
 
   class Ref extends Pattern
     constructor: (@refname, pattern = null) ->
       if pattern
         @pattern = getPattern pattern
+    toString: =>
+      @refname
 
   class Define
     constructor: (@name, pattern) ->
       @pattern = getPattern pattern
+    toString: =>
+      "#{@name} = #{@pattern}"
 
 
   #** QName - label for elements and attributes
@@ -171,7 +245,7 @@ define (require) ->
     constructor: (@qName, @string) ->
 
   { _getAttr, getPattern, AnyName, Attribute, AttributeNode,
-    ChildNode, Choice, Context, Data, DataExcept, Datatype, Define,
+    ChildNode, Choice, Context, Data, Datatype, Define,
     Empty,
     Element, ElementNode, Group, Interleave, List, MissingContent,
     Name, NameClass, NotAllowed, NsName,
