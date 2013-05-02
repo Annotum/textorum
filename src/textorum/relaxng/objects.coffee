@@ -34,10 +34,7 @@ define (require) ->
       when 'notAllowed' then new NotAllowed()
       when 'empty' then new Empty()
       when 'text' then new Text()
-      when 'data'
-        if _getAttr(node, "type") is "NMTOKEN"
-          console.log "data note", node, children
-        new Data _getAttr(node, "datatypeLibrary"), _getAttr(node, "type"), children
+      when 'data' then new Data _getAttr(node, "datatypeLibrary"), _getAttr(node, "type"), children
       when 'value' then new Value _getAttr(node, "dataTypeLibrary"), _getAttr(node, "type"), _getAttr(node, "ns"), children[0]
       when 'list' then new List children[0]
       when 'attribute' then new Attribute children[0], children[1]
@@ -200,9 +197,6 @@ define (require) ->
   class Attribute extends Pattern
     constructor: (@nameClass, pattern, @defaultValue = null) ->
       @pattern = getPattern pattern
-      if @nameClass.name is "lang"
-        console.log "defining attribute", @nameClass, @pattern
-        console.log @pattern.toString()
     toString: =>
       "attribute #{@nameClass} { #{@pattern} }"
 
