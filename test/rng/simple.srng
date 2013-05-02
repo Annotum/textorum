@@ -1,0 +1,37 @@
+<rng:grammar xmlns:rng="http://relaxng.org/ns/structure/1.0">
+	<start xmlns="http://relaxng.org/ns/structure/1.0">
+		<rng:ref name="__addressBook-elt-idp496"/>
+	</start>
+	<rng:define name="__addressBook-elt-idp496">
+		<element xmlns="http://relaxng.org/ns/structure/1.0">
+			<rng:name ns="">addressBook</rng:name>
+			<rng:choice>
+				<rng:empty/>
+				<rng:oneOrMore>
+					<rng:ref name="__card-elt-idp1216"/>
+				</rng:oneOrMore>
+			</rng:choice>
+		</element>
+	</rng:define>
+	<rng:define name="__card-elt-idp1216">
+		<element xmlns="http://relaxng.org/ns/structure/1.0">
+			<rng:name ns="">card</rng:name>
+			<rng:group>
+				<rng:ref name="__name-elt-idp2192"/>
+				<rng:ref name="__email-elt-idp2576"/>
+			</rng:group>
+		</element>
+	</rng:define>
+	<rng:define name="__name-elt-idp2192">
+		<element xmlns="http://relaxng.org/ns/structure/1.0">
+			<rng:name ns="">name</rng:name>
+			<text/>
+		</element>
+	</rng:define>
+	<rng:define name="__email-elt-idp2576">
+		<element xmlns="http://relaxng.org/ns/structure/1.0">
+			<rng:name ns="">email</rng:name>
+			<text/>
+		</element>
+	</rng:define>
+</rng:grammar>

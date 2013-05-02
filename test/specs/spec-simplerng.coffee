@@ -11,43 +11,7 @@ define (require) ->
     describe "Simple RNG loading", ->
       RNGParser = require('textorum/relaxng/parse')
       loader = undefined
-      simpleRNG = """<rng:grammar xmlns:rng="http://relaxng.org/ns/structure/1.0">
-<start xmlns="http://relaxng.org/ns/structure/1.0">
-<rng:ref name="__addressBook-elt-idp496"/>
-</start>
-<rng:define name="__addressBook-elt-idp496">
-<element xmlns="http://relaxng.org/ns/structure/1.0">
-<rng:name ns="">addressBook</rng:name>
-<rng:choice>
-<rng:empty/>
-<rng:oneOrMore>
-<rng:ref name="__card-elt-idp1216"/>
-</rng:oneOrMore>
-</rng:choice>
-</element>
-</rng:define>
-<rng:define name="__card-elt-idp1216">
-<element xmlns="http://relaxng.org/ns/structure/1.0">
-<rng:name ns="">card</rng:name>
-<rng:group>
-<rng:ref name="__name-elt-idp2192"/>
-<rng:ref name="__email-elt-idp2576"/>
-</rng:group>
-</element>
-</rng:define>
-<rng:define name="__name-elt-idp2192">
-<element xmlns="http://relaxng.org/ns/structure/1.0">
-<rng:name ns="">name</rng:name>
-<text/>
-</element>
-</rng:define>
-<rng:define name="__email-elt-idp2576">
-<element xmlns="http://relaxng.org/ns/structure/1.0">
-<rng:name ns="">email</rng:name>
-<text/>
-</element>
-</rng:define>
-</rng:grammar>"""
+      simpleRNG = require("text!test/rng/simple.srng")
       before ->
         loader = new RNGParser()
 
@@ -78,3 +42,16 @@ define (require) ->
           assert(defines[key].toString()).isEqualTo(val, "define #{key} properly stringified")
 
         assert(loader.start.toString()).isEqualTo("__addressBook-elt-idp496", "start properly stringified")
+
+
+    describe "Kipling RNG loading", ->
+      kipling = require("text!test/rng/kipling-jp3-xsl.srng")
+      RNGParser = require('textorum/relaxng/parse')
+      loader = undefined
+
+      before ->
+        loader = new RNGParser()
+
+      it "does not throw exceptions", ->
+        expect(0)
+        loader.process kipling
