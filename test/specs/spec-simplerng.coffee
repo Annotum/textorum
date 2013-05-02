@@ -51,7 +51,20 @@ define (require) ->
 
       before ->
         loader = new RNGParser()
+        loader.process kipling
 
       it "does not throw exceptions", ->
         expect(0)
-        loader.process kipling
+
+      it "finds the amusing pair of start options", ->
+        assert(loader.start.toString()).isEqualTo("(article-idp2181872 | hr-idp2536272)", "start is article OR hr")
+
+      it "handles the related-article define properly", ->
+        relatedArticle = loader.defines["related-article-idp2366528"]
+        relatedToString = """related-article-idp2366528 = element related-article { (empty | attribute id { http://www.w3.org/2001/XMLSchema-datatypes:ID }), attribute related-article-type { text }, (empty | attribute ext-link-type { text }), (empty | attribute vol { text }), (empty | attribute page { text }), (empty | attribute issue { text }), (empty | attribute elocation-id { text }), (empty | attribute journal-id { text }), (empty | attribute journal-id-type { text }), (empty | attribute http://www.w3.org/1999/xlink:type { token "simple" }), (empty | attribute http://www.w3.org/1999/xlink:href { text }), text }"""
+        assert(relatedArticle.toString()).isEqualTo(relatedToString, "related-article is defined correctly overall")
+        assert(relatedArticle.constructor.name).isEqualTo("Define")
+        assert(relatedArticle.pattern.constructor.name).isEqualTo("Element")
+        assert(relatedArticle.pattern.pattern.constructor.name).isEqualTo("Group")
+
+
