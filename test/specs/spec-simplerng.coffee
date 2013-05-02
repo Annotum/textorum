@@ -1,0 +1,68 @@
+###
+  require(['textorum/relaxng/parse', 'textorum/helper'],
+  function(ser) {
+    var x = new ser(); x.debug = true;
+    x.process('<rng:grammar xmlns:rng="http://relaxng.org/ns/structure/1.0">\n<start xmlns="http://relaxng.org/ns/structure/1.0">\n<rng:ref name="__addressBook-elt-idp496"/>\n</start>\n<rng:define name="__addressBook-elt-idp496">\n<element xmlns="http://relaxng.org/ns/structure/1.0">\n<rng:name ns="">addressBook</rng:name>\n<rng:choice>\n<rng:empty/>\n<rng:oneOrMore>\n<rng:ref name="__card-elt-idp1216"/>\n</rng:oneOrMore>\n</rng:choice>\n</element>\n</rng:define>\n<rng:define name="__card-elt-idp1216">\n<element xmlns="http://relaxng.org/ns/structure/1.0">\n<rng:name ns="">card</rng:name>\n<rng:group>\n<rng:ref name="__name-elt-idp2192"/>\n<rng:ref name="__email-elt-idp2576"/>\n</rng:group>\n</element>\n</rng:define>\n<rng:define name="__name-elt-idp2192">\n<element xmlns="http://relaxng.org/ns/structure/1.0">\n<rng:name ns="">name</rng:name>\n<text/>\n</element>\n</rng:define>\n<rng:define name="__email-elt-idp2576">\n<element xmlns="http://relaxng.org/ns/structure/1.0">\n<rng:name ns="">email</rng:name>\n<text/>\n</element>\n</rng:define>\n</rng:grammar>');
+  }); true;
+###
+
+define (require) ->
+  pavlov.specify "Textorum RNG parsing", ->
+    describe "Simple RNG loading", ->
+      RNGParser = require('textorum/relaxng/parse')
+      loader = undefined
+      simpleRNG = """<rng:grammar xmlns:rng="http://relaxng.org/ns/structure/1.0">
+<start xmlns="http://relaxng.org/ns/structure/1.0">
+<rng:ref name="__addressBook-elt-idp496"/>
+</start>
+<rng:define name="__addressBook-elt-idp496">
+<element xmlns="http://relaxng.org/ns/structure/1.0">
+<rng:name ns="">addressBook</rng:name>
+<rng:choice>
+<rng:empty/>
+<rng:oneOrMore>
+<rng:ref name="__card-elt-idp1216"/>
+</rng:oneOrMore>
+</rng:choice>
+</element>
+</rng:define>
+<rng:define name="__card-elt-idp1216">
+<element xmlns="http://relaxng.org/ns/structure/1.0">
+<rng:name ns="">card</rng:name>
+<rng:group>
+<rng:ref name="__name-elt-idp2192"/>
+<rng:ref name="__email-elt-idp2576"/>
+</rng:group>
+</element>
+</rng:define>
+<rng:define name="__name-elt-idp2192">
+<element xmlns="http://relaxng.org/ns/structure/1.0">
+<rng:name ns="">name</rng:name>
+<text/>
+</element>
+</rng:define>
+<rng:define name="__email-elt-idp2576">
+<element xmlns="http://relaxng.org/ns/structure/1.0">
+<rng:name ns="">email</rng:name>
+<text/>
+</element>
+</rng:define>
+</rng:grammar>"""
+      before ->
+        loader = new RNGParser()
+
+      it "does not throw exceptions", ->
+        expect(0)
+        loader.process simpleRNG
+
+      it "finds the correct grammar starts", ->
+        loader.process simpleRNG
+        assert(loader.start.refname).equals "__addressBook-elt-idp496"
+
+      it "finds the correct defines", ->
+        loader.process simpleRNG
+        defines = ["__addressBook-elt-idp496", "__card-elt-idp1216", "__email-elt-idp2576", "__name-elt-idp2192"]
+        for key, val of loader.defines
+          assert(defines.indexOf key).isNotEqualTo(-1, "defined an unknown define")
+          defines.splice defines.indexOf(key), 1
+        assert(defines.length).equals 0, "did not find all of the required defines"

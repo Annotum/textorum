@@ -17,22 +17,38 @@
     <!-- Module loaders & bootstrap -->
     <script src="../vendor/require.js"></script>
     <script>
-        require.config({
-            baseUrl: "../lib",
-            urlArgs: "bust=" +  (new Date()).getTime()
-            });
-	(function () {
+    require.config({
+        baseUrl: "../lib",
+        urlArgs: "bust=" +  (new Date()).getTime(),
+        paths: {
+            "text": "../vendor/text",
+            "sax": "../vendor/sax",
+            "jqueryui-popups": "../vendor/tinymce.jqueryui.popups",
+            "tinymce-jquery": "../vendor/tinymce_jquery/jquery.tinymce",
+            "tinymce-jquery-adapter": "../vendor/tinymce_jquery/adapter"
+            }
+        });
 
-	QUnit.config.autostart = false;
+    if (!require.defined("stream")) {
+      define('stream', function () {
+        var func = function () {};
+        return {"Stream": func};
+      });
+    }
 
-	// Local requirejs syntax - .js only
-	var testModules = [
-	  "./lib/specs/spec-example.js",
-	  "./lib/test-main.js"
-	];
+    (function () {
 
-	require(testModules, QUnit.start);
-	}());
+    QUnit.config.autostart = false;
+
+    // Local requirejs syntax - .js only
+    var testModules = [
+      "./lib/specs/spec-example.js",
+      "./lib/specs/spec-simplerng.js",
+      "./lib/test-main.js"
+    ];
+
+    require(testModules, QUnit.start);
+    }());
         // require( ["textorum"] );
     </script>
   </head>
