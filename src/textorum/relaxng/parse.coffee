@@ -40,10 +40,9 @@ define (require) ->
 
       @debug = false
 
-      @currentTag = null
       @currentPrefixMapping = {}
       @errors = []
-      @output = ""
+
       saxOptions =
         xmlns: true
         trim: false
@@ -75,7 +74,8 @@ define (require) ->
         while @grammarStack[@grammarStack.length - 1] isnt parentNode and @grammarStack
           children.unshift @grammarStack.pop()
         @grammarStack.pop()
-        @handleChildren parentNode, children
+        parentNode.childNodes = children
+        @handleChildren parentNode
 
     nodeIsParent: (node) =>
       return switch h.getLocalName(node)
@@ -92,37 +92,22 @@ define (require) ->
         else
           false
 
-    handleChildren: (parentNode, children) =>
+    handleChildren: (parentNode) =>
       switch h.getLocalName(parentNode)
         when "grammar"
           0 + 0
         when "start"
           if @start
             throw new RNGException("Found a second start")
-          @start = children[0]
+          @start = parentNode.childNodes[0]
         when "define"
-          @defines[h.getNodeAttr parentNode, "name"] = o.getPattern(parentNode, children)
+          @defines[h.getNodeAttr parentNode, "name"] = o.getPattern parentNode
         else
-          @grammarStack.push o.getPattern(parentNode, children)
-
-    handleGrammar: (node) =>
-      if h.getLocalName(node) isnt "grammar"
-        throw new RNGException("expecting grammar, found #{h.getLocalName(node)}")
-      @nextHandler = @handleStart
-      return node
-
-    handleStart: (node) =>
-
-    onopencdata: =>
-      @output += "<![CDATA["
-    oncdata: (data) =>
-      @output += data
-    onclosecdata: =>
-      @output += "]]>"
+          @grammarStack.push o.getPattern parentNode
 
     ontext: (text) =>
-      text = text.replace /^\s+|\s+$/g, ''
-      if text
+      strippedtext = text.replace /^\s+|\s+$/g, ''
+      if strippedtext
         @grammarStack.push text
 
     onopennamespace: (ns) =>

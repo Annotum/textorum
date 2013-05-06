@@ -22,11 +22,14 @@
 define (require) ->
   h = require('../helper')
 
-  getPattern = (node, children = []) =>
+  getPattern = (node) =>
     if node instanceof Pattern or node instanceof NameClass
       return node
     if not node
       return new NotAllowed()
+
+    children = node.childNodes
+
     pattern = switch h.getLocalName(node)
       when 'element' then new Element children[0], children[1]
       when 'define' then new Define h.getNodeAttr(node, "name"), children[0]
@@ -100,11 +103,17 @@ define (require) ->
   #** Pattern Classes
 
   class Pattern
+    check: (node) =>
+      return new NotAllowed()
+    nullable: =>
+      false
 
   class Empty extends Pattern
     constructor: ->
     toString: =>
       "empty"
+    nullable: =>
+      true
 
   class NotAllowed extends Pattern
     constructor: (@message, @pattern, @childNode, @priority) ->
@@ -113,6 +122,8 @@ define (require) ->
         "notAllowed # #{@message}\n"
       else
         "notAllowed"
+    check: (node) =>
+      return this
 
   class MissingContent extends NotAllowed
     constructor: (@message, @pattern, @childNode, @priority) ->
@@ -125,6 +136,14 @@ define (require) ->
   class Text extends Pattern
     toString: =>
       "text"
+    check: (node) =>
+      switch h.getNodeType()
+        when Node.TEXT_NODE
+          return this
+        else
+          return new NotAllowed("expected text node, found #{h.getLocalName(node)}", this, node)
+    nullable: =>
+      true
 
   class Choice extends Pattern
     constructor: (pattern1, pattern2) ->
@@ -132,6 +151,13 @@ define (require) ->
       @pattern2 = getPattern pattern2
     toString: =>
       "(#{@pattern1} | #{@pattern2})"
+    nullable: =>
+      @pattern1.nullable() or @pattern2.nullable()
+    check: (node) =>
+      if @pattern1 instanceof NotAllowed
+        return @pattern2.check(node)
+      @pattern1.check(node)
+
 
   class Interleave extends Pattern
     constructor: (pattern1, pattern2) ->
@@ -139,6 +165,8 @@ define (require) ->
       @pattern2 = getPattern pattern2
     toString: =>
       "(#{@pattern1} & #{@pattern2})"
+    nullable: =>
+      @pattern1.nullable() and @pattern2.nullable()
 
   class Group extends Pattern
     constructor: (pattern1, pattern2) ->
@@ -146,12 +174,16 @@ define (require) ->
       @pattern2 = getPattern pattern2
     toString: =>
       "#{@pattern1}, #{@pattern2}"
+    nullable: =>
+      @pattern1.nullable() and @pattern2.nullable()
 
   class OneOrMore extends Pattern
     constructor: (pattern) ->
       @pattern = getPattern pattern
     toString: =>
       "#{@pattern}+"
+    nullable: =>
+      @pattern.nullable()
 
   class List extends Pattern
     constructor: (pattern) ->
