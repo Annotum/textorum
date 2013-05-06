@@ -123,10 +123,21 @@ define (require) ->
       String(string).replace /[&<>"'\/]/g, (s) ->
         return entityMap[s]
 
+    getNodeAttr: (node, attr) ->
+      return node?.attributes?[attr]?.value
+
+    getNodeType: (node) ->
+      switch true
+        when node.nodeType? then node.nodeType
+        when typeof node is "string" then Node.TEXT_NODE
+        else undefined
+
     getLocalName: (node) ->
       return "" if not node?
       if node?.localName?
         return node.localName
+      if node?.local?
+        return node.local
       if not node.nodeName?
         return ""
       colonIdx = node.nodeName.indexOf ":"
@@ -137,6 +148,7 @@ define (require) ->
 
     textContent: (node) ->
       return node.textContent if node.textContent
+      return node if typeof node is "string"
       result = ''
       for child in node.childNodes
         switch child.nodeType

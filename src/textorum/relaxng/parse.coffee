@@ -27,8 +27,6 @@ define (require) ->
   _rngURI = 'http://relaxng.org/ns/structure/1.0'
   _annURI = 'http://relaxng.org/ns/compatibility/annotations/1.0'
 
-  _getAttr = o._getAttr
-
   RNGException = o.RNGException
 
   class RNGParser
@@ -80,7 +78,7 @@ define (require) ->
         @handleChildren parentNode, children
 
     nodeIsParent: (node) =>
-      return switch node.local
+      return switch h.getLocalName(node)
         when "grammar", "start", "define", "element", "data", "value", "list"
           true
         when "attribute", "ref", "oneOrMore", "choice", "group", "interleave"
@@ -95,7 +93,7 @@ define (require) ->
           false
 
     handleChildren: (parentNode, children) =>
-      switch parentNode.local
+      switch h.getLocalName(parentNode)
         when "grammar"
           0 + 0
         when "start"
@@ -103,13 +101,13 @@ define (require) ->
             throw new RNGException("Found a second start")
           @start = children[0]
         when "define"
-          @defines[_getAttr parentNode, "name"] = o.getPattern(parentNode, children)
+          @defines[h.getNodeAttr parentNode, "name"] = o.getPattern(parentNode, children)
         else
           @grammarStack.push o.getPattern(parentNode, children)
 
     handleGrammar: (node) =>
-      if node.local isnt "grammar"
-        throw new RNGException("expecting grammar, found #{node.local}")
+      if h.getLocalName(node) isnt "grammar"
+        throw new RNGException("expecting grammar, found #{h.getLocalName(node)}")
       @nextHandler = @handleStart
       return node
 

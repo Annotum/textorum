@@ -20,37 +20,36 @@
 # 02110-1301, USA.
 
 define (require) ->
-  _getAttr = (node, attr) ->
-    return node?.attributes?[attr]?.value
+  h = require('../helper')
 
   getPattern = (node, children = []) =>
     if node instanceof Pattern or node instanceof NameClass
       return node
     if not node
       return new NotAllowed()
-    pattern = switch node.local
+    pattern = switch h.getLocalName(node)
       when 'element' then new Element children[0], children[1]
-      when 'define' then new Define _getAttr(node, "name"), children[0]
+      when 'define' then new Define h.getNodeAttr(node, "name"), children[0]
       when 'notAllowed' then new NotAllowed()
       when 'empty' then new Empty()
       when 'text' then new Text()
-      when 'data' then new Data _getAttr(node, "datatypeLibrary"), _getAttr(node, "type"), children
-      when 'value' then new Value _getAttr(node, "dataTypeLibrary"), _getAttr(node, "type"), _getAttr(node, "ns"), children[0]
+      when 'data' then new Data h.getNodeAttr(node, "datatypeLibrary"), h.getNodeAttr(node, "type"), children
+      when 'value' then new Value h.getNodeAttr(node, "dataTypeLibrary"), h.getNodeAttr(node, "type"), h.getNodeAttr(node, "ns"), children[0]
       when 'list' then new List children[0]
       when 'attribute' then new Attribute children[0], children[1]
-      when 'ref' then new Ref _getAttr(node, "name")
+      when 'ref' then new Ref h.getNodeAttr(node, "name")
       when 'oneOrMore' then new OneOrMore children[0]
       when 'choice' then new Choice children[0], children[1]
       when 'group' then new Group children[0], children[1]
       when 'interleave' then new Interleave children[0], children[1]
       when "anyName" then new AnyName children[0]
-      when "nsName" then new NsName _getAttr(node, "ns"), children[0]
-      when "name" then new Name _getAttr(node, "ns"), children[0]
+      when "nsName" then new NsName h.getNodeAttr(node, "ns"), children[0]
+      when "name" then new Name h.getNodeAttr(node, "ns"), children[0]
       when "choice" then new Choice children[0], children[1]
       when 'except' then getPattern children[0]
-      when 'param' then new Param _getAttr(node, "name"), children[0]
+      when 'param' then new Param h.getNodeAttr(node, "name"), children[0]
       else
-        throw new RNGException("can't parse pattern for #{node.local}")
+        throw new RNGException("can't parse pattern for #{h.getLocalName(node)}")
     pattern
 
 
@@ -217,7 +216,7 @@ define (require) ->
     toString: =>
       "#{@name} = #{@pattern}"
 
-  { _getAttr, getPattern,
+  { getPattern,
     AnyName, Attribute,
     Choice, Context,
     Data, Datatype, Define,
