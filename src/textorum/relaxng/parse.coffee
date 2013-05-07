@@ -101,9 +101,9 @@ define (require) ->
             throw new RNGException("Found a second start")
           @start = parentNode.childNodes[0]
         when "define"
-          @defines[h.getNodeAttr parentNode, "name"] = o.getPattern parentNode
+          @defines[h.getNodeAttr parentNode, "name"] = o.getPattern parentNode, @defines
         else
-          @grammarStack.push o.getPattern parentNode
+          @grammarStack.push o.getPattern parentNode, @defines
 
     ontext: (text) =>
       strippedtext = text.replace /^\s+|\s+$/g, ''

@@ -112,12 +112,23 @@ define (require) ->
           children.push child
       children
 
-    getNamespacePrefix: (nodeName) ->
+    getQname: (nodeName) ->
+      nodeName = "" + nodeName
+      i = nodeName.indexOf(":")
+      qualName = (if i < 0 then ["", nodeName] else nodeName.split(":"))
+      prefix = qualName[0]
+      local = qualName[1]
+
+      # <x "xmlns"="http://foo">
+      if nodeName is "xmlns"
+        prefix = "xmlns"
+        local = ""
+      prefix: prefix
+      local: local
+
+    getNamespacePrefix: (nodeName) =>
       return '' if not nodeName?
-      if nodeName.indexOf(':') isnt -1
-        nodeName.split(':')[0]
-      else
-        ''
+      return @getQname(nodeName).prefix
 
     escapeHtml: (string) ->
       String(string).replace /[&<>"'\/]/g, (s) ->
@@ -126,9 +137,15 @@ define (require) ->
     getNodeAttr: (node, attr) ->
       return node?.attributes?[attr]?.value
 
+    getNodeAttributes: (node) ->
+      if node.attributes?
+        return node.attributes
+      return []
+
+
     getNodeType: (node) ->
       switch true
-        when node.nodeType? then node.nodeType
+        when node?.nodeType? then node.nodeType
         when typeof node is "string" then Node.TEXT_NODE
         else undefined
 
@@ -138,13 +155,9 @@ define (require) ->
         return node.localName
       if node?.local?
         return node.local
-      if not node.nodeName?
-        return ""
-      colonIdx = node.nodeName.indexOf ":"
-      if colonIdx < 0
-        node.nodeName
-      else
-        node.nodeName.substr colonIdx + 1
+      if node.nodeName?
+        return @getQname(node.nodeName).local
+      return @getQname(node).local
 
     textContent: (node) ->
       return node.textContent if node.textContent
