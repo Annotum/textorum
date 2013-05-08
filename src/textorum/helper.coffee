@@ -234,12 +234,14 @@ define (require) ->
     # @overload depthFirstIterativePreorderEvents(root, handlerFunction)
     #   Calls handlerFunction once at the start of visiting every node, with 'this' set to the node
     #   @param [Node] root Root DOM node to traverse
-    #   @param [Function] handler Function to call with 'this' set to every node as it is entered; two arguments (depth, node)
+    #   @param [Function] handler Function to call with 'this' set to every node as it is entered;
+    #     two arguments (depth, node)
     #
     # @overload depthFirstIterativePreorderEvents(root, handlerObject)
     #   Calls handlerObject.startTag when entering a node and handlerObject.endTag when leaving a node
     #   @param [Node] root Root DOM node to traverse
-    #   @param [Object] handler Handler object; startTag and endTag methods are called with two arguments (node, depth)
+    #   @param [Object] handler Handler object; startTag and endTag methods are called with
+    #     two arguments (node, depth)
     #
     # @note To prune all children of a node (and not visit them), return 'false' from the handler function or startTag
     #

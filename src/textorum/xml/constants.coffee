@@ -149,7 +149,7 @@ define (require) ->
   SCHEMATYPEVARIETY_UNION: 2
 
 # Generated from the WINE msxml files:
-# 
+#
 # http://source.winehq.org/git/wine.git/blob/HEAD:/include/msxml6.idl
 #
 # Perl to generate:

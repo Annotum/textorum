@@ -37,7 +37,8 @@ define (require) ->
       when 'empty' then new Empty()
       when 'text' then new Text()
       when 'data' then new Data h.getNodeAttr(node, "datatypeLibrary"), h.getNodeAttr(node, "type"), children
-      when 'value' then new Value h.getNodeAttr(node, "dataTypeLibrary"), h.getNodeAttr(node, "type"), h.getNodeAttr(node, "ns"), children[0]
+      when 'value' then new Value(h.getNodeAttr(node, "dataTypeLibrary"),
+        h.getNodeAttr(node, "type"), h.getNodeAttr(node, "ns"), children[0])
       when 'list' then new List children[0]
       when 'attribute' then new Attribute children[0], children[1]
       when 'ref' then new Ref h.getNodeAttr(node, "name"), defines

@@ -31,7 +31,8 @@ define (require) ->
   processor.importStylesheet(forwardStylesheet)
   # TODO: Switch to class setup, get these params from main textorum plugin
   # Elements to bring across as <span> rather than <div>
-  processor.setParameter(null, "inlineelements", "bold,italic,monospace,underline,sub,sup,named-content,ext-link,inline-graphic,inline-formula,xref")
+  processor.setParameter(null, "inlineelements", "bold,italic,monospace,underline,sub," +
+    "sup,named-content,ext-link,inline-graphic,inline-formula,xref")
   # Elements to bring over without changing their element name
   processor.setParameter(null, "fixedelements", "table,thead,tbody,td,tr,th")
 
@@ -61,9 +62,11 @@ define (require) ->
       return serializeError(xmlDoc)
     revNewDoc = revprocessor.transformToDocument(xmlDoc)
     (new XMLSerializer()).serializeToString(revNewDoc)
-      .replace(/\/\/TEXTORUM\/\/DOCTYPE-SYSTEM\/\//, "http://dtd.nlm.nih.gov/publishing/3.0/journalpublishing3.dtd") # XSLT 1.0 doesn't support params in <xsl:output>, so use a placeholder
-      .replace(/^(<!DOCTYPE[^>]*>\s*<[^>]*?)[ ]?xmlns:xml="http:\/\/www.w3.org\/XML\/1998\/namespace"/g, "$1") # Chrome adds an unneeded xmlns:xml
-
+      .replace(/\/\/TEXTORUM\/\/DOCTYPE-SYSTEM\/\//,
+        "http://dtd.nlm.nih.gov/publishing/3.0/journalpublishing3.dtd")
+      .replace(/^(<!DOCTYPE[^>]*>\s*<[^>]*?)[ ]?xmlns:xml="http:\/\/www.w3.org\/XML\/1998\/namespace"/g, "$1")
+      # XSLT 1.0 doesn't support params in <xsl:output>, so use a placeholder
+      # Chrome adds an unneeded xmlns:xml
 
   loadDataHandler = ->
     uri = $('#datafile').val()

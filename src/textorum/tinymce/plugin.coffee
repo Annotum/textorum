@@ -73,11 +73,14 @@ define (require) ->
         editor.plugins.textorum.nsmap[node.attributes.map['data-textorum-nsurl']] = node.attributes.map['data-textorum-nsprefix']
         node.remove()
 
-  tinymce.create 'tinymce.plugins.textorum.loader', {
-    elementMap: {
-      inlineelements: "bold,italic,monospace,underline,sub,sup,named-content,ext-link,inline-graphic,inline-formula".split(',')
-      fixedelements: "table,thead,tbody,td,tr,th".split(',')
+  elementMap = {
+      inlineelements: "bold italic monospace underline sub sup named-content
+        ext-link inline-graphic inline-formula xref".split(/\s+/)
+      fixedelements: "table thead tbody td tr th".split(/\s+/)
     }
+
+  tinymce.create 'tinymce.plugins.textorum.loader', {
+    elementMap: elementMap
     updateTree: () ->
       @tree.updateTreeCallback()
     schema: {}
