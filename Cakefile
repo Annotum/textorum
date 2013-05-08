@@ -11,6 +11,11 @@ catch error
   console.error 'Please run `npm install` first'
   process.exit 1
 
+try
+  growl = require 'growl'
+catch error
+  growl = ->
+
 # Setup directory paths
 paths =
   tmpDir: '.tmp'
@@ -86,13 +91,16 @@ task 'build', 'Compiles JavaScript and CSS files', ->
 task 'watch', 'Automatically recompile CoffeeScript files to JavaScript, SASS to CSS', ->
   console.log "Watching coffee and sass files for changes, press Control-C to quit".yellow
   srcWatcher  = exec "coffee --compile --watch --output #{paths.libDir} #{paths.srcDir}"
-  srcWatcher.stderr.on 'data', (data) -> console.error stripEndline(data).red
+  srcWatcher.stderr.on 'data', (data) ->
+    console.error stripEndline(data).red
+    growl stripEndline(data), { title: 'coffee compile error' }
   srcWatcher.stdout.on 'data', (data) ->
     filenameMatcher = new RegExp("^In #{paths.srcDir}/(.*)\.coffee")
     if /\s-\scompiled\s/.test data
       process.stdout.write data.green
     else
       process.stderr.write data.red
+      growl data, { title: 'coffeescript error' }
       #filenameMatch = data.match /^In (.*)\.coffee/
       filenameMatch = data.match filenameMatcher
       if filenameMatch and filenameMatch[1]
@@ -106,6 +114,7 @@ task 'watch', 'Automatically recompile CoffeeScript files to JavaScript, SASS to
       process.stdout.write data.green
     else
       process.stderr.write data.red
+      growl data, { title: 'coffeescript test compile error' }
   sassWriter = (data) ->
     if !data
       return false
@@ -116,8 +125,11 @@ task 'watch', 'Automatically recompile CoffeeScript files to JavaScript, SASS to
       err = data.match /(.*)\s+\((Line \d+: .*)\)/
       if err
         process.stdout.write "#{err[1].red}\n     #{err[2].red}\n"
+        growl "#{err[1]} | #{err[2]}", { title: 'sass line error' }
+
       else
         process.stdout.write ">>> #{data.red}"
+        growl data, { title: 'sass error' }
     else
       process.stdout.write data.green
   sassWriterCallback = (error, stdout, stderr) ->
@@ -137,7 +149,7 @@ task 'watch', 'Automatically recompile CoffeeScript files to JavaScript, SASS to
         console.log "Cakefile changed, restarting watch"
         sassWatcher.kill()
         testWatcher.kill()
-        srcWatcher.kill() 
+        srcWatcher.kill()
         kexec "npm run-script watch"
   catch ex
     console.log "problem loading kexec, not watching Cakefile: ".yellow + ex
