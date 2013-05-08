@@ -225,7 +225,8 @@ define (require) ->
       p1 = @pattern1.check(node, descend)
       p2 = @pattern2.check(node, descend)
       if p1 instanceof NotAllowed and p2 instanceof NotAllowed
-        return new NotAllowed("choice failed", new Choice(p1, p2), node)
+        failed = new Choice(p1, p2)
+        return new NotAllowed("choice failed: #{failed}", failed, node)
       if p2 instanceof NotAllowed
         return p1
       if p2 instanceof Empty and p1 instanceof Empty
