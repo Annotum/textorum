@@ -161,7 +161,7 @@ define (require) ->
     nullable: =>
       true
     _check: (node, descend) =>
-      #return this
+      return this
       if h.getNodeType(node) is Node.TEXT_NODE and h.textContent(node).replace(/^\s+|\s+$/gm, "") is ""
         return this
       return new NotAllowed("expected nothing, found #{h.getLocalName(node)}", this, node)
@@ -213,10 +213,15 @@ define (require) ->
     nullable: =>
       @pattern1.nullable() or @pattern2.nullable()
     _check: (node, descend) =>
-      if @pattern1 instanceof GoodElement
-        return @pattern2
-      if @pattern2 instanceof GoodElement
+      if @pattern1 instanceof Empty and @pattern2 instanceof Attribute
         return @pattern1
+      if @pattern2 instanceof Empty and @pattern1 instanceof Attribute
+        return @pattern2
+
+      if @pattern1 instanceof GoodElement
+        return @pattern1
+      if @pattern2 instanceof GoodElement
+        return @pattern2
       if @pattern1 instanceof NotAllowed
         return @pattern2.check(node, descend)
       if @pattern2 instanceof NotAllowed
@@ -226,14 +231,14 @@ define (require) ->
       if p1 instanceof NotAllowed and p2 instanceof NotAllowed
         failed = new Choice(p1, p2)
         return new NotAllowed("choice failed: #{failed}", failed, node)
-      if p2 instanceof NotAllowed
-        return p1
       if p2 instanceof Empty and p1 instanceof Empty
         return p1
       if p1 instanceof NotAllowed and @pattern1 instanceof Empty
         return new Choice(@pattern1, p2)
       if p2 instanceof NotAllowed and @pattern2 instanceof Empty
         return new Choice(p1, @pattern2)
+      if p2 instanceof NotAllowed
+        return p1
       return new Choice(p1, p2)
     attrCheck: (node) =>
       if @pattern1 instanceof NotAllowed or @pattern2 instanceof Empty
@@ -281,7 +286,7 @@ define (require) ->
       @pattern1 = getPattern pattern1
       @pattern2 = getPattern pattern2
     toString: =>
-      "#{@pattern1}, #{@pattern2}"
+      "(#{@pattern1}, #{@pattern2})"
     nullable: =>
       @pattern1.nullable() and @pattern2.nullable()
     _check: (node, descend) =>
@@ -297,18 +302,21 @@ define (require) ->
         return @pattern2.check(node, descend)
       if @pattern2 instanceof Empty
         return @pattern1.check(node, descend)
-
+      _nodelog node, "p1 group, checking pattern1 #{@pattern1} against", node, [this, @pattern1, node]
       p1 = @pattern1.check(node, descend)
       if p1 instanceof NotAllowed
         return p1
       if p1 instanceof GoodElement
         return @pattern2
+      _nodelog node, "p2 group, checking pattern2 #{@pattern2} against", node, [this, @pattern2, node]
       p2 = @pattern2.check(node, descend)
-      if p1 instanceof Empty
-        return p2
       if p2 instanceof NotAllowed
         # Return nullabled group
         return new Group(p1, @pattern2)
+      if p1 instanceof Empty
+        return p2
+      if p2 instanceof Empty
+        return p1
       return new Group(p1, p2)
     attrCheck: (node) =>
       p1 = @pattern1.attrCheck(node)
@@ -331,10 +339,10 @@ define (require) ->
       p1 = @pattern.check(node, descend)
       if p1 instanceof NotAllowed
         return p1
-      return this
+      return new Group(p1, new Choice(new Empty(), this))
     attrCheck: (node) =>
       p1 = @pattern.attrCheck(node)
-      return (new Group(p1, new Choice(@pattern, new Empty()))).attrCheck(node)
+      return (new Group(p1, new Choice(new Empty(), this)))
 
   class List extends Pattern
     constructor: (pattern) ->
@@ -452,9 +460,9 @@ define (require) ->
         return new NotAllowed("name check failed - expecting #{@name}, found #{h.getLocalName(node)}", @name, node)
       if nameCheck instanceof NotAllowed
         return nameCheck
-      attrCheck = @pattern.attrCheck node
-      if attrCheck instanceof NotAllowed
-        return attrCheck
+      # attrCheck = @pattern.attrCheck node
+      # if attrCheck instanceof NotAllowed
+      #   return attrCheck
       if descend
         unless descend is true
           descend = descend - 1
@@ -478,7 +486,8 @@ define (require) ->
         else
           return nextPattern
       else
-        return new Empty("not descending into #{h.getLocalName(node)}", @pattern, node)
+        emptyPattern = new Empty("not descending into #{h.getLocalName(node)}", @pattern, node)
+        return new GoodElement(emptyPattern, node)
         if node.childNodes?.length
           return new GoodParentElement(@name, @pattern, node.childNodes)
         return new GoodElement(@name, @pattern)
