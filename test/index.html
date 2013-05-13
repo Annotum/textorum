@@ -29,6 +29,12 @@
 
     QUnit.config.autostart = false;
 
+    pavlov.specify.extendAssertions({
+        isEqualTo: function(actual, expected, message) {
+            equal(actual, expected, message);
+        }
+    });
+
     // Local requirejs syntax - .js only
     var testModules = [
       "./lib/specs/spec-example.js",

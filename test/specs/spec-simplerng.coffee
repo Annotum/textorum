@@ -39,7 +39,7 @@ define (require) ->
           "__name-elt-idp2192": "__name-elt-idp2192 = element name { text }"
           "__email-elt-idp2576": "__email-elt-idp2576 = element email { text }"
         for key, val of loader.defines
-          assert(defines[key].toString()).isEqualTo(val, "define #{key} properly stringified")
+          assert(val.toString()).isEqualTo(defines[key], "define #{key} properly stringified")
 
         assert(loader.start.toString()).isEqualTo("__addressBook-elt-idp496", "start properly stringified")
 
