@@ -94,6 +94,13 @@ define (require) ->
           node = node.nextSibling
       return node
 
+    depth: (node) ->
+      nodeDepth = 0
+      while node.parentElement and node isnt prevnode
+        prevnode = node
+        nodeDepth += 1
+        node = node.parentElement
+      return nodeDepth
 
     getChildByName: (node, names, namespaceURI) ->
       for child in node.childNodes
