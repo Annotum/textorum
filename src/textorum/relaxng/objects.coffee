@@ -22,6 +22,17 @@
 define (require) ->
   h = require('../helper')
 
+  _nodelog = (node, message...) =>
+    depth = h.depth(node) + 0
+    indent = ""
+    x = 0
+    while x < depth
+      indent += "| "
+      x += 1
+    if indent.length
+      message.unshift indent
+    console.log.apply(console, message)
+
   getPattern = (node, defines) =>
     if node instanceof Pattern or node instanceof NameClass
       return node
@@ -34,7 +45,7 @@ define (require) ->
       when 'element' then new Element children[0], children[1]
       when 'define' then new Define h.getNodeAttr(node, "name"), children[0]
       when 'notAllowed' then new NotAllowed("not allowed by pattern", node)
-      when 'empty' then new Empty()
+      when 'empty' then new Empty("empty node", node)
       when 'text' then new Text()
       when 'data' then new Data h.getNodeAttr(node, "datatypeLibrary"), h.getNodeAttr(node, "type"), children
       when 'value' then new Value(h.getNodeAttr(node, "dataTypeLibrary"),
@@ -120,11 +131,11 @@ define (require) ->
   class Pattern
     check: (node, descend) =>
       unless node?
-        console.log "missing node", node, this
+        _nodelog node, "missing node", node, this
         throw new Error("ack node missing")
-      console.log "checking", this, "against", node
+      _nodelog node, "checking #{this} against", node, [this, node]
       res = @_check(node, descend)
-      console.log "result for", this, "against", node, "is", res
+      _nodelog node, "result for #{this} againt", node, "is #{res}", [this, node, res]
       return res
 
     _check: (node, descend) =>
@@ -150,6 +161,7 @@ define (require) ->
     nullable: =>
       true
     _check: (node, descend) =>
+      #return this
       if h.getNodeType(node) is Node.TEXT_NODE and h.textContent(node).replace(/^\s+|\s+$/gm, "") is ""
         return this
       return new NotAllowed("expected nothing, found #{h.getLocalName(node)}", this, node)
@@ -160,7 +172,7 @@ define (require) ->
     constructor: (@message, @pattern, @childNode, @priority) ->
     toString: =>
       if @message
-        "notAllowed # #{@message}\n"
+        "notAllowed /* # #{@message} */"
       else
         "notAllowed"
     _check: (node, descend) =>
@@ -172,7 +184,7 @@ define (require) ->
     constructor: (@message, @pattern, @childNode, @priority) ->
     toString: =>
       if @message
-        "missingContent # #{@message}\n"
+        "missingContent /* # #{@message} */"
       else
         "missingContent"
 
@@ -187,19 +199,6 @@ define (require) ->
           return new NotAllowed("expected text node, found #{h.getLocalName(node)}", this, node)
     nullable: =>
       true
-
-  class After extends Pattern
-    constructor: (pattern1, pattern2) ->
-      @pattern1 = getPattern pattern1
-      @pattern2 = getPattern pattern2
-    toString: =>
-      "(after #{@pattern1}: #{@pattern2})"
-    _check: (node, descend) =>
-      if @pattern2 instanceof NotAllowed
-        return @pattern2
-      if @pattern1 instanceof NotAllowed
-        return @pattern1
-      return
 
   class Choice extends Pattern
     constructor: (pattern1, pattern2) ->
@@ -231,6 +230,10 @@ define (require) ->
         return p1
       if p2 instanceof Empty and p1 instanceof Empty
         return p1
+      if p1 instanceof NotAllowed and @pattern1 instanceof Empty
+        return new Choice(@pattern1, p2)
+      if p2 instanceof NotAllowed and @pattern2 instanceof Empty
+        return new Choice(p1, @pattern2)
       return new Choice(p1, p2)
     attrCheck: (node) =>
       if @pattern1 instanceof NotAllowed or @pattern2 instanceof Empty
@@ -430,6 +433,12 @@ define (require) ->
     _check: (node, descend = false) =>
       throw new Error("checking good stuff")
       return this
+
+  class GoodParentElement extends GoodElement
+    constructor: (@name, @pattern, @childNodes) ->
+      super(name, pattern)
+    toString: => "(GOOD) element #{@name} (with #{childNodes?.length + 0} children)"
+
   class Element extends Pattern
     constructor: (name, pattern) ->
       @name = getPattern name
@@ -438,7 +447,7 @@ define (require) ->
       "element #{@name} { #{@pattern} }"
     _check: (node, descend = false) =>
       nameCheck = @name.contains node
-      console.log "Namechecking", node, "against", @name, "result", nameCheck
+      _nodelog node, "Namechecking", node, "against", @name, "result", nameCheck
       if not nameCheck
         return new NotAllowed("name check failed - expecting #{@name}, found #{h.getLocalName(node)}", @name, node)
       if nameCheck instanceof NotAllowed
@@ -447,21 +456,32 @@ define (require) ->
       if attrCheck instanceof NotAllowed
         return attrCheck
       if descend
-        console.log "let's check descent: #{descend}, #{node.childNodes?.length}", this, node
-        descend = descend - 1
+        unless descend is true
+          descend = descend - 1
         nextPattern = @pattern
         if node.childNodes?.length
           for child in node.childNodes
-            if h.getNodeType(child) is Node.TEXT_NODE and h.textContent(child).replace(/^\s+|\s+$/gm, "") is ""
-              console.log "skipping empty text node"
-              continue
-            console.log "==> checking child", child, "against", nextPattern
+            switch h.getNodeType(child)
+              when Node.TEXT_NODE
+                if h.textContent(child).replace(/^\s+|\s+$/gm, "") is ""
+                  continue
+              when Node.COMMENT_NODE
+                continue
+            _nodelog node, "==> checking child", child, "against", nextPattern
             nextPattern = nextPattern.check(child, descend)
-            console.log "child result of", child, "was", nextPattern
+            _nodelog node, "child result of", child, "was", nextPattern
             if nextPattern instanceof NotAllowed
               return nextPattern
-
-      return new GoodElement(@name, @pattern)
+        # TODO: Detect missing elements
+        if nextPattern.nullable()
+          return new GoodElement(@name, @pattern)
+        else
+          return nextPattern
+      else
+        return new Empty("not descending into #{h.getLocalName(node)}", @pattern, node)
+        if node.childNodes?.length
+          return new GoodParentElement(@name, @pattern, node.childNodes)
+        return new GoodElement(@name, @pattern)
 
 
 
@@ -474,7 +494,7 @@ define (require) ->
       @dereference()
       if @pattern?
         if not @pattern.check?
-          console.log("failed", this)
+          _nodelog node, "failed", this
         return @pattern.check(node, descend)
       return new NotAllowed("cannot find reference '#{@refname}'", this, node)
     dereference: =>
@@ -493,7 +513,8 @@ define (require) ->
     attrCheck: (node) =>
       @pattern.attrCheck(node)
 
-  { getPattern,
+  {
+    getPattern,
     AnyName, Attribute,
     Choice, Context,
     Data, Datatype, Define,
