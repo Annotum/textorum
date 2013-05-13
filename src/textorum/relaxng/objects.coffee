@@ -156,10 +156,7 @@ define (require) ->
   class Empty extends Pattern
     constructor: (@message, @pattern, @childNode) ->
     toString: =>
-      if @message
-        "empty(#{@message})"
-      else
-        "empty"
+      "empty"
     nullable: =>
       true
     _check: (node, descend) =>
@@ -325,7 +322,7 @@ define (require) ->
       @pattern1 = getPattern pattern1
       @pattern2 = getPattern pattern2
     toString: =>
-      "(#{@pattern1}, #{@pattern2})"
+      "#{@pattern1}, #{@pattern2}"
     nullable: =>
       @pattern1.nullable() and @pattern2.nullable()
     require: =>
