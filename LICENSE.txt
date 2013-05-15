@@ -80,6 +80,10 @@ permission notices:
   Copyright (c) 2013 Isaac Z. Schlueter
   Released under the BSD license (2-clause)
 
+- http://downloads.xmlschemata.org/relax-ng/utilities/simplification.xsl
+  Copyright (c) 2004 Eric van der Vlist
+  Released under the MIT license
+
 ## License Texts
 
 ### MIT license
