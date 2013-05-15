@@ -235,7 +235,7 @@ define (require) ->
             return this
         when Node.COMMENT_NODE
           return this
-      return new NotAllowed("expected nothing, found #{h.getLocalName(node)}", this, node)
+      return new NotAllowed("expected nothing, found #{h.getLocalName(node)}", this, node, -10 + h.depth(node))
     attrCheck: (node) =>
       return this
 
@@ -243,7 +243,7 @@ define (require) ->
    * A pattern denying all contents
   ###
   class NotAllowed extends Pattern
-    constructor: (@message, @pattern, @childNode, @priority) ->
+    constructor: (@message, @pattern, @childNode, @priority = 10) ->
     toString: =>
       if @message
         "notAllowed { #{@message} }"
@@ -262,7 +262,7 @@ define (require) ->
    * A pattern indicating missing content (end state)
   ###
   class MissingContent extends NotAllowed
-    constructor: (@message, @pattern, @childNode, @priority) ->
+    constructor: (@message, @pattern, @childNode, @priority = 10) ->
     toString: =>
       if @message
         "missingContent { #{@message} }"
@@ -314,6 +314,10 @@ define (require) ->
           return p2
         if p2.pattern instanceof EmptyNode
           return p1
+        if p1.priority > p2.priority
+          return p1
+        if p2.priority > p1.priority
+          return p2
       if p1 instanceof NotAllowed
         if p2 instanceof Empty or p2 instanceof EmptyNode
           return new Empty("#{p2}", p2)
@@ -347,8 +351,6 @@ define (require) ->
         return p2
       if p1 instanceof NotAllowed and @pattern1.require(node) instanceof Empty
         return p2
-      if p2 instanceof NotAllowed and @pattern2.require(node) instanceof Empty
-        return p1
       if p2.require(node) instanceof Empty and p1.require(node) instanceof Empty
         if p1 instanceof Empty
           return p2
@@ -356,9 +358,12 @@ define (require) ->
           return p1
         return new Choice(p1, p2)
       if p1 instanceof NotAllowed and p2 instanceof NotAllowed
-        # Simplification makes the right side more likely to be interesting
-        failed = new Choice(p1, p2)
-        return new NotAllowed("choice failed: #{failed}", failed, node)
+        if p1.priority is p2.priority
+          failed = new Choice(p1, p2)
+          return new NotAllowed("choice failed: #{failed}", failed, node)
+        else if p1.priority > p2.priority
+          return p1
+        return p2
       return new Choice(p1, p2)
     attrCheck: (node) =>
       if @pattern1 instanceof NotAllowed or @pattern1 instanceof Empty
@@ -640,7 +645,7 @@ define (require) ->
       nameCheck = @name.contains node
       _nodelog node, "Namechecking", node, "against", @name, "result", nameCheck
       if not nameCheck
-        return new NotAllowed("name check failed - expecting #{@name}, found #{h.getLocalName(node)}", @name, node)
+        return new NotAllowed("name check failed - expecting #{@name}, found #{h.getLocalName(node)}", @name, node, 5 + h.depth(node))
       if nameCheck instanceof NotAllowed
         return nameCheck
       # attrCheck = @pattern.attrCheck node
