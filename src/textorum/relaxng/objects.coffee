@@ -137,7 +137,7 @@ define (require) ->
      *   GoodElement status.
      * @return {Node} GoodElement or NotAllowed type
     ###
-    require: =>
+    require: (node) =>
       return this
 
     ###*
@@ -220,14 +220,14 @@ define (require) ->
   ###*
    * An empty Pattern node, matching only comments and empty text node blocks
   ###
-  class EmptyNode extends Empty
+  class EmptyNode extends Pattern
     constructor: (@message, @pattern, @childNode) ->
     toString: =>
       "empty"
     nullable: =>
       true
-    require: =>
-      return new Empty("#{this}", this)
+    require: (node) =>
+      return this
     _check: (node, descend) =>
       switch h.getNodeType(node)
         when Node.TEXT_NODE
@@ -293,30 +293,32 @@ define (require) ->
       @pattern1.contains(nodeName) or @pattern2.contains(nodeName)
     nullable: =>
       @pattern1.nullable() or @pattern2.nullable()
-    require: =>
-      p1 = @pattern1.require()
+    require: (node) =>
+      p1 = @pattern1.require(node)
       if p1 instanceof GoodElement
         return p1
-      p2 = @pattern2.require()
+      p2 = @pattern2.require(node)
       if p2 instanceof GoodElement
         return p2
       if p1 instanceof NotAllowed
-        if p2 instanceof Empty
+        if p2 instanceof Empty or p2 instanceof EmptyNode
           return new Empty("#{p2}", p2)
-        return new Choice(p1, new MissingContent("Missing: #{p2}", p2))
+        if p2 instanceof MissingContent and p1 instanceof MissingContent
+          return new MissingContent("#{p1} | #{p2}", new Choice(p1, p2), node)
+        return new NotAllowed("#{p1} | #{p2}", new Choice(p1, p2), node)
       if p2 instanceof NotAllowed
-        if p1 instanceof Empty
+        if p1 instanceof Empty or p2 instanceof EmptyNode
           return new Empty("#{p1}", p1)
-        return new Choice(new MissingContent("Missing: #{p1}"), p2)
-      if p2 instanceof Empty
+        return new NotAllowed("#{p1} | #{p2}", new Choice(p1, p2), node)
+      if p2 instanceof Empty or p2 instanceof EmptyNode
         return new Empty("#{p2}", p2)
       return p2
 
     _check: (node, descend) =>
-      if @pattern1 instanceof Empty and @pattern2 instanceof Attribute
-        return @pattern1
-      if @pattern2 instanceof Empty and @pattern1 instanceof Attribute
-        return @pattern2
+      if @pattern1 instanceof EmptyNode and @pattern2 instanceof Attribute
+        return @pattern1.check(node)
+      if @pattern2 instanceof EmptyNode and @pattern1 instanceof Attribute
+        return @pattern2.check(node)
       if @pattern1 instanceof GoodElement
         return @pattern1
       if @pattern2 instanceof GoodElement
@@ -327,21 +329,25 @@ define (require) ->
       #   return @pattern1.check(node, descend)
       p1 = @pattern1.check(node, descend)
       p2 = @pattern2.check(node, descend)
-      if @pattern2 + "" is "c-idp9392+"
-        console.log "tick"
-      if p1 instanceof NotAllowed and @pattern1.require() instanceof Empty
-        return new Choice(@pattern1, p2)
-      if p2 instanceof NotAllowed and @pattern2.require() instanceof Empty
-        return new Choice(p1, @pattern2)
-      if p2.require() instanceof Empty and p1.require() instanceof Empty
+      if p1 instanceof GoodElement
+        return p1
+      if p2 instanceof GoodElement
+        return p2
+      if p1 instanceof NotAllowed and @pattern1.require(node) instanceof Empty
+        return p2
+      if p2 instanceof NotAllowed and @pattern2.require(node) instanceof Empty
+        return p1
+      if p2.require(node) instanceof Empty and p1.require(node) instanceof Empty
         if p1 instanceof Empty
           return p2
         if p2 instanceof Empty
           return p1
         return new Choice(p1, p2)
       if p1 instanceof NotAllowed and p2 instanceof NotAllowed
-        failed = new Choice(p1, p2)
-        return new NotAllowed("choice failed: #{failed}", failed, node)
+        return p2
+        # Simplification makes the right side more likely to be interesting
+        # failed = new Choice(p1, p2)
+        # return new NotAllowed("choice failed: #{failed}", failed, node)
       return new Choice(p1, p2)
     attrCheck: (node) =>
       if @pattern1 instanceof NotAllowed or @pattern1 instanceof Empty
@@ -369,11 +375,11 @@ define (require) ->
       "(#{@pattern1} & #{@pattern2})"
     nullable: =>
       @pattern1.nullable() and @pattern2.nullable()
-    require: =>
-      p1 = @pattern1.require()
+    require: (node) =>
+      p1 = @pattern1.require(node)
       if p1 instanceof Empty
-        return @pattern2.require()
-      p2 = @pattern2.require()
+        return @pattern2.require(node)
+      p2 = @pattern2.require(node)
       if p2 instanceof Empty
         return p1
       if p1 instanceof GoodElement and p2 instanceof GoodElement
@@ -414,22 +420,23 @@ define (require) ->
       "#{@pattern1}, #{@pattern2}"
     nullable: =>
       @pattern1.nullable() and @pattern2.nullable()
-    require: =>
-      p1 = @pattern1.require()
-      p2 = @pattern2.require()
+    require: (node) =>
+      p1 = @pattern1.require(node)
+      p2 = @pattern2.require(node)
       if p1 instanceof GoodElement
-        if p2 instanceof Empty
+        if p2 instanceof Empty or p2 instanceof EmptyNode
           return p1
       if p2 instanceof GoodElement
-        if p1 instanceof Empty
+        if p1 instanceof Empty or p2 instanceof EmptyNode
           return p2
-      if p1 instanceof Empty and p2 instanceof Empty
-        return p1
-      if p1 instanceof Empty
-        return new MissingContent("missing group element 2", this)
-      if p2 instanceof Empty
-        return new MissingContent("missing group element 1", this)
-      return new MissingContent("missing both group elements", this)
+      if p1 instanceof Empty or p1 instanceof EmptyNode
+        if p2 instanceof Empty or p2 instanceof EmptyNode
+          return p1
+      if p1 instanceof Empty or p1 instanceof EmptyNode
+        return new MissingContent("#{p2} not found", p2, node)
+      if p2 instanceof Empty or p2 instanceof EmptyNode
+        return new MissingContent("#{p1} not found", p1, node)
+      return new MissingContent("missing #{p1}, #{p2}", node)
 
     _check: (node, descend) =>
       if @pattern2 instanceof GoodElement
@@ -440,9 +447,9 @@ define (require) ->
         return @pattern1
       if @pattern2 instanceof NotAllowed
         return @pattern2
-      if @pattern1 instanceof Empty or @pattern1 instanceof GoodElement
+      if @pattern1 instanceof Empty or @pattern1 instanceof EmptyNode or @pattern1 instanceof GoodElement
         return @pattern2.check(node, descend)
-      if @pattern2 instanceof Empty
+      if @pattern2 instanceof Empty or @pattern2 instanceof EmptyNode
         return @pattern1.check(node, descend)
       _nodelog node, "p1 group, checking pattern1 #{@pattern1} against", node, [this, @pattern1, node]
       p1 = @pattern1.check(node, descend)
@@ -458,10 +465,10 @@ define (require) ->
       return new Group(p1, p2)
     attrCheck: (node) =>
       p1 = @pattern1.attrCheck(node)
-      if p1 instanceof NotAllowed or p1 instanceof Empty
+      if p1 instanceof NotAllowed or p1 instanceof Empty or p1 instanceof EmptyNode
         return @pattern2.attrCheck(node)
       p2 = @pattern2.attrCheck(node)
-      if p2 instanceof NotAllowed or p2 instanceof Empty
+      if p2 instanceof NotAllowed or p2 instanceof Empty or p1 instanceof EmptyNode
         return p1
       return (new Interleave(p1, p2)).attrCheck(node)
 
@@ -476,7 +483,7 @@ define (require) ->
       "#{@pattern}+"
     nullable: =>
       @pattern.nullable()
-    require: =>
+    require: (node) =>
       return new MissingContent("missing #{this}", this)
     _check: (node, descend) =>
       p1 = @pattern.check(node, descend)
@@ -574,7 +581,9 @@ define (require) ->
     toString: =>
       "attribute #{@nameClass} { #{@pattern} }"
     _check: (node, descend) =>
-      return new Empty()
+      return @require(node)
+    require: (node) =>
+      return new EmptyNode("#{this}", this)
     attrCheck: (node) =>
       error = []
       for attr in h.getNodeAttributes(node)
@@ -630,6 +639,7 @@ define (require) ->
         unless descend is true
           descend = descend - 1
         nextPattern = @pattern
+        lastElementNode = undefined
         if node.childNodes?.length
           for child in node.childNodes
             switch h.getNodeType(child)
@@ -638,6 +648,8 @@ define (require) ->
                   continue
               when Node.COMMENT_NODE
                 continue
+              when Node.ELEMENT_NODE
+                lastElementNode = child
             curPattern = nextPattern
             _nodelog node, "==> checking child", child, "against", nextPattern
             nextPattern = nextPattern.check(child, descend)
@@ -645,10 +657,12 @@ define (require) ->
             if nextPattern instanceof NotAllowed
               return nextPattern
         # TODO: Detect missing elements
-        if nextPattern.require() instanceof Empty
+        if nextPattern.require(node) instanceof Empty
           return new GoodElement(@name, nextPattern)
         else
-          return nextPattern.require()
+          if lastElementNode?
+            return nextPattern.require(lastElementNode)
+          return nextPattern.require(node)
       else
         emptyPattern = new Empty("not descending into #{h.getLocalName(node)}", @pattern, node)
         return new GoodElement(emptyPattern, node)
