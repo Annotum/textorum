@@ -38,7 +38,7 @@ require req, (parser, objects, helper) ->
   xmldoc = helper.getXML(xml)
   window.rngparser = rngparser
   window.xmldoc = xmldoc
-  console.log rngparser.start.check(xmldoc.documentElement).require()
+  console.log rngparser.start.check(xmldoc.documentElement, true).require()
   </textarea>
           </div>
           <div id="repl_results_wrap"><pre id="repl_results"></pre></div>

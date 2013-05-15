@@ -680,8 +680,6 @@ define (require) ->
             return nextPattern.require(lastElementNode)
           return nextPattern.require(node)
       else
-        emptyPattern = new Empty("not descending into #{h.getLocalName(node)}", @pattern, node)
-        return new GoodElement(emptyPattern, node)
         if node.childNodes?.length
           return new GoodParentElement(@name, @pattern, node.childNodes)
         return new GoodElement(@name, @pattern)
