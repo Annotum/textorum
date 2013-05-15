@@ -249,6 +249,10 @@ define (require) ->
         "notAllowed { #{@message} }"
       else
         "notAllowed"
+    require: (node) =>
+      if @pattern instanceof Choice or @pattern instanceof Group or @pattern instanceof Interleave
+        return @pattern.require(node)
+      return this
     _check: (node, descend) =>
       return this
     attrCheck: (node) =>
@@ -300,18 +304,26 @@ define (require) ->
       p2 = @pattern2.require(node)
       if p2 instanceof GoodElement
         return p2
+      if p2 instanceof MissingContent and p1 instanceof MissingContent
+        return new MissingContent("#{p1} | #{p2}", new Choice(p1, p2), node)
+      if p1 instanceof NotAllowed and p2 instanceof NotAllowed
+
+        if p1.pattern instanceof EmptyNode
+          if p2.pattern instanceof EmptyNode
+            return new NotAllowed("#{p1} | #{p2}", new Choice(p1, p2), node)
+          return p2
+        if p2.pattern instanceof EmptyNode
+          return p1
       if p1 instanceof NotAllowed
         if p2 instanceof Empty or p2 instanceof EmptyNode
           return new Empty("#{p2}", p2)
-        if p2 instanceof MissingContent and p1 instanceof MissingContent
-          return new MissingContent("#{p1} | #{p2}", new Choice(p1, p2), node)
         return new NotAllowed("#{p1} | #{p2}", new Choice(p1, p2), node)
       if p2 instanceof NotAllowed
         if p1 instanceof Empty or p2 instanceof EmptyNode
-          return new Empty("#{p1}", p1)
+          return new Empty("1 - #{p1}", p1)
         return new NotAllowed("#{p1} | #{p2}", new Choice(p1, p2), node)
       if p2 instanceof Empty or p2 instanceof EmptyNode
-        return new Empty("#{p2}", p2)
+        return new Empty("2 - #{p2}", p2)
       return p2
 
     _check: (node, descend) =>
@@ -344,10 +356,9 @@ define (require) ->
           return p1
         return new Choice(p1, p2)
       if p1 instanceof NotAllowed and p2 instanceof NotAllowed
-        return p2
         # Simplification makes the right side more likely to be interesting
-        # failed = new Choice(p1, p2)
-        # return new NotAllowed("choice failed: #{failed}", failed, node)
+        failed = new Choice(p1, p2)
+        return new NotAllowed("choice failed: #{failed}", failed, node)
       return new Choice(p1, p2)
     attrCheck: (node) =>
       if @pattern1 instanceof NotAllowed or @pattern1 instanceof Empty
