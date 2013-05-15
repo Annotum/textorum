@@ -33,8 +33,8 @@ THE SOFTWARE.
 
 ## Incorporated Works
 
-This program incorporates work covered by the following copyright and
-permission notices:
+This program includes or incorporates work covered by the following copyright 
+and permission notices:
 
 - http://tinymce.com
   Copyright (c) 2003-2013 Moxiecode Systems AB
@@ -82,6 +82,10 @@ permission notices:
 
 - http://downloads.xmlschemata.org/relax-ng/utilities/simplification.xsl
   Copyright (c) 2004 Eric van der Vlist
+  Released under the MIT license
+
+- http://coffeescript.org/
+  Copyright (c) 2011, Jeremy Ashkenas
   Released under the MIT license
 
 ## License Texts
