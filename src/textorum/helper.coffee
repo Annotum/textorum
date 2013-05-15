@@ -4,20 +4,26 @@
 #
 # This file is part of Textorum.
 #
-# Textorum is free software; you can redistribute it and/or modify it
-# under the terms of the GNU General Public License as published by the
-# Free Software Foundation; either version 2 of the License, or (at your
-# option) any later version.
+# Licensed under the MIT license:
 #
-# Textorum is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# General Public License for more details.
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
 
 define (require) ->
   # Check if a given name is:
@@ -94,6 +100,13 @@ define (require) ->
           node = node.nextSibling
       return node
 
+    depth: (node) ->
+      nodeDepth = 0
+      while node.parentElement and node isnt prevnode
+        prevnode = node
+        nodeDepth += 1
+        node = node.parentElement
+      return nodeDepth
 
     getChildByName: (node, names, namespaceURI) ->
       for child in node.childNodes
@@ -112,12 +125,23 @@ define (require) ->
           children.push child
       children
 
-    getNamespacePrefix: (nodeName) ->
+    getQname: (nodeName) ->
+      nodeName = "" + nodeName
+      i = nodeName.indexOf(":")
+      qualName = (if i < 0 then ["", nodeName] else nodeName.split(":"))
+      prefix = qualName[0]
+      local = qualName[1]
+
+      # <x "xmlns"="http://foo">
+      if nodeName is "xmlns"
+        prefix = "xmlns"
+        local = ""
+      prefix: prefix
+      local: local
+
+    getNamespacePrefix: (nodeName) =>
       return '' if not nodeName?
-      if nodeName.indexOf(':') isnt -1
-        nodeName.split(':')[0]
-      else
-        ''
+      return @getQname(nodeName).prefix
 
     escapeHtml: (string) ->
       String(string).replace /[&<>"'\/]/g, (s) ->
@@ -126,9 +150,15 @@ define (require) ->
     getNodeAttr: (node, attr) ->
       return node?.attributes?[attr]?.value
 
+    getNodeAttributes: (node) ->
+      if node.attributes?
+        return node.attributes
+      return []
+
+
     getNodeType: (node) ->
       switch true
-        when node.nodeType? then node.nodeType
+        when node?.nodeType? then node.nodeType
         when typeof node is "string" then Node.TEXT_NODE
         else undefined
 
@@ -138,13 +168,9 @@ define (require) ->
         return node.localName
       if node?.local?
         return node.local
-      if not node.nodeName?
-        return ""
-      colonIdx = node.nodeName.indexOf ":"
-      if colonIdx < 0
-        node.nodeName
-      else
-        node.nodeName.substr colonIdx + 1
+      if node.nodeName?
+        return @getQname(node.nodeName).local
+      return @getQname(node).local
 
     textContent: (node) ->
       return node.textContent if node.textContent
@@ -221,12 +247,14 @@ define (require) ->
     # @overload depthFirstIterativePreorderEvents(root, handlerFunction)
     #   Calls handlerFunction once at the start of visiting every node, with 'this' set to the node
     #   @param [Node] root Root DOM node to traverse
-    #   @param [Function] handler Function to call with 'this' set to every node as it is entered; two arguments (depth, node)
+    #   @param [Function] handler Function to call with 'this' set to every node as it is entered;
+    #     two arguments (depth, node)
     #
     # @overload depthFirstIterativePreorderEvents(root, handlerObject)
     #   Calls handlerObject.startTag when entering a node and handlerObject.endTag when leaving a node
     #   @param [Node] root Root DOM node to traverse
-    #   @param [Object] handler Handler object; startTag and endTag methods are called with two arguments (node, depth)
+    #   @param [Object] handler Handler object; startTag and endTag methods are called with
+    #     two arguments (node, depth)
     #
     # @note To prune all children of a node (and not visit them), return 'false' from the handler function or startTag
     #

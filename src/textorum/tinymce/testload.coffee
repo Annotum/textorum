@@ -5,20 +5,25 @@
 #
 # This file is part of Textorum.
 #
-# Textorum is free software; you can redistribute it and/or modify it
-# under the terms of the GNU General Public License as published by the
-# Free Software Foundation; either version 2 of the License, or (at your
-# option) any later version.
+# Licensed under the MIT license:
 #
-# Textorum is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# General Public License for more details.
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
 ###
 define (require) ->
   helper = require('../helper')
@@ -31,7 +36,8 @@ define (require) ->
   processor.importStylesheet(forwardStylesheet)
   # TODO: Switch to class setup, get these params from main textorum plugin
   # Elements to bring across as <span> rather than <div>
-  processor.setParameter(null, "inlineelements", "bold,italic,monospace,underline,sub,sup,named-content,ext-link,inline-graphic,inline-formula,xref")
+  processor.setParameter(null, "inlineelements", "bold,italic,monospace,underline,sub," +
+    "sup,named-content,ext-link,inline-graphic,inline-formula,xref")
   # Elements to bring over without changing their element name
   processor.setParameter(null, "fixedelements", "table,thead,tbody,td,tr,th")
 
@@ -61,9 +67,11 @@ define (require) ->
       return serializeError(xmlDoc)
     revNewDoc = revprocessor.transformToDocument(xmlDoc)
     (new XMLSerializer()).serializeToString(revNewDoc)
-      .replace(/\/\/TEXTORUM\/\/DOCTYPE-SYSTEM\/\//, "http://dtd.nlm.nih.gov/publishing/3.0/journalpublishing3.dtd") # XSLT 1.0 doesn't support params in <xsl:output>, so use a placeholder
-      .replace(/^(<!DOCTYPE[^>]*>\s*<[^>]*?)[ ]?xmlns:xml="http:\/\/www.w3.org\/XML\/1998\/namespace"/g, "$1") # Chrome adds an unneeded xmlns:xml
-
+      .replace(/\/\/TEXTORUM\/\/DOCTYPE-SYSTEM\/\//,
+        "http://dtd.nlm.nih.gov/publishing/3.0/journalpublishing3.dtd")
+      .replace(/^(<!DOCTYPE[^>]*>\s*<[^>]*?)[ ]?xmlns:xml="http:\/\/www.w3.org\/XML\/1998\/namespace"/g, "$1")
+      # XSLT 1.0 doesn't support params in <xsl:output>, so use a placeholder
+      # Chrome adds an unneeded xmlns:xml
 
   loadDataHandler = ->
     uri = $('#datafile').val()

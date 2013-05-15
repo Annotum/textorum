@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+  <start>
+    <ref name="head-idp1536"/>
+  </start>
+  <define name="head-idp1536">
+    <element>
+      <name ns="">head</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <ref name="head-group-or-zeroormore-idp1376"/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="head-group-or-zeroormore-idp1376">
+    <element>
+      <name ns="">group-zeroormore</name>
+      <choice>
+        <group>
+          <ref name="a-idp6976"/>
+          <ref name="b-idp7968"/>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="c-idp9232"/>
+          </oneOrMore>
+        </choice>
+      </choice>
+    </element>
+  </define>
+  <define name="a-idp6976">
+    <element>
+      <name ns="">a</name>
+      <empty/>
+    </element>
+  </define>
+  <define name="b-idp7968">
+    <element>
+      <name ns="">b</name>
+      <empty/>
+    </element>
+  </define>
+  <define name="c-idp9232">
+    <element>
+      <name ns="">c</name>
+      <choice>
+        <empty/>
+        <attribute>
+          <name ns="">foobar</name>
+          <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="token"/>
+        </attribute>
+      </choice>
+    </element>
+  </define>
+</grammar>

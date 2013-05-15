@@ -39,9 +39,34 @@ define (require) ->
           "__name-elt-idp2192": "__name-elt-idp2192 = element name { text }"
           "__email-elt-idp2576": "__email-elt-idp2576 = element email { text }"
         for key, val of loader.defines
-          assert(defines[key].toString()).isEqualTo(val, "define #{key} properly stringified")
+          assert(val.toString()).isEqualTo(defines[key], "define #{key} properly stringified")
 
         assert(loader.start.toString()).isEqualTo("__addressBook-elt-idp496", "start properly stringified")
+    describe "Testing RNG loading", ->
+      RNGParser = require('textorum/relaxng/parse')
+      loader = undefined
+      simpleRNG = require("text!test/rng/testing.srng")
+      before ->
+        loader = new RNGParser()
+      describe "validating", ->
+        helper = require('textorum/helper')
+        objects = require('textorum/relaxng/objects')
+        before ->
+          loader.process simpleRNG
+        given(['a-missing-b', 'b-missing-a', 'c-child', 'c-followed-by-a']).
+          it "gets NotAllowed results", (target) ->
+            xml = helper.getXML "xml/testing-bad-#{target}.xml"
+            res = loader.start.check(xml.documentElement, true).require()
+            assert(res).isInstanceOf(objects.NotAllowed, "#{target} produces a NotAllowed result: #{res}")
+        given(['empty-group', 'empty-head', 'c-attribute', 'c-repeat', 'c', 'a-b']).
+          it "gets GoodElement results", (target) ->
+            xml = helper.getXML "xml/testing-good-#{target}.xml"
+            res = loader.start.check(xml.documentElement, true).require()
+            assert(res).isInstanceOf(objects.GoodElement, "#{target} produces a GoodElement result: #{res}")
+
+
+        undefined
+
 
 
     describe "Kipling RNG loading", ->
