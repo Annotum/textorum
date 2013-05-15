@@ -500,10 +500,10 @@ define (require) ->
       p1 = @pattern.check(node, descend)
       if p1 instanceof NotAllowed
         return p1
-      return new Choice(new Empty("oneOrMore satisfied"), this)
+      return new Choice(new EmptyNode("oneOrMore satisfied"), this)
     attrCheck: (node) =>
       p1 = @pattern.attrCheck(node)
-      return (new Choice(new Empty("oneOrMore satisfied"), this))
+      return (new Choice(new EmptyNode("oneOrMore satisfied"), this))
 
   ###*
    * A pattern that matches space-separated text tokens against its subpattern
@@ -723,7 +723,7 @@ define (require) ->
     Choice,
     Data, Define,
     Empty, Element,
-    Group,
+    Group, GoodElement, GoodParentElement,
     Interleave,
     List,
     MissingContent,
