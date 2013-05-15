@@ -319,7 +319,7 @@ define (require) ->
           return new Empty("#{p2}", p2)
         return new NotAllowed("#{p1} | #{p2}", new Choice(p1, p2), node)
       if p2 instanceof NotAllowed
-        if p1 instanceof Empty or p2 instanceof EmptyNode
+        if p1 instanceof Empty or p1 instanceof EmptyNode
           return new Empty("1 - #{p1}", p1)
         return new NotAllowed("#{p1} | #{p2}", new Choice(p1, p2), node)
       if p2 instanceof Empty or p2 instanceof EmptyNode
