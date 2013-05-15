@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<head>
+
+    <!-- correct -->
+    <group-zeroormore>
+        <c foobar="baz"/>
+    </group-zeroormore>
+
+</head>

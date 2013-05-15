@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<head>
+    <!-- element "b" not allowed yet; expected the element end-tag or element "a" or "c" -->
+    <group-zeroormore>
+        <b/>
+    </group-zeroormore>
+
+</head>

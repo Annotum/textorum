@@ -32,6 +32,13 @@
     pavlov.specify.extendAssertions({
         isEqualTo: function(actual, expected, message) {
             equal(actual, expected, message);
+        },
+        isInstanceOf: function(actual, expected, message) {
+            var res = actual instanceof expected;
+            if (!res) {
+                message = message + " (" + actual + " != " + expected + ")";
+            }
+            ok(res, message);
         }
     });
 
