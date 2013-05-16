@@ -87,58 +87,186 @@ define (require) ->
         throw new RNGException("can't parse pattern for #{h.getLocalName(node)}")
     pattern
 
+  class PatternBuilder
+    constructor: ->
+    choice: (pattern1, pattern2) ->
+      if pattern1 instanceof NotAllowed
+        pattern2
+      else if pattern2 instanceof NotAllowed
+        pattern1
+      else if pattern1 instanceof Empty and pattern2 instanceof Empty
+        pattern1
+      else
+        if pattern1 instanceof Empty and pattern2 instanceof Empty
+          return pattern1
+        l1 = pattern1.choiceLeaves()
+        l2 = pattern2.choiceLeaves()
+        for p in l1
+          index = l2.indexOf(p)
+          if index isnt -1
+            l2.splice(index, 1)
+        c = new Choice(pattern1, pattern2)
+        for p in l2
+          c = c.pruneChoiceLeaf(p)
+        return c
+
+    group: (pattern1, pattern2) ->
+      if pattern1 instanceof NotAllowed
+        pattern1
+      else if pattern2 instanceof NotAllowed
+        pattern2
+      else if pattern2 instanceof Empty
+        pattern1
+      else if pattern1 instanceof Empty
+        pattern2
+      else
+        new Group(pattern1, pattern2)
+
+    interleave: (pattern1, pattern2) ->
+      if pattern1 instanceof NotAllowed
+        pattern1
+      else if pattern2 instanceof NotAllowed
+        pattern2
+      else if pattern2 instanceof Empty
+        pattern1
+      else if pattern1 instanceof Empty
+        pattern2
+      else
+        new Interleave(pattern1, pattern2)
+
+    after: (pattern1, pattern2) ->
+      if pattern1 instanceof NotAllowed
+        pattern1
+      else if pattern2 instanceof NotAllowed
+        pattern2
+      else
+        new After(pattern1, pattern2)
+
+    oneOrMore: (pattern) ->
+      if pattern instanceof NotAllowed
+        pattern
+      else
+        new OneOrMore(pattern)
+
+  builder = new PatternBuilder()
 
   class RNGException extends Error
-    constructor: (message, @node = null, @parser = null) ->
+    constructor: (message, @pattern = null, @node = null, @parser = null) ->
       return super message
+
+  class Flip
+    constructor: (@func, @arg2) ->
+    apply: (thisarg, arg1) =>
+      @func.apply(thisarg, [arg1, @arg2])
+
+  class notFlip
+    constructor: (@func, @arg1) ->
+    apply: (thisarg, arg2) =>
+      @func.apply(thisarg, [@arg1, arg2])
+
+
+  applyAfter = (func, pattern) ->
+    if pattern instanceof After
+      builder.after pattern.pattern1, func.apply(this, pattern.pattern2)
+    else if pattern instanceof Choice
+      builder.choice applyAfter(func, pattern.pattern1), applyAfter(func, pattern.pattern2)
+    else if pattern instanceof NotAllowed
+      pattern
+    else
+      throw new RNGException("#{pattern} is not an After, Choice, or NotAllowed", pattern)
+
+
+
 
   ###*
    * Superclass for all (simplified) RNG pattern representation nodes
   ###
   class Pattern
-    ###*
-     * Interface for running node validity tests
-     *
-     * @param  {Node} node    DOM Node to check
-     * @param  {Boolean|Integer} descend Boolean true: Unlimited descent.  Integer: Descend to that total depth
-     * @return {Node}         Composed node - Empty, NotAllowed, or Choice/Group/etc types
-    ###
-    check: (node, descend) =>
-      unless node?
-        _nodelog node, "missing node", node, this
-        throw new Error("ack node missing")
-      _nodelog node, "checking #{this} against", node, [this, node]
-      res = @_check(node, descend)
-      _nodelog node, "result for #{this} against", node, "is #{res}", [this, node, res]
-      return res
-    ###*
-     * Implementation for running node validity tests per-type, intended to be overridden
-     *
-     * @see Pattern#check
-    ###
-    _check: (node, descend) =>
-      return new NotAllowed("pattern check failed", this, node)
+    choiceLeaves: =>
+      []
+    pruneChoiceLeaf: (pattern) =>
+      this
 
-    ###*
-     * Check the validity of this node's attributes
-     * @param  {Node} node
-     * @return {Pattern}      an Empty or NotAllowed type
-    ###
-    attrCheck: (node) =>
-      return new Empty("not checking an attribute", this, node)
+    startTagOpenDeriv: (node) =>
+      return new NotAllowed("expected #{this}, found #{h.getLocalName(node)}", this, node)
 
+    startTagCloseDeriv: (node) =>
+      this
+
+    endTagDeriv: (node) =>
+      if this instanceof NotAllowed
+        return this
+      return new NotAllowed("invalid pattern: #{this}", this, node)
+
+    attDeriv: (attribute) =>
+      if h.getNamespacePrefix(attribute.name) is "xml"
+        return this
+      return new NotAllowed("unknown attribute #{attribute.name} (value #{attribute.value} - expecting #{this}", this, attribute)
+
+    childDeriv: (node, descend = false) =>
+      _nodelog(node, "starting childDeriv", node, this)
+      if h.getNodeType(node) is Node.TEXT_NODE
+        return @textDeriv(node)
+      patt = @startTagOpenDeriv(node)
+      if patt instanceof NotAllowed
+        return patt
+      for attr in h.getNodeAttributes(node)
+        patt = patt.attDeriv(attr)
+        if patt instanceof NotAllowed
+          return patt
+      patt = patt.startTagCloseDeriv(node)
+      if patt instanceof NotAllowed
+        return patt
+      if descend
+        unless descend is true
+          descend = descend - 1
+        patt = patt.childrenDeriv(node.childNodes, descend)
+      else
+        return new After(new Empty("skipping 1"), new Empty("skipping descent"))
+      if patt instanceof NotAllowed
+        return patt
+      return patt.endTagDeriv(node)
+
+    childrenDeriv: (children, descend) =>
+      if not children.length
+        @childrenDeriv [""]
+      if children.length is 1 and h.isNodeWhitespace(children[0])
+        p1 = @childDeriv(children[0], descend)
+        return builder.choice(this, p1)
+      patt = this
+      for child in children
+        switch h.getNodeType(child)
+          when Node.TEXT_NODE
+            if h.textContent(child).replace(/^\s+|\s+$/gm, "") is ""
+              continue
+          when Node.COMMENT_NODE
+            continue
+          when Node.ELEMENT_NODE
+            lastElementNode = child
+        nextPatt = patt.childDeriv(child, descend)
+        if nextPatt instanceof NotAllowed
+          return nextPatt
+        patt = nextPatt
+      return patt
+
+    textDeriv: (node) =>
+      return new NotAllowed("#{this}", this, node)
     toString: =>
       "<UNDEFINED PATTERN>"
 
+    valueMatch: (value) =>
+      if @nullable() and h.isNodeWhitespace(value)
+        return new Empty()
+      deriv = @textDeriv(value)
+      if deriv.nullable()
+        return new Empty()
+      return NotAllowed("value mismatch: #{value} does not match #{this}: #{deriv}", this, value)
+
     nullable: =>
+      return @_nullable()
+
+    _nullable: ->
       false
-    ###*
-     * Reduce this pattern to a minimum, preferring successful validation.  Choices prefer
-     *   GoodElement status.
-     * @return {Node} GoodElement or NotAllowed type
-    ###
-    require: (node) =>
-      return this
 
     ###*
      * Stub for Name class patterns
@@ -200,63 +328,64 @@ define (require) ->
 
   #** Pattern Classes
 
+  class After extends Pattern
+    constructor: (@pattern1, @pattern2) ->
+    startTagOpenDeriv: (node) =>
+      f1 = new Flip(builder.after, @pattern2)
+      applyAfter(f1, @pattern1.startTagOpenDeriv(node))
+    startTagCloseDeriv: (node) =>
+      builder.after(@pattern1.startTagCloseDeriv(node), @pattern2)
+    endTagDeriv: (node) =>
+      if @pattern1.nullable()
+        return @pattern2
+      else
+        return new MissingContent("missing #{@pattern1} before close of #{h.getLocalName(node)}", this, node)
+    attDeriv: (attribute) =>
+      builder.after(@pattern1.attDeriv(attribute), @pattern2)
+    textDeriv: (node) =>
+      builder.after(@pattern1.textDeriv(node), @pattern2)
+    toString: =>
+      "\n [:first: -- #{@pattern1} \n -- :then: #{@pattern2}]"
+
   ###*
    * Nulled portion of a pattern.
   ###
   class Empty extends Pattern
     constructor: (@message, @pattern, @childNode) ->
+    textDeriv: (node) =>
+      return this
     toString: =>
       if @message
-        "(null: #{@message})"
+        "#{@message}"
       else
         "(null)"
-    nullable: =>
+    _nullable: =>
       true
-    _check: (node, descend) =>
-      return this
-    attrCheck: (node) =>
-      return this
+
 
   ###*
    * An empty Pattern node, matching only comments and empty text node blocks
   ###
-  class EmptyNode extends Pattern
+  class EmptyNode extends Empty
     constructor: (@message, @pattern, @childNode) ->
     toString: =>
       "empty"
-    nullable: =>
+    _nullable: =>
       true
-    require: (node) =>
-      return this
-    _check: (node, descend) =>
-      switch h.getNodeType(node)
-        when Node.TEXT_NODE
-          if h.textContent(node).replace(/^\s+|\s+$/gm, "") is ""
-            return this
-        when Node.COMMENT_NODE
-          return this
-      return new NotAllowed("expected nothing, found #{h.getLocalName(node)}", this, node, -10 + h.depth(node))
-    attrCheck: (node) =>
-      return this
+
 
   ###*
    * A pattern denying all contents
   ###
   class NotAllowed extends Pattern
     constructor: (@message, @pattern, @childNode, @priority = 10) ->
+      return this
     toString: =>
       if @message
         "notAllowed { #{@message} }"
       else
         "notAllowed"
-    require: (node) =>
-      if @pattern instanceof Choice or @pattern instanceof Group or @pattern instanceof Interleave
-        return @pattern.require(node)
-      return this
-    _check: (node, descend) =>
-      return this
-    attrCheck: (node) =>
-      return this
+
 
   ###*
    * A pattern indicating missing content (end state)
@@ -275,13 +404,9 @@ define (require) ->
   class Text extends Empty
     toString: =>
       "text"
-    _check: (node, descend) =>
-      switch h.getNodeType(node)
-        when Node.TEXT_NODE
-          return this
-        else
-          return new NotAllowed("expected text node, found #{h.getLocalName(node)}", this, node)
-    nullable: =>
+    textDeriv: (node) =>
+      this
+    _nullable: =>
       true
 
   ###*
@@ -291,94 +416,39 @@ define (require) ->
     constructor: (pattern1, pattern2) ->
       @pattern1 = getPattern pattern1
       @pattern2 = getPattern pattern2
+    choiceLeaves: =>
+      l1 = @pattern1.choiceLeaves()
+      l2 = @pattern2.choiceLeaves()
+      for c in l2
+        unless c in l1
+          l1.push(c)
+      return l1
+    pruneChoiceLeaf: (pattern) =>
+      if @pattern1 is pattern
+        return @pattern2.pruneChoiceLeaf(pattern)
+      if @pattern2 is pattern
+        return @pattern1.pruneChoiceLeaf(pattern)
+      return this
+
+    startTagOpenDeriv: (node) =>
+      p1 = @pattern1.startTagOpenDeriv(node)
+      p2 = @pattern2.startTagOpenDeriv(node)
+      return builder.choice(p1, p2)
+    startTagCloseDeriv: (node) =>
+      builder.choice(@pattern1.startTagCloseDeriv(node), @pattern2.startTagCloseDeriv(node))
+    endTagDeriv: (node) =>
+      builder.choice(@pattern1.endTagDeriv(node), @pattern2.endTagDeriv(node))
+    attDeriv: (attribute) =>
+      builder.choice(@pattern1.attDeriv(attribute), @pattern2.attDeriv(attribute))
+    textDeriv: (node) =>
+      builder.choice(@pattern1.textDeriv(node), @pattern2.textDeriv(node))
     toString: =>
       "(#{@pattern1} | #{@pattern2})"
     contains: (nodeName) =>
       @pattern1.contains(nodeName) or @pattern2.contains(nodeName)
-    nullable: =>
+    _nullable: =>
       @pattern1.nullable() or @pattern2.nullable()
-    require: (node) =>
-      p1 = @pattern1.require(node)
-      if p1 instanceof GoodElement
-        return p1
-      p2 = @pattern2.require(node)
-      if p2 instanceof GoodElement
-        return p2
-      if p2 instanceof MissingContent and p1 instanceof MissingContent
-        return new MissingContent("#{p1} | #{p2}", new Choice(p1, p2), node)
-      if p1 instanceof NotAllowed and p2 instanceof NotAllowed
 
-        if p1.pattern instanceof EmptyNode
-          if p2.pattern instanceof EmptyNode
-            return new NotAllowed("#{p1} | #{p2}", new Choice(p1, p2), node)
-          return p2
-        if p2.pattern instanceof EmptyNode
-          return p1
-        if p1.priority > p2.priority
-          return p1
-        if p2.priority > p1.priority
-          return p2
-      if p1 instanceof NotAllowed
-        if p2 instanceof Empty or p2 instanceof EmptyNode
-          return new Empty("#{p2}", p2)
-        return new NotAllowed("#{p1} | #{p2}", new Choice(p1, p2), node)
-      if p2 instanceof NotAllowed
-        if p1 instanceof Empty or p1 instanceof EmptyNode
-          return new Empty("1 - #{p1}", p1)
-        return new NotAllowed("#{p1} | #{p2}", new Choice(p1, p2), node)
-      if p2 instanceof Empty or p2 instanceof EmptyNode
-        return new Empty("2 - #{p2}", p2)
-      return p2
-
-    _check: (node, descend) =>
-      if @pattern1 instanceof EmptyNode and @pattern2 instanceof Attribute
-        return @pattern1.check(node)
-      if @pattern2 instanceof EmptyNode and @pattern1 instanceof Attribute
-        return @pattern2.check(node)
-      if @pattern1 instanceof GoodElement
-        return @pattern1
-      if @pattern2 instanceof GoodElement
-        return @pattern2
-      # if @pattern1 instanceof NotAllowed
-      #   return @pattern2.check(node, descend)
-      # if @pattern2 instanceof NotAllowed
-      #   return @pattern1.check(node, descend)
-      p1 = @pattern1.check(node, descend)
-      p2 = @pattern2.check(node, descend)
-      if p1 instanceof GoodElement
-        return p1
-      if p2 instanceof GoodElement
-        return p2
-      if p1 instanceof NotAllowed and @pattern1.require(node) instanceof Empty
-        return p2
-      if p2.require(node) instanceof Empty and p1.require(node) instanceof Empty
-        if p1 instanceof Empty
-          return p2
-        if p2 instanceof Empty
-          return p1
-        return new Choice(p1, p2)
-      if p1 instanceof NotAllowed and p2 instanceof NotAllowed
-        if p1.priority is p2.priority
-          failed = new Choice(p1, p2)
-          return new NotAllowed("choice failed: #{failed}", failed, node)
-        else if p1.priority > p2.priority
-          return p1
-        return p2
-      return new Choice(p1, p2)
-    attrCheck: (node) =>
-      if @pattern1 instanceof NotAllowed or @pattern1 instanceof Empty
-        return @pattern2.attrCheck(node)
-      if @pattern2 instanceof NotAllowed or @pattern2 instanceof Empty
-        return @pattern1.attrCheck(node)
-      p1 = @pattern1.attrCheck(node)
-      if p1 instanceof NotAllowed
-        return @pattern2.attrCheck(node)
-      p2 = @pattern2.attrCheck(node)
-      if p2 instanceof NotAllowed or p2 instanceof Empty
-        return p1
-      if p1 instanceof Empty
-        return p2
-      return (new Choice(p1, p2)).attrCheck(node)
 
   ###*
    * A pattern requiring both of its subpatterns to be valid, in any order
@@ -387,43 +457,23 @@ define (require) ->
     constructor: (pattern1, pattern2) ->
       @pattern1 = getPattern pattern1
       @pattern2 = getPattern pattern2
+    startTagOpenDeriv: (node) =>
+      f1 = new Flip(builder.interleave, @pattern2)
+      p1 = applyAfter(f1, @pattern1.startTagOpenDeriv(node))
+      f2 = new notFlip(builder.interleave, @pattern1)
+      p2 = applyAfter(f2, @pattern2.startTagOpenDeriv(node))
+      builder.choice(p1, p2)
+    startTagCloseDeriv: (node) =>
+      builder.interleave(@pattern1.startTagCloseDeriv(node), @pattern2.startTagCloseDeriv(node))
+    attDeriv: (attribute) =>
+      p1 = builder.interleave(@pattern1.attDeriv(attribute), @pattern2)
+      p2 = builder.interleave(@pattern1, @pattern2.attDeriv(attribute))
+      builder.choice(p1, p2)
     toString: =>
       "(#{@pattern1} & #{@pattern2})"
-    nullable: =>
+    _nullable: =>
       @pattern1.nullable() and @pattern2.nullable()
-    require: (node) =>
-      p1 = @pattern1.require(node)
-      if p1 instanceof Empty
-        return @pattern2.require(node)
-      p2 = @pattern2.require(node)
-      if p2 instanceof Empty
-        return p1
-      if p1 instanceof GoodElement and p2 instanceof GoodElement
-        return p1
-      if p1 instanceof NotAllowed
-        return p1
-      if p2 instanceof NotAllowed
-        return p2
-      return p2
 
-    _check: (node, descend) =>
-      if @pattern1 instanceof NotAllowed or @pattern2 instanceof Empty
-        return @pattern1.check(node, descend)
-      if @pattern2 instanceof NotAllowed or @pattern1 instanceof Empty
-        return @pattern2.check(node, descend)
-      p1 = @pattern1.check(node, descend)
-      unless p1 instanceof NotAllowed
-        return @pattern2
-      p2 = @pattern2.check(node, descend)
-      unless p2 instanceof NotAllowed
-        return @pattern1
-      return new Interleave(p1, p2)
-    attrCheck: (node) =>
-      p1 = @pattern1.attrCheck(node)
-      choice1 = new Interleave(p1, @pattern2)
-      p2 = @pattern2.attrCheck(node)
-      choice2 = new Interleave(@pattern1, p2)
-      return (new Choice(choice1, choice2)).attrCheck(node)
 
   ###*
    * A pattern requiring both of its subpatterns to be valid, in the given order
@@ -432,61 +482,29 @@ define (require) ->
     constructor: (pattern1, pattern2) ->
       @pattern1 = getPattern pattern1
       @pattern2 = getPattern pattern2
+    startTagOpenDeriv: (node) =>
+      f1 = new Flip(builder.group, @pattern2)
+      r1 = applyAfter(f1, @pattern1.startTagOpenDeriv(node))
+      if @pattern1.nullable()
+        builder.choice(r1, @pattern2.startTagOpenDeriv(node))
+      else
+        r1
+    startTagCloseDeriv: (node) =>
+      builder.group(@pattern1.startTagCloseDeriv(node), @pattern2.startTagCloseDeriv(node))
+    attDeriv: (attribute) =>
+      p1 = builder.group(@pattern1.attDeriv(attribute), @pattern2)
+      p2 = builder.group(@pattern1, @pattern2.attDeriv(attribute))
+      builder.choice(p1, p2)
+    textDeriv: (node) =>
+      p1 = builder.group(@pattern1.textDeriv(node), @pattern2)
+      if @pattern1.nullable()
+        return builder.choice(p1, @pattern2.textDeriv(node))
+      return p1
     toString: =>
       "#{@pattern1}, #{@pattern2}"
-    nullable: =>
+    _nullable: =>
       @pattern1.nullable() and @pattern2.nullable()
-    require: (node) =>
-      p1 = @pattern1.require(node)
-      p2 = @pattern2.require(node)
-      if p1 instanceof GoodElement
-        if p2 instanceof Empty or p2 instanceof EmptyNode
-          return p1
-      if p2 instanceof GoodElement
-        if p1 instanceof Empty or p2 instanceof EmptyNode
-          return p2
-      if p1 instanceof Empty or p1 instanceof EmptyNode
-        if p2 instanceof Empty or p2 instanceof EmptyNode
-          return p1
-      if p1 instanceof Empty or p1 instanceof EmptyNode
-        return new MissingContent("#{p2} not found", p2, node)
-      if p2 instanceof Empty or p2 instanceof EmptyNode
-        return new MissingContent("#{p1} not found", p1, node)
-      return new MissingContent("missing #{p1}, #{p2}", node)
 
-    _check: (node, descend) =>
-      if @pattern2 instanceof GoodElement
-        return new Empty("null branch")
-      if @pattern1 instanceof Empty and @pattern2 instanceof Empty
-        return @pattern1
-      if @pattern1 instanceof NotAllowed
-        return @pattern1
-      if @pattern2 instanceof NotAllowed
-        return @pattern2
-      if @pattern1 instanceof Empty or @pattern1 instanceof EmptyNode or @pattern1 instanceof GoodElement
-        return @pattern2.check(node, descend)
-      if @pattern2 instanceof Empty or @pattern2 instanceof EmptyNode
-        return @pattern1.check(node, descend)
-      _nodelog node, "p1 group, checking pattern1 #{@pattern1} against", node, [this, @pattern1, node]
-      p1 = @pattern1.check(node, descend)
-      if p1 instanceof NotAllowed
-        return p1
-      if p1 instanceof GoodElement
-        return @pattern2
-      _nodelog node, "p2 group, checking pattern2 #{@pattern2} against", node, [this, @pattern2, node]
-      p2 = @pattern2.check(node, descend)
-      if p2 instanceof NotAllowed
-        # Return nullabled group
-        return new Group(p1, @pattern2)
-      return new Group(p1, p2)
-    attrCheck: (node) =>
-      p1 = @pattern1.attrCheck(node)
-      if p1 instanceof NotAllowed or p1 instanceof Empty or p1 instanceof EmptyNode
-        return @pattern2.attrCheck(node)
-      p2 = @pattern2.attrCheck(node)
-      if p2 instanceof NotAllowed or p2 instanceof Empty or p1 instanceof EmptyNode
-        return p1
-      return (new Interleave(p1, p2)).attrCheck(node)
 
   ###*
    * A pattern that requires at least one instance of its subpattern to be valid.
@@ -495,20 +513,21 @@ define (require) ->
   class OneOrMore extends Pattern
     constructor: (pattern) ->
       @pattern = getPattern pattern
+    startTagOpenDeriv: (node) =>
+      p1 = @pattern.startTagOpenDeriv(node)
+      f1 = new Flip(builder.group, builder.choice(this, new Empty("empty | #{this}", this)))
+      applyAfter(f1, p1)
+    startTagCloseDeriv: (node) =>
+      builder.oneOrMore(@pattern.startTagCloseDeriv(node))
+    attDeriv: (attribute) =>
+      builder.group(@pattern.attDeriv(attribute), builder.choice(this, new Empty("#{this}")))
+    textDeriv: (node) =>
+      builder.group(@pattern.textDeriv(node), builder.choice(this, new Empty("#{this}")))
     toString: =>
       "#{@pattern}+"
-    nullable: =>
+    _nullable: =>
       @pattern.nullable()
-    require: (node) =>
-      return new MissingContent("missing #{this}", this)
-    _check: (node, descend) =>
-      p1 = @pattern.check(node, descend)
-      if p1 instanceof NotAllowed
-        return p1
-      return new Choice(new EmptyNode("oneOrMore satisfied"), this)
-    attrCheck: (node) =>
-      p1 = @pattern.attrCheck(node)
-      return (new Choice(new EmptyNode("oneOrMore satisfied"), this))
+
 
   ###*
    * A pattern that matches space-separated text tokens against its subpattern
@@ -516,19 +535,10 @@ define (require) ->
   class List extends Pattern
     constructor: (pattern) ->
       @pattern = getPattern pattern
+    textDeriv: (node) =>
+      return new Empty("skipping List validation")
     toString: =>
       "list { #{@pattern} }"
-    _check: (node, descend) =>
-      switch h.getNodeType(node)
-        when Node.TEXT_NODE
-          for text in h.textContent(node).split(/\s+/)
-            if text
-              res = @pattern.check(text, descend)
-              if res instanceof NotAllowed
-                return res
-          return new Empty()
-        else
-          return new NotAllowed("expected text node, found #{h.getLocalName(node)}", this, node)
 
   ###*
    * A pattern that matches data against a data validation library (currently unimplemented)
@@ -536,13 +546,14 @@ define (require) ->
   class Data extends Pattern
     constructor: (@dataType, @type, paramList) ->
       @params = []
-      @except = new NotAllowed("shouldn't happen - data except")
+      @except = new NotAllowed()
       for param in paramList
         if param.local is "param"
           @params.push getPattern param
         else if param.local is "except"
           @except = getPattern param
-
+    textDeriv: (node) =>
+      return new Empty("Skipping Data validation")
     toString: =>
       output = ""
       if @dataType
@@ -553,23 +564,15 @@ define (require) ->
       unless @except instanceof NotAllowed
         output += " - #{@except}"
       output
-    _check: (node, descend) =>
-      unless @except instanceof NotAllowed
-        except = @except.check(node, descend)
-        if except instanceof NotAllowed
-          return except
-      switch h.getNodeType(node)
-        when Node.TEXT_NODE
-          # TODO: handle data validation
-          return new Empty()
-        else
-          return new NotAllowed("expected text(data) node, found #{h.getLocalName(node)}", this, node)
 
   ###*
    * A pattern that matches data against a given value (currently minimally implemented)
   ###
   class Value extends Pattern
     constructor: (@dataType, @type, @ns, @string) ->
+    textDeriv: (node) =>
+      return new Empty("skipping Value validation")
+
     toString: =>
       output = ""
 
@@ -578,15 +581,6 @@ define (require) ->
       if @type
         output += "#{@type} "
       output += '"' + @string + '"'
-    _check: (node, descend) =>
-      switch h.getNodeType(node)
-        when Node.TEXT_NODE
-          # TODO: handle proper value validation
-          if h.textContent(node) is @string
-            return new Empty()
-          return new NotAllowed("expected #{@string}, found #{h.textContent(node)}", this, node)
-        else
-          return new NotAllowed("expected text(value) node, found #{h.getLocalName(node)}", this, node)
 
   ###*
    * A pattern that matches an attribute (name, value) on the given node
@@ -594,24 +588,20 @@ define (require) ->
   class Attribute extends Pattern
     constructor: (@nameClass, pattern, @defaultValue = null) ->
       @pattern = getPattern pattern
-    toString: =>
-      "attribute #{@nameClass} { #{@pattern} }"
-    _check: (node, descend) =>
-      return @require(node)
-    require: (node) =>
-      return new EmptyNode("#{this}", this)
-    attrCheck: (node) =>
-      error = []
-      for attr in h.getNodeAttributes(node)
-        if @nameClass.contains(attr.name)
-          attrCheck = @pattern.check(attr.value)
-          unless attrCheck instanceof NotAllowed
-            return new Empty()
-          error.push attrCheck
+    startTagCloseDeriv: (node) =>
+      return new NotAllowed("attr StartTagCloseDeriv #{this}", this, node)
+    attDeriv: (attribute) =>
+      contains = @nameClass.contains(attribute.name)
+      if contains instanceof NotAllowed
+        return contains
+      valuematch = @pattern.valueMatch(attribute.value)
+      if valuematch instanceof NotAllowed
+        return valuematch
+      return new Empty("good attribute: #{this}", this, attribute)
 
-      if attrCheck.length
-        return new NotAllowed("Attribute failure: #{error.join(',')}", this, node)
-      return new MissingContent("expected to find an attribute #{@nameClass}", this, node)
+    toString: =>
+      "attribute '#{@nameClass} { #{@pattern} }".substr(0, 20) + "'"
+
 
   ###*
    * {@link Empty} subclass that specifically indicates a good element
@@ -619,9 +609,6 @@ define (require) ->
   class GoodElement extends Empty
     constructor: (@name, @pattern) ->
     toString: => "(GOOD) element #{@name}"
-    _check: (node, descend = false) =>
-      throw new Error("checking good stuff")
-      return this
 
   ###*
    * {@link GoodElement} subclass that has (unvalidated) children of the node remaining
@@ -639,50 +626,16 @@ define (require) ->
     constructor: (name, pattern) ->
       @name = getPattern name
       @pattern = getPattern pattern
+    startTagOpenDeriv: (node) =>
+      nameCheck = @name.contains node
+      if nameCheck
+        builder.after @pattern, new EmptyNode()
+      else
+        new NotAllowed("expecting #{@name}, found #{h.getLocalName(node)}", @name, node, 5 + h.depth(node))
+
     toString: =>
       "element #{@name} { #{@pattern} }"
-    _check: (node, descend = false) =>
-      nameCheck = @name.contains node
-      _nodelog node, "Namechecking", node, "against", @name, "result", nameCheck
-      if not nameCheck
-        return new NotAllowed("name check failed - expecting #{@name}, found #{h.getLocalName(node)}", @name, node, 5 + h.depth(node))
-      if nameCheck instanceof NotAllowed
-        return nameCheck
-      # attrCheck = @pattern.attrCheck node
-      # if attrCheck instanceof NotAllowed
-      #   return attrCheck
-      if descend
-        unless descend is true
-          descend = descend - 1
-        nextPattern = @pattern
-        lastElementNode = undefined
-        if node.childNodes?.length
-          for child in node.childNodes
-            switch h.getNodeType(child)
-              when Node.TEXT_NODE
-                if h.textContent(child).replace(/^\s+|\s+$/gm, "") is ""
-                  continue
-              when Node.COMMENT_NODE
-                continue
-              when Node.ELEMENT_NODE
-                lastElementNode = child
-            curPattern = nextPattern
-            _nodelog node, "==> checking child", child, "against", nextPattern
-            nextPattern = nextPattern.check(child, descend)
-            _nodelog node, "child result of", child, "against", curPattern, "was", nextPattern
-            if nextPattern instanceof NotAllowed
-              return nextPattern
-        # TODO: Detect missing elements
-        if nextPattern.require(node) instanceof Empty
-          return new GoodElement(@name, nextPattern)
-        else
-          if lastElementNode?
-            return nextPattern.require(lastElementNode)
-          return nextPattern.require(node)
-      else
-        if node.childNodes?.length
-          return new GoodParentElement(@name, @pattern, node.childNodes)
-        return new GoodElement(@name, @pattern)
+
 
 
   ###*
@@ -691,15 +644,24 @@ define (require) ->
   class Ref extends Pattern
     constructor: (@refname, @defines) ->
       @dereference()
-    toString: =>
-      @refname
-    _check: (node, descend) =>
+    startTagOpenDeriv: (node) =>
       @dereference()
       if @pattern?
-        if not @pattern.check?
-          _nodelog node, "failed", this
-        return @pattern.check(node, descend)
+        return @pattern.startTagOpenDeriv(node)
       return new NotAllowed("cannot find reference '#{@refname}'", this, node)
+    endTagDeriv: (node) =>
+      @dereference()
+      if @pattern?
+        return @pattern.endTagDeriv(node)
+      return new NotAllowed("cannot find reference '#{@refname}'", this, node)
+    attDeriv: (attribute) =>
+      @dereference()
+      if @pattern?
+        return @pattern.attDeriv(attribute)
+      return new NotAllowed("cannot find reference '#{@refname}'", this, node)
+
+    toString: =>
+      @refname
     dereference: =>
       return @pattern if @pattern?
       if @defines and @defines[@refname]?
@@ -712,12 +674,15 @@ define (require) ->
   class Define extends Pattern
     constructor: (@name, pattern) ->
       @pattern = getPattern pattern
+    startTagOpenDeriv: (node) =>
+      return @pattern.startTagOpenDeriv(node)
+    endTagDeriv: (node) =>
+      return @pattern.endTagDeriv(node)
+    attDeriv: (node) =>
+      return @pattern.attDeriv(node)
     toString: =>
       "#{@name} = #{@pattern}"
-    _check: (node, descend) =>
-      @pattern.check(node, descend)
-    attrCheck: (node) =>
-      @pattern.attrCheck(node)
+
 
   {
     getPattern,

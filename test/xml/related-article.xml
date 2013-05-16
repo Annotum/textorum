@@ -49,6 +49,7 @@
           <license-p>This is an open access article. Unrestricted non-commercial use is permitted provided the original work is properly cited.</license-p>
         </license>
       </permissions>
+      <related-article related-article-type="testing" id="test-related-article" xlink:type="simple" xlink:href="foo"/>
       <abstract>
         <p>Ullam volobore nonse nummy iuscipit nonsenibhiscinim psusto sis odionsequip, facin iril vullan. Rud ed vulputeisis elis landrem susto verostin si dolore. Eumsandre tatet loborper aut. Vivamus vulla illuptatie dionull. Lut dictum urna esting magniat, metus erit nulla core facidunt iliquiscipis feugiamet faccum adionse. Ipsumsan tionulla niam ulputat augue obor suscipit, issectem susciduipit veliquat, acipisl faccumsan ipis amconsendre. </p>
       </abstract>
@@ -56,7 +57,6 @@
         <kwd>opioid peptided esters</kwd>
         <kwd>analgesics</kwd>
       </kwd-group>
-      <related-article related-article-type="testing" id="test-related-article" xlink:type="simple" xlink:href="foo"/>
     </article-meta>
   </front>
   <body>

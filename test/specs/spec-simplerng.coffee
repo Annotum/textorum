@@ -56,13 +56,13 @@ define (require) ->
         given(['a-missing-b', 'b-missing-a', 'c-child', 'c-followed-by-a']).
           it "gets NotAllowed results", (target) ->
             xml = helper.getXML "xml/testing-bad-#{target}.xml"
-            res = loader.start.check(xml.documentElement, true).require()
+            res = loader.start.childDeriv(xml.documentElement, true)
             assert(res).isInstanceOf(objects.NotAllowed, "#{target} produces a NotAllowed result: #{res}")
         given(['empty-group', 'empty-head', 'c-attribute', 'c-repeat', 'c', 'a-b']).
           it "gets GoodElement results", (target) ->
             xml = helper.getXML "xml/testing-good-#{target}.xml"
-            res = loader.start.check(xml.documentElement, true).require()
-            assert(res).isInstanceOf(objects.GoodElement, "#{target} produces a GoodElement result: #{res}")
+            res = loader.start.childDeriv(xml.documentElement, true)
+            assert(res).isInstanceOf(objects.Empty, "#{target} produces a GoodElement result: #{res}")
 
 
         undefined
