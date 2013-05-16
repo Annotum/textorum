@@ -250,6 +250,8 @@ define (require) ->
       else
         "notAllowed"
     require: (node) =>
+      if not node?
+        node = @childNode
       if @pattern instanceof Choice or @pattern instanceof Group or @pattern instanceof Interleave
         return @pattern.require(node)
       return this
@@ -467,13 +469,13 @@ define (require) ->
         return @pattern2.check(node, descend)
       if @pattern2 instanceof Empty or @pattern2 instanceof EmptyNode
         return @pattern1.check(node, descend)
-      _nodelog node, "p1 group, checking pattern1 #{@pattern1} against", node, [this, @pattern1, node]
+      _nodelog node, "p1 group #{this}, checking pattern1 #{@pattern1} against", node, [this, @pattern1, node]
       p1 = @pattern1.check(node, descend)
-      if p1 instanceof NotAllowed
+      if p1 instanceof NotAllowed and not @pattern1.require instanceof Empty
         return p1
-      if p1 instanceof GoodElement
+      if p1.require(node) instanceof GoodElement
         return @pattern2
-      _nodelog node, "p2 group, checking pattern2 #{@pattern2} against", node, [this, @pattern2, node]
+      _nodelog node, "p2 group #{this}, checking pattern2 #{@pattern2} against", node, [this, @pattern2, node]
       p2 = @pattern2.check(node, descend)
       if p2 instanceof NotAllowed
         # Return nullabled group
@@ -599,7 +601,7 @@ define (require) ->
     _check: (node, descend) =>
       return @require(node)
     require: (node) =>
-      return new EmptyNode("#{this}", this)
+      return new Empty("#{this}", this)
     attrCheck: (node) =>
       error = []
       for attr in h.getNodeAttributes(node)
@@ -693,6 +695,11 @@ define (require) ->
       @dereference()
     toString: =>
       @refname
+    require: (node) =>
+      @dereference()
+      if @pattern?
+        return @pattern.require(node)
+      return new NotAllowed("cannot find reference '#{@refname}'", this, node)
     _check: (node, descend) =>
       @dereference()
       if @pattern?
@@ -714,6 +721,8 @@ define (require) ->
       @pattern = getPattern pattern
     toString: =>
       "#{@name} = #{@pattern}"
+    require: (node) =>
+      return @pattern.require(node)
     _check: (node, descend) =>
       @pattern.check(node, descend)
     attrCheck: (node) =>
