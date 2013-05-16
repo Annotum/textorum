@@ -162,6 +162,12 @@ define (require) ->
         when typeof node is "string" then Node.TEXT_NODE
         else undefined
 
+    isNodeWhitespace: (node) =>
+      if @getNodeType(node) is Node.TEXT_NODE
+        if @textContent(node).replace(/^\s+|\s+$/gm, "") is ""
+          return true
+      return false
+
     getLocalName: (node) ->
       return "" if not node?
       if node?.localName?

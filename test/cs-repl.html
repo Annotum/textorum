@@ -38,7 +38,7 @@ require req, (parser, objects, helper) ->
   xmldoc = helper.getXML(xml)
   window.rngparser = rngparser
   window.xmldoc = xmldoc
-  res = rngparser.start.check(xmldoc.documentElement, true).require()
+  res = rngparser.start.childDeriv(xmldoc.documentElement, true)
   window.res = res
   console.log res
   </textarea>
