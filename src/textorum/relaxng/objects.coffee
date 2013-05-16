@@ -600,7 +600,7 @@ define (require) ->
       return new Empty("good attribute: #{this}", this, attribute)
 
     toString: =>
-      "attribute '#{@nameClass} { #{@pattern} }".substr(0, 20) + "'"
+      "attribute #{@nameClass} { #{@pattern} }"
 
 
   ###*
