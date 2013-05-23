@@ -147,10 +147,36 @@ define (require) ->
       String(string).replace /[&<>"'\/]/g, (s) ->
         return entityMap[s]
 
-    getNodeAttr: (node, attr) ->
-      return node?.attributes?[attr]?.value
+    getNodeAttr: (node, target) ->
+      attrs = @getNodeAttributes(node)
+      if attrs[target]?.value isnt undefined
+        return attrs[target].value
+      if attrs[target] isnt undefined
+        return attrs[target]
+      index = attrs.length
+      while index--
+        if attrs[index].name is target
+          return attrs[index].value
+      return undefined
 
     getNodeAttributes: (node) ->
+      if node.hasAttribute? and node.hasAttribute('data-xmlel')
+        lastindex = node.attributes.length - 1
+        attrs = []
+        for attrindex in [0..lastindex]
+          attr = node.attributes[attrindex]
+          switch attr.name
+            when "data-xmlel", "data-nsbk", "data-nsuribk" then continue
+            when "data-clsbk"
+              newattr = document.createAttribute('class')
+              newattr.value = attr.value
+              attrs[attrindex] = newattr
+            when "class" then continue
+            else
+              if attr.value.substr(0, 9) is "tmp_tree_"
+                continue
+              attrs[attrindex] = attr
+        return attrs
       if node.attributes?
         return node.attributes
       return []
@@ -170,6 +196,8 @@ define (require) ->
 
     getLocalName: (node) ->
       return "" if not node?
+      if node?.getAttribute?('data-xmlel')?
+        return node.getAttribute('data-xmlel')
       if node?.localName?
         return node.localName
       if node?.local?
