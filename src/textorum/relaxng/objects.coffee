@@ -53,7 +53,7 @@ define (require) ->
    * @param  {Object} defines The (shared) named pattern definitions
    * @return {Pattern}
   ###
-  getPattern = (node, defines) =>
+  getPattern = (node, defines) ->
     if node instanceof Pattern
       return node
     if not node
@@ -187,23 +187,23 @@ define (require) ->
     pruneChoiceLeaf: (pattern) =>
       this
 
-    startTagOpenDeriv: (node) =>
+    startTagOpenDeriv: (node) ->
       return new NotAllowed("expected #{this}, found #{h.getLocalName(node)}", this, node)
 
-    startTagCloseDeriv: (node) =>
+    startTagCloseDeriv: (node) ->
       this
 
-    endTagDeriv: (node) =>
+    endTagDeriv: (node) ->
       if this instanceof NotAllowed
         return this
       return new NotAllowed("invalid pattern: #{this}", this, node)
 
-    attDeriv: (attribute) =>
+    attDeriv: (attribute) ->
       if h.getNamespacePrefix(attribute.name) is "xml"
         return this
       return new NotAllowed("unknown attribute #{attribute.name} (value #{attribute.value} - expecting #{this}", this, attribute)
 
-    childDeriv: (node, descend = false) =>
+    childDeriv: (node, descend = false) ->
       _nodelog(node, "starting childDeriv", node, this)
       if h.getNodeType(node) is Node.TEXT_NODE
         return @textDeriv(node)
@@ -227,7 +227,7 @@ define (require) ->
         return patt
       return patt.endTagDeriv(node)
 
-    childrenDeriv: (children, descend) =>
+    childrenDeriv: (children, descend) ->
       if not children.length
         @childrenDeriv [""]
       if children.length is 1 and h.isNodeWhitespace(children[0])
@@ -249,12 +249,12 @@ define (require) ->
         patt = nextPatt
       return patt
 
-    textDeriv: (node) =>
+    textDeriv: (node) ->
       return new NotAllowed("#{this}", this, node)
-    toString: =>
+    toString: ->
       "<UNDEFINED PATTERN>"
 
-    valueMatch: (value) =>
+    valueMatch: (value) ->
       if @nullable() and h.isNodeWhitespace(value)
         return new Empty()
       deriv = @textDeriv(value)
@@ -262,7 +262,7 @@ define (require) ->
         return new Empty()
       return NotAllowed("value mismatch: #{value} does not match #{this}: #{deriv}", this, value)
 
-    nullable: =>
+    nullable: ->
       return @_nullable()
 
     _nullable: ->
@@ -272,30 +272,30 @@ define (require) ->
      * Stub for Name class patterns
      * @see NameClass#contains
     ###
-    contains: (nodeName) =>
+    contains: (nodeName) ->
       throw new RNGException("Cannot call 'contains(#{nodeName})' on pattern '#{@toString()}'")
 
     ###*
      * Stub for Ref class patterns
      * @see Ref#dereference
     ###
-    dereference: =>
+    dereference: ->
       return this
 
   #** Name Classes
 
   class NameClass extends Pattern
-    contains: (node) =>
+    contains: (node) ->
       throw new RNGException("Checking contains(#{node}) on undefined NameClass")
 
   class AnyName extends NameClass
     constructor: (exceptPattern) ->
       @except = getPattern exceptPattern
-    contains: (node) =>
+    contains: (node) ->
       unless @except instanceof NotAllowed
         return not @except.contains(node)
       true
-    toString: =>
+    toString: ->
       if @except instanceof NotAllowed
         "*"
       else
@@ -303,10 +303,10 @@ define (require) ->
 
   class Name extends NameClass
     constructor: (@ns, @name) ->
-    contains: (node) =>
+    contains: (node) ->
       # TODO: namespace URI handling
       @name is h.getLocalName(node)
-    toString: =>
+    toString: ->
       if @ns
         "#{@ns}:#{@name}"
       else
@@ -315,12 +315,12 @@ define (require) ->
   class NsName extends NameClass
     constructor: (@ns, exceptPattern) ->
       @except = getPattern exceptPattern
-    contains: (node) =>
+    contains: (node) ->
       # TODO: namespace URI handling
       unless @except instanceof NotAllowed
         @except.contains(node)
       true
-    toString: =>
+    toString: ->
       if @except instanceof NotAllowed
         "#{@ns}:*"
       else
@@ -330,21 +330,21 @@ define (require) ->
 
   class After extends Pattern
     constructor: (@pattern1, @pattern2) ->
-    startTagOpenDeriv: (node) =>
+    startTagOpenDeriv: (node) ->
       f1 = new Flip(builder.after, @pattern2)
       applyAfter(f1, @pattern1.startTagOpenDeriv(node))
-    startTagCloseDeriv: (node) =>
+    startTagCloseDeriv: (node) ->
       builder.after(@pattern1.startTagCloseDeriv(node), @pattern2)
-    endTagDeriv: (node) =>
+    endTagDeriv: (node) ->
       if @pattern1.nullable()
         return @pattern2
       else
         return new MissingContent("missing #{@pattern1} before close of #{h.getLocalName(node)}", this, node)
-    attDeriv: (attribute) =>
+    attDeriv: (attribute) ->
       builder.after(@pattern1.attDeriv(attribute), @pattern2)
-    textDeriv: (node) =>
+    textDeriv: (node) ->
       builder.after(@pattern1.textDeriv(node), @pattern2)
-    toString: =>
+    toString: ->
       "\n [:first: -- #{@pattern1} \n -- :then: #{@pattern2}]"
 
   ###*
@@ -352,14 +352,14 @@ define (require) ->
   ###
   class Empty extends Pattern
     constructor: (@message, @pattern, @childNode) ->
-    textDeriv: (node) =>
+    textDeriv: (node) ->
       return this
-    toString: =>
+    toString: ->
       if @message
         "#{@message}"
       else
         "(null)"
-    _nullable: =>
+    _nullable: ->
       true
 
 
@@ -368,9 +368,9 @@ define (require) ->
   ###
   class EmptyNode extends Empty
     constructor: (@message, @pattern, @childNode) ->
-    toString: =>
+    toString: ->
       "empty"
-    _nullable: =>
+    _nullable: ->
       true
 
 
@@ -380,7 +380,7 @@ define (require) ->
   class NotAllowed extends Pattern
     constructor: (@message, @pattern, @childNode, @priority = 10) ->
       return this
-    toString: =>
+    toString: ->
       if @message
         "notAllowed { #{@message} }"
       else
@@ -392,7 +392,7 @@ define (require) ->
   ###
   class MissingContent extends NotAllowed
     constructor: (@message, @pattern, @childNode, @priority = 10) ->
-    toString: =>
+    toString: ->
       if @message
         "missingContent { #{@message} }"
       else
@@ -402,11 +402,11 @@ define (require) ->
    * A pattern accepting any text content
   ###
   class Text extends Empty
-    toString: =>
+    toString: ->
       "text"
-    textDeriv: (node) =>
+    textDeriv: (node) ->
       this
-    _nullable: =>
+    _nullable: ->
       true
 
   ###*
@@ -416,37 +416,37 @@ define (require) ->
     constructor: (pattern1, pattern2) ->
       @pattern1 = getPattern pattern1
       @pattern2 = getPattern pattern2
-    choiceLeaves: =>
+    choiceLeaves: ->
       l1 = @pattern1.choiceLeaves()
       l2 = @pattern2.choiceLeaves()
       for c in l2
         unless c in l1
           l1.push(c)
       return l1
-    pruneChoiceLeaf: (pattern) =>
       if @pattern1 is pattern
+    pruneChoiceLeaf: (pattern) ->
         return @pattern2.pruneChoiceLeaf(pattern)
       if @pattern2 is pattern
         return @pattern1.pruneChoiceLeaf(pattern)
       return this
 
-    startTagOpenDeriv: (node) =>
+    startTagOpenDeriv: (node) ->
       p1 = @pattern1.startTagOpenDeriv(node)
       p2 = @pattern2.startTagOpenDeriv(node)
       return builder.choice(p1, p2)
-    startTagCloseDeriv: (node) =>
+    startTagCloseDeriv: (node) ->
       builder.choice(@pattern1.startTagCloseDeriv(node), @pattern2.startTagCloseDeriv(node))
-    endTagDeriv: (node) =>
+    endTagDeriv: (node) ->
       builder.choice(@pattern1.endTagDeriv(node), @pattern2.endTagDeriv(node))
-    attDeriv: (attribute) =>
+    attDeriv: (attribute) ->
       builder.choice(@pattern1.attDeriv(attribute), @pattern2.attDeriv(attribute))
-    textDeriv: (node) =>
+    textDeriv: (node) ->
       builder.choice(@pattern1.textDeriv(node), @pattern2.textDeriv(node))
-    toString: =>
+    toString: ->
       "(#{@pattern1} | #{@pattern2})"
-    contains: (nodeName) =>
+    contains: (nodeName) ->
       @pattern1.contains(nodeName) or @pattern2.contains(nodeName)
-    _nullable: =>
+    _nullable: ->
       @pattern1.nullable() or @pattern2.nullable()
 
 
@@ -457,21 +457,21 @@ define (require) ->
     constructor: (pattern1, pattern2) ->
       @pattern1 = getPattern pattern1
       @pattern2 = getPattern pattern2
-    startTagOpenDeriv: (node) =>
+    startTagOpenDeriv: (node) ->
       f1 = new Flip(builder.interleave, @pattern2)
       p1 = applyAfter(f1, @pattern1.startTagOpenDeriv(node))
       f2 = new notFlip(builder.interleave, @pattern1)
       p2 = applyAfter(f2, @pattern2.startTagOpenDeriv(node))
       builder.choice(p1, p2)
-    startTagCloseDeriv: (node) =>
+    startTagCloseDeriv: (node) ->
       builder.interleave(@pattern1.startTagCloseDeriv(node), @pattern2.startTagCloseDeriv(node))
-    attDeriv: (attribute) =>
+    attDeriv: (attribute) ->
       p1 = builder.interleave(@pattern1.attDeriv(attribute), @pattern2)
       p2 = builder.interleave(@pattern1, @pattern2.attDeriv(attribute))
       builder.choice(p1, p2)
-    toString: =>
+    toString: ->
       "(#{@pattern1} & #{@pattern2})"
-    _nullable: =>
+    _nullable: ->
       @pattern1.nullable() and @pattern2.nullable()
 
 
@@ -482,27 +482,27 @@ define (require) ->
     constructor: (pattern1, pattern2) ->
       @pattern1 = getPattern pattern1
       @pattern2 = getPattern pattern2
-    startTagOpenDeriv: (node) =>
+    startTagOpenDeriv: (node) ->
       f1 = new Flip(builder.group, @pattern2)
       r1 = applyAfter(f1, @pattern1.startTagOpenDeriv(node))
       if @pattern1.nullable()
         builder.choice(r1, @pattern2.startTagOpenDeriv(node))
       else
         r1
-    startTagCloseDeriv: (node) =>
+    startTagCloseDeriv: (node) ->
       builder.group(@pattern1.startTagCloseDeriv(node), @pattern2.startTagCloseDeriv(node))
-    attDeriv: (attribute) =>
+    attDeriv: (attribute) ->
       p1 = builder.group(@pattern1.attDeriv(attribute), @pattern2)
       p2 = builder.group(@pattern1, @pattern2.attDeriv(attribute))
       builder.choice(p1, p2)
-    textDeriv: (node) =>
+    textDeriv: (node) ->
       p1 = builder.group(@pattern1.textDeriv(node), @pattern2)
       if @pattern1.nullable()
         return builder.choice(p1, @pattern2.textDeriv(node))
       return p1
-    toString: =>
+    toString: ->
       "#{@pattern1}, #{@pattern2}"
-    _nullable: =>
+    _nullable: ->
       @pattern1.nullable() and @pattern2.nullable()
 
 
@@ -513,19 +513,19 @@ define (require) ->
   class OneOrMore extends Pattern
     constructor: (pattern) ->
       @pattern = getPattern pattern
-    startTagOpenDeriv: (node) =>
+    startTagOpenDeriv: (node) ->
       p1 = @pattern.startTagOpenDeriv(node)
       f1 = new Flip(builder.group, builder.choice(this, new Empty("empty | #{this}", this)))
       applyAfter(f1, p1)
-    startTagCloseDeriv: (node) =>
+    startTagCloseDeriv: (node) ->
       builder.oneOrMore(@pattern.startTagCloseDeriv(node))
-    attDeriv: (attribute) =>
+    attDeriv: (attribute) ->
       builder.group(@pattern.attDeriv(attribute), builder.choice(this, new Empty("#{this}")))
-    textDeriv: (node) =>
+    textDeriv: (node) ->
       builder.group(@pattern.textDeriv(node), builder.choice(this, new Empty("#{this}")))
-    toString: =>
+    toString: ->
       "#{@pattern}+"
-    _nullable: =>
+    _nullable: ->
       @pattern.nullable()
 
 
@@ -535,9 +535,9 @@ define (require) ->
   class List extends Pattern
     constructor: (pattern) ->
       @pattern = getPattern pattern
-    textDeriv: (node) =>
+    textDeriv: (node) ->
       return new Empty("skipping List validation")
-    toString: =>
+    toString: ->
       "list { #{@pattern} }"
 
   ###*
@@ -552,9 +552,9 @@ define (require) ->
           @params.push getPattern param
         else if param.local is "except"
           @except = getPattern param
-    textDeriv: (node) =>
+    textDeriv: (node) ->
       return new Empty("Skipping Data validation")
-    toString: =>
+    toString: ->
       output = ""
       if @dataType
         output += "#{@dataType}:"
@@ -570,10 +570,10 @@ define (require) ->
   ###
   class Value extends Pattern
     constructor: (@dataType, @type, @ns, @string) ->
-    textDeriv: (node) =>
+    textDeriv: (node) ->
       return new Empty("skipping Value validation")
 
-    toString: =>
+    toString: ->
       output = ""
 
       if @dataType
@@ -588,9 +588,9 @@ define (require) ->
   class Attribute extends Pattern
     constructor: (@nameClass, pattern, @defaultValue = null) ->
       @pattern = getPattern pattern
-    startTagCloseDeriv: (node) =>
+    startTagCloseDeriv: (node) ->
       return new NotAllowed("attr StartTagCloseDeriv #{this}", this, node)
-    attDeriv: (attribute) =>
+    attDeriv: (attribute) ->
       contains = @nameClass.contains(attribute.name)
       if contains instanceof NotAllowed
         return contains
@@ -599,7 +599,7 @@ define (require) ->
         return valuematch
       return new Empty("good attribute: #{this}", this, attribute)
 
-    toString: =>
+    toString: ->
       "attribute #{@nameClass} { #{@pattern} }"
 
 
@@ -608,7 +608,7 @@ define (require) ->
   ###
   class GoodElement extends Empty
     constructor: (@name, @pattern) ->
-    toString: => "(GOOD) element #{@name}"
+    toString: -> "(GOOD) element #{@name}"
 
   ###*
    * {@link GoodElement} subclass that has (unvalidated) children of the node remaining
@@ -616,7 +616,7 @@ define (require) ->
   class GoodParentElement extends GoodElement
     constructor: (@name, @pattern, @childNodes) ->
       super(name, pattern)
-    toString: => "(GOOD) element #{@name} (with #{childNodes?.length + 0} children)"
+    toString: -> "(GOOD) element #{@name} (with #{childNodes?.length + 0} children)"
 
   ###*
    * Pattern matching an element node, validating name, attributes (disabled),
@@ -626,14 +626,14 @@ define (require) ->
     constructor: (name, pattern) ->
       @name = getPattern name
       @pattern = getPattern pattern
-    startTagOpenDeriv: (node) =>
+    startTagOpenDeriv: (node) ->
       nameCheck = @name.contains node
       if nameCheck
         builder.after @pattern, new EmptyNode()
       else
         new NotAllowed("expecting #{@name}, found #{h.getLocalName(node)}", @name, node, 5 + h.depth(node))
 
-    toString: =>
+    toString: ->
       "element #{@name} { #{@pattern} }"
 
 
@@ -644,25 +644,25 @@ define (require) ->
   class Ref extends Pattern
     constructor: (@refname, @defines) ->
       @dereference()
-    startTagOpenDeriv: (node) =>
+    startTagOpenDeriv: (node) ->
       @dereference()
       if @pattern?
         return @pattern.startTagOpenDeriv(node)
       return new NotAllowed("cannot find reference '#{@refname}'", this, node)
-    endTagDeriv: (node) =>
+    endTagDeriv: (node) ->
       @dereference()
       if @pattern?
         return @pattern.endTagDeriv(node)
       return new NotAllowed("cannot find reference '#{@refname}'", this, node)
-    attDeriv: (attribute) =>
+    attDeriv: (attribute) ->
       @dereference()
       if @pattern?
         return @pattern.attDeriv(attribute)
       return new NotAllowed("cannot find reference '#{@refname}'", this, node)
 
-    toString: =>
+    toString: ->
       @refname
-    dereference: =>
+    dereference: ->
       return @pattern if @pattern?
       if @defines and @defines[@refname]?
         @pattern = @defines[@refname]
@@ -674,13 +674,13 @@ define (require) ->
   class Define extends Pattern
     constructor: (@name, pattern) ->
       @pattern = getPattern pattern
-    startTagOpenDeriv: (node) =>
+    startTagOpenDeriv: (node) ->
       return @pattern.startTagOpenDeriv(node)
-    endTagDeriv: (node) =>
+    endTagDeriv: (node) ->
       return @pattern.endTagDeriv(node)
-    attDeriv: (node) =>
+    attDeriv: (node) ->
       return @pattern.attDeriv(node)
-    toString: =>
+    toString: ->
       "#{@name} = #{@pattern}"
 
 
