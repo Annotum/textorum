@@ -195,15 +195,17 @@ define (require) ->
       return false
 
     getLocalName: (node) ->
-      return "" if not node?
-      if node?.getAttribute?('data-xmlel')?
-        return node.getAttribute('data-xmlel')
-      if node?.localName?
-        return node.localName
-      if node?.local?
-        return node.local
-      if node.nodeName?
-        return @getQname(node.nodeName).local
+      return "" if node is undefined
+      if node._localNameCache isnt undefined
+        return node._localNameCache
+      if typeof node is "string"
+        return @getQname(node).local
+      if node.localName isnt undefined
+        return node._localNameCache = node.localName
+      if node.local isnt undefined
+        return node._localNameCache = node.local
+      if node.nodeName isnt undefined
+        return node._localNameCache = @getQname(node.nodeName).local
       return @getQname(node).local
 
     textContent: (node) ->

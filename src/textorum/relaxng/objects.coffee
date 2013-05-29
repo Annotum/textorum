@@ -30,8 +30,12 @@ define (require) ->
   DEBUG = false
 
   uniqueIndex = 0
-  patternIntern = {internSuccess: 0, internCheck: 0}
-
+  patternIntern = {
+    internSuccess: 0,
+    internCheck: 0,
+    attributeShutDown: 0,
+    startTagOpenDeriv: 0
+  }
 
   setDebug = (debug) =>
     DEBUG = debug
@@ -69,13 +73,16 @@ define (require) ->
       when 'element' then new Element children[0], children[1]
       when 'define' then new Define h.getNodeAttr(node, "name"), children[0]
       when 'notAllowed' then new NotAllowed("not allowed by pattern", node)
-      when 'empty' then new Empty(undefined, node)
+      when 'empty' then builder.empty(undefined, node)
       when 'text' then new Text()
       when 'data' then new Data h.getNodeAttr(node, "datatypeLibrary"), h.getNodeAttr(node, "type"), children
       when 'value' then new Value(h.getNodeAttr(node, "dataTypeLibrary"),
         h.getNodeAttr(node, "type"), h.getNodeAttr(node, "ns"), children[0])
       when 'list' then new List children[0]
-      when 'attribute' then new Attribute children[0], children[1]
+      when 'attribute'
+        attr = new Attribute children[0], children[1]
+        new Empty("#{attr}")
+        attr
       when 'ref' then new Ref h.getNodeAttr(node, "name"), defines
       when 'oneOrMore' then new OneOrMore children[0]
       when 'choice' then new Choice children[0], children[1]
@@ -93,32 +100,94 @@ define (require) ->
 
   class PatternBuilder
     constructor: ->
-    choice: (pattern1, pattern2) ->
-      if pattern1 instanceof NotAllowed
-        pattern2
-      else if pattern2 instanceof NotAllowed
-        pattern1
-      else if pattern1 instanceof Empty and pattern2 instanceof Empty
-        pattern1
+      @choiceMap = {}
+      patternIntern['empty'] = new Empty()
+      patternIntern['notallowed'] = new NotAllowed()
+    notAllowed: ->
+      return patternIntern['notallowed']
+    empty: (message, node) ->
+      return patternIntern['empty']
+      if message? or node?
+        return new Empty(message, node)
+      return patternIntern['empty']
+    noteChoices: (pattern) ->
+      if pattern._notedChoices?
+        return pattern._notedChoices
+      if pattern instanceof Choice
+        c1 = @noteChoices(pattern.pattern1)
+        c2 = @noteChoices(pattern.pattern2)
+        pattern._notedChoices = c1.concat(c2)
+        return pattern._notedChoices
       else
-        if pattern1 instanceof Empty and pattern2 instanceof Empty
+        @choiceMap[pattern.uniqueIndex] = pattern
+        return [pattern]
+    removeChoices: (pattern) ->
+      if pattern instanceof Choice
+        pattern1 = @removeChoices(pattern.pattern1)
+        pattern2 = @removeChoices(pattern.pattern2)
+        if pattern1.uniqueIndex is pattern.pattern1.uniqueIndex and pattern2.uniqueIndex is pattern.pattern2.uniqueIndex
+          return pattern
+        if pattern1 instanceof NotAllowed
+          return pattern2
+        if pattern2 instanceof NotAllowed
           return pattern1
-        l1 = pattern1.choiceLeaves()
-        l2 = pattern2.choiceLeaves()
-        for p in l1
-          index = l2.indexOf(p)
-          if index isnt -1
-            l2.splice(index, 1)
-        c = new Choice(pattern1, pattern2)
-        # for p in l2
-        #   c = c.pruneChoiceLeaf(p)
-        hash = c.hash()
-        patternIntern["internCheck"] += 1
-        unless patternIntern[hash]?
-          patternIntern[hash] = c
-        else
-          patternIntern["internSuccess"] += 1
-        return patternIntern[hash]
+        return @internChoice(pattern1, pattern2)
+      else
+        if @choiceMap[pattern.uniqueIndex] isnt undefined
+          return new NotAllowed()
+      return pattern
+
+    choice: (pattern1, pattern2) ->
+      if pattern1.uniqueIndex is pattern2.uniqueIndex
+        return pattern1
+      if pattern1 instanceof NotAllowed
+        return pattern2
+      if pattern2 instanceof NotAllowed
+        return pattern1
+      if pattern1 instanceof Empty and pattern2 instanceof Empty
+        return pattern1
+      unless pattern1 instanceof Choice
+        if pattern2.containsChoice(pattern1)
+          return pattern2
+      unless pattern2 instanceof Choice
+        if pattern1.containsChoice(pattern2)
+          return pattern1
+
+      @noteChoices(pattern1)
+      pattern2 = @removeChoices(pattern2)
+      @choiceMap = {}
+      if pattern2 instanceof NotAllowed
+        return pattern1
+
+
+      if pattern1 instanceof After and pattern2 instanceof After
+        if pattern1.pattern1.uniqueIndex is pattern2.pattern1.uniqueIndex
+          return @after(pattern1.pattern1, @choice(pattern1.pattern2, pattern2.pattern2))
+        if pattern1.pattern1 instanceof NotAllowed
+          return pattern2
+        if pattern2.pattern1 instanceof NotAllowed
+          return pattern1
+        if pattern1.pattern2.uniqueIndex is pattern2.pattern2.uniqueIndex
+          return @after(@choice(pattern1.pattern1, pattern2.pattern1), pattern1.pattern2)
+
+      return @internChoice(pattern1, pattern2)
+
+    internChoice: (pattern1, pattern2) ->
+      if pattern1 instanceof Ref
+        pattern1.dereference()
+      if pattern2 instanceof Ref
+        pattern2.dereference()
+      if pattern1.uniqueIndex < pattern2.uniqueIndex
+        choices = "Choice,choices," + pattern1.uniqueIndex + "," + pattern2.uniqueIndex
+      else
+        choices = "Choice,choices," + pattern2.uniqueIndex + "," + pattern1.uniqueIndex
+
+      patternIntern["internCheck"] += 1
+      if patternIntern[choices] is undefined
+        patternIntern[choices] = new Choice(pattern1, pattern2)
+      else
+        patternIntern["internSuccess"] += 1
+      return patternIntern[choices]
 
     group: (pattern1, pattern2) ->
       if pattern1 instanceof NotAllowed
@@ -130,11 +199,10 @@ define (require) ->
       else if pattern1 instanceof Empty
         pattern2
       else
-        g = new Group(pattern1, pattern2)
-        hash = g.hash()
+        hash = "Group,choices," + pattern1.uniqueIndex + "," + pattern2.uniqueIndex
         patternIntern["internCheck"] += 1
-        unless patternIntern[hash]?
-          patternIntern[hash] = g
+        if patternIntern[hash] is undefined
+          patternIntern[hash] = new Group(pattern1, pattern2)
         else
           patternIntern["internSuccess"] += 1
         return patternIntern[hash]
@@ -150,11 +218,15 @@ define (require) ->
       else if pattern1 instanceof Empty
         pattern2
       else
-        i = new Interleave(pattern1, pattern2)
-        hash = i.hash()
+        parts = ["Interleave"]
+        choices = [pattern1.uniqueIndex, pattern2.uniqueIndex].sort()
+        parts.push "choices"
+        parts.push choices
+        hash = parts.join("|")
+
         patternIntern["internCheck"] += 1
-        unless patternIntern[hash]?
-          patternIntern[hash] = i
+        if patternIntern[hash] is undefined
+          patternIntern[hash] = new Interleave(pattern1, pattern2)
         else
           patternIntern["internSuccess"] += 1
         return patternIntern[hash]
@@ -165,29 +237,31 @@ define (require) ->
       else if pattern2 instanceof NotAllowed
         pattern2
       else
-        a = new After(pattern1, pattern2)
-        hash = a.hash()
+        parts = ["After"]
+        choices = [pattern1.uniqueIndex, pattern2.uniqueIndex]
+        parts.push "choices"
+        parts.push choices
+        hash = parts.join("|")
+
         patternIntern["internCheck"] += 1
-        unless patternIntern[hash]?
-          patternIntern[hash] = a
+        if patternIntern[hash] is undefined
+          patternIntern[hash] = new After(pattern1, pattern2)
         else
           patternIntern["internSuccess"] += 1
         return patternIntern[hash]
 
     oneOrMore: (pattern) ->
-      if pattern instanceof NotAllowed
+      if pattern instanceof NotAllowed or pattern instanceof Empty or pattern instanceof OneOrMore
         pattern
       else
-        o = new OneOrMore(pattern)
-        hash = o.hash()
+        hash = "OneOrMore," + pattern.uniqueIndex
+
         patternIntern["internCheck"] += 1
-        unless patternIntern[hash]?
-          patternIntern[hash] = o
+        if patternIntern[hash] is undefined
+          patternIntern[hash] = new OneOrMore(pattern)
         else
           patternIntern["internSuccess"] += 1
         return patternIntern[hash]
-
-  builder = new PatternBuilder()
 
   class RNGException extends Error
     constructor: (message, @pattern = null, @node = null, @parser = null) ->
@@ -227,36 +301,42 @@ define (require) ->
       else
         @uniqueIndex = uniqueIndex++
 
-    hash: ->
-      parts = ["name", @constructor.name]
-      if this instanceof Empty
-        return "empty"
-      if this instanceof Choice
-        choices = [@pattern1.uniqueIndex, @pattern2.uniqueIndex].sort()
-        parts.push "choices"
-        parts.push choices
-      else
-        for attribute in ["pattern", "pattern1", "pattern2", "except", "name", "message", "childNode"]
-          if this[attribute]?
-            parts.push attribute
-            if this[attribute].uniqueIndex?
-              parts.push this[attribute].uniqueIndex
-            else
-              parts.push this[attribute]
-      return parts.join("|")
-
     choiceLeaves: ->
       [@uniqueIndex]
     pruneChoiceLeaf: (pattern) ->
       this
+    containsChoice: (pattern) ->
+      return this.uniqueIndex is pattern.uniqueIndex
 
     startTagOpenDeriv: (node) ->
-      return new NotAllowed("expected #{this}, found #{h.getLocalName(node)}", this, node)
+      if node._memoizedStartTagOpenDeriv is undefined
+        node._memoizedStartTagOpenDeriv = {}
+      if node._memoizedStartTagOpenDeriv[this.uniqueIndex] is undefined
+        node._memoizedStartTagOpenDeriv[this.uniqueIndex] = @_startTagOpenDeriv(node)
+        patternIntern['startTagOpenDeriv'] += 1
+      return node._memoizedStartTagOpenDeriv[this.uniqueIndex]
+
+    _startTagOpenDeriv: (node) ->
+      return new NotAllowed("expected #{this}", this, node)
 
     startTagCloseDeriv: (node) ->
+      if node._memoizedstartTagCloseDeriv is undefined
+        node._memoizedstartTagCloseDeriv = {}
+      if node._memoizedstartTagCloseDeriv[this.uniqueIndex] is undefined
+        node._memoizedstartTagCloseDeriv[this.uniqueIndex] = @_startTagCloseDeriv(node)
+      return node._memoizedstartTagCloseDeriv[this.uniqueIndex]
+
+    _startTagCloseDeriv: (node) ->
       this
 
     endTagDeriv: (node) ->
+      if node._memoizedendTagDeriv is undefined
+        node._memoizedendTagDeriv = {}
+      if node._memoizedendTagDeriv[this.uniqueIndex] is undefined
+        node._memoizedendTagDeriv[this.uniqueIndex] = @_endTagDeriv(node)
+      return node._memoizedendTagDeriv[this.uniqueIndex]
+
+    _endTagDeriv: (node) ->
       if this instanceof NotAllowed
         return this
       return new NotAllowed("invalid pattern: #{this}", this, node)
@@ -264,7 +344,7 @@ define (require) ->
     attDeriv: (attribute) ->
       if h.getNamespacePrefix(attribute.name) is "xml"
         return this
-      return new NotAllowed("unknown attribute #{attribute.name} (value #{attribute.value} - expecting #{this}", this, attribute)
+      return new NotAllowed("unknown attribute #{attribute.name} (value #{attribute.value}", this, attribute)
 
     childDeriv: (node, descend = false) ->
       _nodelog(node, "starting childDeriv", node, this)
@@ -285,7 +365,7 @@ define (require) ->
           descend = descend - 1
         patt = patt.childrenDeriv(node.childNodes, descend)
       else
-        return new After(new Empty("skipping 1"), new Empty("skipping descent"))
+        return new After(builder.empty("skipping 1"), builder.empty("skipping descent"))
       if patt instanceof NotAllowed
         return patt
       return patt.endTagDeriv(node)
@@ -314,15 +394,21 @@ define (require) ->
 
     textDeriv: (node) ->
       return new NotAllowed("#{this}", this, node)
+
     toString: ->
-      "<UNDEFINED PATTERN>"
+      if @_toStringCache is undefined
+        @_toStringCache = @_toString()
+      @_toStringCache
+
+    _toString: ->
+        "<UNDEFINED PATTERN>"
 
     valueMatch: (value) ->
       if @nullable() and h.isNodeWhitespace(value)
-        return new Empty()
+        return builder.empty()
       deriv = @textDeriv(value)
       if deriv.nullable()
-        return new Empty()
+        return builder.empty()
       return NotAllowed("value mismatch: #{value} does not match #{this}: #{deriv}", this, value)
 
     nullable: ->
@@ -359,34 +445,37 @@ define (require) ->
       unless @except instanceof NotAllowed
         return not @except.contains(node)
       true
-    toString: ->
+    _toString: ->
       if @except instanceof NotAllowed
         "*"
       else
         "* - #{@except}"
 
   class Name extends NameClass
-    constructor: (@ns, @name) ->
+    constructor: (ns, name) ->
       super()
+      @ns = ns
+      @name = name
     contains: (node) ->
       # TODO: namespace URI handling
-      @name is h.getLocalName(node)
-    toString: ->
+      @name is node.localName or @name is h.getLocalName(node)
+    _toString: ->
       if @ns
         "#{@ns}:#{@name}"
       else
         "#{@name}"
 
   class NsName extends NameClass
-    constructor: (@ns, exceptPattern) ->
+    constructor: (ns, exceptPattern) ->
       super()
+      @ns = ns
       @except = getPattern exceptPattern
     contains: (node) ->
       # TODO: namespace URI handling
       unless @except instanceof NotAllowed
         @except.contains(node)
       true
-    toString: ->
+    _toString: ->
       if @except instanceof NotAllowed
         "#{@ns}:*"
       else
@@ -397,21 +486,26 @@ define (require) ->
   class After extends Pattern
     constructor: (@pattern1, @pattern2) ->
       super()
-    startTagOpenDeriv: (node) ->
+    _startTagOpenDeriv: (node) ->
       f1 = new Flip(builder.after, @pattern2)
       applyAfter(f1, @pattern1.startTagOpenDeriv(node))
-    startTagCloseDeriv: (node) ->
+    _startTagCloseDeriv: (node) ->
       builder.after(@pattern1.startTagCloseDeriv(node), @pattern2)
-    endTagDeriv: (node) ->
+    _endTagDeriv: (node) ->
       if @pattern1.nullable()
         return @pattern2
       else
-        return new MissingContent("missing #{@pattern1} before close of #{h.getLocalName(node)}", this, node)
+        return new MissingContent("missing #{@pattern1} before close", this, node)
     attDeriv: (attribute) ->
-      builder.after(@pattern1.attDeriv(attribute), @pattern2)
+      if @pattern2 instanceof NotAllowed
+        return @pattern2
+      p1 = @pattern1.attDeriv(attribute)
+      if p1.uniqueIndex is @pattern1.uniqueIndex
+        return this
+      return builder.after(p1, @pattern2)
     textDeriv: (node) ->
       builder.after(@pattern1.textDeriv(node), @pattern2)
-    toString: ->
+    _toString: ->
       "\n [:first: -- #{@pattern1} \n -- :then: #{@pattern2}]"
 
   ###*
@@ -422,7 +516,7 @@ define (require) ->
       super()
     textDeriv: (node) ->
       return this
-    toString: ->
+    _toString: ->
       if @message
         "#{@message}"
       else
@@ -438,7 +532,7 @@ define (require) ->
     constructor: (@message, @pattern, @childNode, @priority = 10) ->
       super()
       return this
-    toString: ->
+    _toString: ->
       if @message
         "notAllowed { #{@message} }"
       else
@@ -451,7 +545,7 @@ define (require) ->
   class MissingContent extends NotAllowed
     constructor: (@message, @pattern, @childNode, @priority = 10) ->
       super(@message, @pattern, @childNode, @priority)
-    toString: ->
+    _toString: ->
       if @message
         "missingContent { #{@message} }"
       else
@@ -461,7 +555,7 @@ define (require) ->
    * A pattern accepting any text content
   ###
   class Text extends Empty
-    toString: ->
+    _toString: ->
       "text"
     textDeriv: (node) ->
       this
@@ -483,6 +577,7 @@ define (require) ->
         unless c in l1
           l1.push(c)
       return l1
+
     pruneChoiceLeaf: (pattern) ->
       if @pattern1.uniqueIndex is pattern
         return @pattern2.pruneChoiceLeaf(pattern)
@@ -490,19 +585,40 @@ define (require) ->
         return @pattern1.pruneChoiceLeaf(pattern)
       return this
 
-    startTagOpenDeriv: (node) ->
+    containsChoice: (pattern) ->
+      if @pattern1.uniqueIndex is pattern.uniqueIndex
+        return true
+      if @pattern2.unqiueIndex is pattern.uniqueIndex
+        return true
+      if @pattern1 instanceof Choice and @pattern1.containsChoice(pattern)
+        return true
+      if @pattern2 instanceof Choice and @pattern2.containsChoice(pattern)
+        return true
+      return false
+
+    _startTagOpenDeriv: (node) ->
       p1 = @pattern1.startTagOpenDeriv(node)
       p2 = @pattern2.startTagOpenDeriv(node)
       return builder.choice(p1, p2)
-    startTagCloseDeriv: (node) ->
+    _startTagCloseDeriv: (node) ->
       builder.choice(@pattern1.startTagCloseDeriv(node), @pattern2.startTagCloseDeriv(node))
-    endTagDeriv: (node) ->
-      builder.choice(@pattern1.endTagDeriv(node), @pattern2.endTagDeriv(node))
+    _endTagDeriv: (node) ->
+      if @pattern1 instanceof Attribute
+        if @pattern2 instanceof Attribute
+          return globalNotAllowed
+        return @pattern2.endTagDeriv(node)
+      if @pattern2 instanceof Attribute
+        return @pattern1.endTagDeriv(node)
+      p1 = @pattern1.endTagDeriv(node)
+      p2 = @pattern2.endTagDeriv(node)
+      if p1.uniqueIndex is @pattern1.uniqueIndex and p2.uniqueIndex is @pattern2.uniqueIndex
+        return this
+      return builder.choice(p1, p2)
     attDeriv: (attribute) ->
       builder.choice(@pattern1.attDeriv(attribute), @pattern2.attDeriv(attribute))
     textDeriv: (node) ->
       builder.choice(@pattern1.textDeriv(node), @pattern2.textDeriv(node))
-    toString: ->
+    _toString: ->
       "(#{@pattern1} | #{@pattern2})"
     contains: (nodeName) ->
       @pattern1.contains(nodeName) or @pattern2.contains(nodeName)
@@ -518,19 +634,25 @@ define (require) ->
       @pattern1 = getPattern pattern1
       @pattern2 = getPattern pattern2
       super()
-    startTagOpenDeriv: (node) ->
+    _startTagOpenDeriv: (node) ->
       f1 = new Flip(builder.interleave, @pattern2)
       p1 = applyAfter(f1, @pattern1.startTagOpenDeriv(node))
       f2 = new notFlip(builder.interleave, @pattern1)
       p2 = applyAfter(f2, @pattern2.startTagOpenDeriv(node))
       builder.choice(p1, p2)
-    startTagCloseDeriv: (node) ->
+    _endTagDeriv: (node) ->
+      p1 = @pattern1.endTagDeriv(node)
+      p2 = @pattern2.endTagDeriv(node)
+      if p1.uniqueIndex is @pattern1.uniqueIndex and p2.uniqueIndex is @pattern2.uniqueIndex
+        return this
+      return builder.interleave(p1, p2)
+    _startTagCloseDeriv: (node) ->
       builder.interleave(@pattern1.startTagCloseDeriv(node), @pattern2.startTagCloseDeriv(node))
     attDeriv: (attribute) ->
       p1 = builder.interleave(@pattern1.attDeriv(attribute), @pattern2)
       p2 = builder.interleave(@pattern1, @pattern2.attDeriv(attribute))
       builder.choice(p1, p2)
-    toString: ->
+    _toString: ->
       "(#{@pattern1} & #{@pattern2})"
     _nullable: ->
       @pattern1.nullable() and @pattern2.nullable()
@@ -544,25 +666,37 @@ define (require) ->
       @pattern1 = getPattern pattern1
       @pattern2 = getPattern pattern2
       super()
-    startTagOpenDeriv: (node) ->
+    _startTagOpenDeriv: (node) ->
       f1 = new Flip(builder.group, @pattern2)
       r1 = applyAfter(f1, @pattern1.startTagOpenDeriv(node))
       if @pattern1.nullable()
         builder.choice(r1, @pattern2.startTagOpenDeriv(node))
       else
         r1
-    startTagCloseDeriv: (node) ->
+    _endTagDeriv: (node) ->
+      if @pattern1 instanceof Attribute or @pattern2 instanceof Attribute
+        return globalNotAllowed
+      p1 = @pattern1.endTagDeriv(node)
+      p2 = @pattern2.endTagDeriv(node)
+      if p1.uniqueIndex is @pattern1.uniqueIndex and p2.uniqueIndex is @pattern2.uniqueIndex
+        return this
+      return builder.group(p1, p2)
+    _startTagCloseDeriv: (node) ->
       builder.group(@pattern1.startTagCloseDeriv(node), @pattern2.startTagCloseDeriv(node))
     attDeriv: (attribute) ->
-      p1 = builder.group(@pattern1.attDeriv(attribute), @pattern2)
-      p2 = builder.group(@pattern1, @pattern2.attDeriv(attribute))
-      builder.choice(p1, p2)
+      p1 = @pattern1.attDeriv(attribute)
+      p2 = @pattern2.attDeriv(attribute)
+      if p1.uniqueIndex is @pattern1.uniqueIndex and p2.uniqueIndex is @pattern2.uniqueIndex
+        return this
+      g1 = builder.group(p1, @pattern2)
+      g2 = builder.group(@pattern1, p2)
+      builder.choice(g1, g2)
     textDeriv: (node) ->
       p1 = builder.group(@pattern1.textDeriv(node), @pattern2)
       if @pattern1.nullable()
         return builder.choice(p1, @pattern2.textDeriv(node))
       return p1
-    toString: ->
+    _toString: ->
       "#{@pattern1}, #{@pattern2}"
     _nullable: ->
       @pattern1.nullable() and @pattern2.nullable()
@@ -576,17 +710,22 @@ define (require) ->
     constructor: (pattern) ->
       @pattern = getPattern pattern
       super()
-    startTagOpenDeriv: (node) ->
+    _startTagOpenDeriv: (node) ->
       p1 = @pattern.startTagOpenDeriv(node)
-      f1 = new Flip(builder.group, builder.choice(this, new Empty("empty | #{this}", this)))
+      f1 = new Flip(builder.group, builder.choice(this, builder.empty("empty | #{this}", this)))
       applyAfter(f1, p1)
-    startTagCloseDeriv: (node) ->
+    _endTagDeriv: (node) ->
+      p = @pattern.endTagDeriv(node)
+      if p.uniqueIndex is @pattern.uniqueIndex
+        return this
+      return builder.oneOrMore(p)
+    _startTagCloseDeriv: (node) ->
       builder.oneOrMore(@pattern.startTagCloseDeriv(node))
     attDeriv: (attribute) ->
-      builder.group(@pattern.attDeriv(attribute), builder.choice(this, new Empty("#{this}")))
+      builder.group(@pattern.attDeriv(attribute), builder.choice(this, builder.empty("#{this}")))
     textDeriv: (node) ->
-      builder.group(@pattern.textDeriv(node), builder.choice(this, new Empty("#{this}")))
-    toString: ->
+      builder.group(@pattern.textDeriv(node), builder.choice(this, builder.empty("#{this}")))
+    _toString: ->
       "#{@pattern}+"
     _nullable: ->
       @pattern.nullable()
@@ -600,15 +739,17 @@ define (require) ->
       @pattern = getPattern pattern
       super()
     textDeriv: (node) ->
-      return new Empty("skipping List validation")
-    toString: ->
+      return builder.empty("skipping List validation")
+    _toString: ->
       "list { #{@pattern} }"
 
   ###*
    * A pattern that matches data against a data validation library (currently unimplemented)
   ###
   class Data extends Pattern
-    constructor: (@dataType, @type, paramList) ->
+    constructor: (dataType, type, paramList) ->
+      @dataType = dataType
+      @type = type
       @params = []
       @except = new NotAllowed()
       for param in paramList
@@ -618,8 +759,8 @@ define (require) ->
           @except = getPattern param
       super()
     textDeriv: (node) ->
-      return new Empty("Skipping Data validation")
-    toString: ->
+      return builder.empty("Skipping Data validation")
+    _toString: ->
       output = ""
       if @dataType
         output += "#{@dataType}:"
@@ -634,17 +775,21 @@ define (require) ->
    * A pattern that matches data against a given value (currently minimally implemented)
   ###
   class Value extends Pattern
-    constructor: (@dataType, @type, @ns, @string) ->
+    constructor: (dataType, type, ns, string) ->
+      @dataType = dataType
+      @type = type
+      @ns = ns
+      @string = string
       super()
     textDeriv: (node) ->
-      return new Empty("skipping Value validation")
+      return builder.empty("skipping Value validation")
 
-    toString: ->
+    _toString: ->
       output = ""
 
-      if @dataType
+      if @dataType isnt undefined
         output += "" + @dataType + ":"
-      if @type
+      if @type isnt undefined
         output += "#{@type} "
       output += '"' + @string + '"'
 
@@ -652,11 +797,16 @@ define (require) ->
    * A pattern that matches an attribute (name, value) on the given node
   ###
   class Attribute extends Pattern
-    constructor: (@nameClass, pattern, @defaultValue = null) ->
+    constructor: (nameClass, pattern, @defaultValue = null) ->
+      @nameClass = nameClass
       @pattern = getPattern pattern
       super()
-    startTagCloseDeriv: (node) ->
+    _startTagCloseDeriv: (node) ->
+      patternIntern['attributeShutDown'] += 1
+      return globalNotAllowed
       return new NotAllowed("attr StartTagCloseDeriv #{this}", this, node)
+    matchAttrName: (attribute) ->
+
     attDeriv: (attribute) ->
       contains = @nameClass.contains(attribute.name)
       if contains instanceof NotAllowed
@@ -664,9 +814,9 @@ define (require) ->
       valuematch = @pattern.valueMatch(attribute.value)
       if valuematch instanceof NotAllowed
         return valuematch
-      return new Empty("good attribute: #{this}", this, attribute)
+      return builder.empty("good attribute: #{this}", this, attribute)
 
-    toString: ->
+    _toString: ->
       "attribute #{@nameClass} { #{@pattern} }"
 
 
@@ -676,7 +826,7 @@ define (require) ->
   class GoodElement extends Empty
     constructor: (@name, @pattern) ->
       super(@name, @pattern)
-    toString: -> "(GOOD) element #{@name}"
+    _toString: -> "(GOOD) element #{@name}"
 
   ###*
    * {@link GoodElement} subclass that has (unvalidated) children of the node remaining
@@ -684,7 +834,7 @@ define (require) ->
   class GoodParentElement extends GoodElement
     constructor: (@name, @pattern, @childNodes) ->
       super(name, pattern)
-    toString: -> "(GOOD) element #{@name} (with #{childNodes?.length + 0} children)"
+    _toString: -> "(GOOD) element #{@name} (with #{childNodes?.length + 0} children)"
 
   ###*
    * Pattern matching an element node, validating name, attributes (disabled),
@@ -695,14 +845,14 @@ define (require) ->
       @name = getPattern name
       @pattern = getPattern pattern
       super()
-    startTagOpenDeriv: (node) ->
+    _startTagOpenDeriv: (node) ->
       nameCheck = @name.contains node
       if nameCheck
-        builder.after @pattern, new Empty()
+        builder.after @pattern, builder.empty()
       else
-        new NotAllowed("expecting #{@name}, found #{h.getLocalName(node)}", @name, node, 5 + h.depth(node))
+        new NotAllowed("expecting #{@name}", @name, node, 5 + h.depth(node))
 
-    toString: ->
+    _toString: ->
       "element #{@name} { #{@pattern} }"
 
 
@@ -712,14 +862,14 @@ define (require) ->
   ###
   class Ref extends Pattern
     constructor: (@refname, @defines) ->
-      @dereference()
       super()
-    startTagOpenDeriv: (node) ->
+      @dereference()
+    _startTagOpenDeriv: (node) ->
       @dereference()
       if @pattern?
         return @pattern.startTagOpenDeriv(node)
       return new NotAllowed("cannot find reference '#{@refname}'", this, node)
-    endTagDeriv: (node) ->
+    _endTagDeriv: (node) ->
       @dereference()
       if @pattern?
         return @pattern.endTagDeriv(node)
@@ -730,12 +880,14 @@ define (require) ->
         return @pattern.attDeriv(attribute)
       return new NotAllowed("cannot find reference '#{@refname}'", this, node)
 
-    toString: ->
+    _toString: ->
       @refname
     dereference: ->
       return @pattern if @pattern?
       if @defines and @defines[@refname]?
         @pattern = @defines[@refname]
+        @pattern['dereferenced_from'] = @refname
+        @uniqueIndex = @pattern.uniqueIndex
       @pattern
 
   ###*
@@ -744,16 +896,20 @@ define (require) ->
   class Define extends Pattern
     constructor: (@name, pattern) ->
       @pattern = getPattern pattern
+      @pattern['defined_from'] = @name
+      @uniqueIndex = @pattern.uniqueIndex
       super()
-    startTagOpenDeriv: (node) ->
+    _startTagOpenDeriv: (node) ->
       return @pattern.startTagOpenDeriv(node)
-    endTagDeriv: (node) ->
+    _endTagDeriv: (node) ->
       return @pattern.endTagDeriv(node)
     attDeriv: (node) ->
       return @pattern.attDeriv(node)
-    toString: ->
+    _toString: ->
       "#{@name} = #{@pattern}"
 
+  builder = new PatternBuilder()
+  globalNotAllowed = new NotAllowed("global not allowed")
 
   {
     getPattern,
