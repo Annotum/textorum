@@ -28,6 +28,7 @@ define (require) ->
   h = require('../helper')
 
   DEBUG = false
+  skipAttributes = false
 
   uniqueIndex = 0
   indexCount = {}
@@ -39,9 +40,26 @@ define (require) ->
     startTagOpenDeriv: 0
   }
 
+  resetObjects = ->
+    uniqueIndex = 0
+    indexCount = {}
+
+    patternIntern = {
+      internSuccess: 0,
+      internCheck: 0,
+      attributeShutDown: 0,
+      startTagOpenDeriv: 0
+    }
+
+  setSkipAttributes = (skip) =>
+    prevSkip = skipAttributes
+    skipAttributes = !!skip
+    return prevSkip
+
   setDebug = (debug) =>
+    prevDebug = DEBUG
     DEBUG = debug
-    return DEBUG
+    return prevDebug
 
   ### @private ###
   _nodelog = (node, message...) =>
@@ -82,8 +100,10 @@ define (require) ->
         h.getNodeAttr(node, "type"), h.getNodeAttr(node, "ns"), children[0])
       when 'list' then new List children[0]
       when 'attribute'
-        attr = new Attribute children[0], children[1]
+        if skipAttributes
         new Empty("#{attr}")
+        else
+          attr = new Attribute children[0], children[1]
         attr
       when 'ref' then new Ref h.getNodeAttr(node, "name"), defines
       when 'oneOrMore' then new OneOrMore children[0]
@@ -359,6 +379,7 @@ define (require) ->
       patt = @startTagOpenDeriv(node)
       if patt instanceof NotAllowed
         return patt
+      unless skipAttributes
       for attr in h.getNodeAttributes(node)
         patt = patt.attDeriv(attr)
         if patt instanceof NotAllowed
@@ -919,7 +940,7 @@ define (require) ->
 
   {
     getPattern,
-    setDebug,
+    setDebug, setSkipAttributes,
     AnyName, Attribute,
     Choice,
     Data, Define,
