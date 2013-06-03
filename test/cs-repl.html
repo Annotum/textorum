@@ -31,7 +31,7 @@
 require req, (parser, objects, helper) ->
   rng = 'rng/kipling-jp3-xsl.srng'
   xml = 'xml/related-article.xml'
-  rngparser = new parser()
+  rngparser = new parser.RNGParser()
   # objects.setDebug true # show the rng validation tree
   # rngparser.debug = true # log the rng defines and start elements once loaded
   rngparser.process(helper.getXHR(rng).responseText)

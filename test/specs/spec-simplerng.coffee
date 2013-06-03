@@ -9,7 +9,7 @@
 define (require) ->
   pavlov.specify "Textorum RNG parsing", ->
     describe "Simple RNG loading", ->
-      RNGParser = require('textorum/relaxng/parse')
+      {RNGParser} = require('textorum/relaxng/parse')
       loader = undefined
       simpleRNG = require("text!test/rng/simple.srng")
       before ->
@@ -43,7 +43,7 @@ define (require) ->
 
         assert(loader.start.toString()).isEqualTo("__addressBook-elt-idp496", "start properly stringified")
     describe "Testing RNG loading", ->
-      RNGParser = require('textorum/relaxng/parse')
+      {RNGParser} = require('textorum/relaxng/parse')
       loader = undefined
       simpleRNG = require("text!test/rng/testing.srng")
       before ->
@@ -71,7 +71,7 @@ define (require) ->
 
     describe "Kipling RNG loading", ->
       kipling = require("text!test/rng/kipling-jp3-xsl.srng")
-      RNGParser = require('textorum/relaxng/parse')
+      {RNGParser} = require('textorum/relaxng/parse')
       loader = undefined
 
       before ->

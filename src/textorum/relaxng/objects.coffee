@@ -359,7 +359,7 @@ define (require) ->
     attDeriv: (attribute) ->
       if h.getNamespacePrefix(attribute.name) is "xml"
         return this
-      return builder.notAllowed("unknown attribute #{attribute.name} (value #{attribute.value}", this, attribute)
+      return builder.notAllowed("unknown attribute #{attribute.name} (value #{attribute.value})", this, attribute)
 
     childDeriv: (node, descend = false) ->
       _nodelog(node, "starting childDeriv", node, this)
@@ -621,7 +621,7 @@ define (require) ->
     _endTagDeriv: (node) ->
       if @pattern1 instanceof Attribute
         if @pattern2 instanceof Attribute
-          return globalNotAllowed
+          return builder.notAllowed()
         return @pattern2.endTagDeriv(node)
       if @pattern2 instanceof Attribute
         return @pattern1.endTagDeriv(node)
@@ -691,7 +691,7 @@ define (require) ->
         r1
     _endTagDeriv: (node) ->
       if @pattern1 instanceof Attribute or @pattern2 instanceof Attribute
-        return globalNotAllowed
+        return builder.notAllowed()
       p1 = @pattern1.endTagDeriv(node)
       p2 = @pattern2.endTagDeriv(node)
       if p1.uniqueIndex is @pattern1.uniqueIndex and p2.uniqueIndex is @pattern2.uniqueIndex
@@ -819,7 +819,7 @@ define (require) ->
       super()
     _startTagCloseDeriv: (node) ->
       patternIntern['attributeShutDown'] += 1
-      return globalNotAllowed
+      return builder.notAllowed()
       return builder.notAllowed("attr StartTagCloseDeriv #{this}", this, node)
     matchAttrName: (attribute) ->
 
@@ -925,7 +925,6 @@ define (require) ->
       "#{@name} = #{@pattern}"
 
   builder = new PatternBuilder()
-  globalNotAllowed = new NotAllowed("global not allowed")
 
   {
     getPattern,
