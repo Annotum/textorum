@@ -28,7 +28,8 @@ define (require) ->
   pluginCss = require('text!./plugin.css')
   testload = require('./testload')
   helper = require('../helper')
-  TextorumTree = require('./tree')
+  {TextorumTree} = require('./tree')
+  {TextorumValidator} = require('./validator')
   #pathHelper = require('./pathhelper')
 
   tinymce = window.tinymce
@@ -56,6 +57,7 @@ define (require) ->
     schematext = (schemadoc.text || schemadoc.textContent || schemadoc.innerHTML)
     schema = ($.parseJSON || tinymce.util.JSON.parse)(schematext)
     schema ||= {}
+    schema.schemaURI = schemaUri
     schema.containedBy ||= {}
     schema.defs ||= {}
     schema.$root ||= []
@@ -98,6 +100,8 @@ define (require) ->
         tinymce.adapter.patchEditor(editor)
       @schema = _getSchema("test/rng/kipling-jp3-xsl.srng")
       @tree = new TextorumTree '#editortree', editor
+      @validator = new TextorumValidator '#editorvalidation', editor
+
       testload.bindHandler editor
       editor.onSetContent.add (ed, o) ->
         that.tree.updateTreeCallback()

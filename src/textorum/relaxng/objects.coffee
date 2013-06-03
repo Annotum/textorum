@@ -40,20 +40,9 @@ define (require) ->
     startTagOpenDeriv: 0
   }
 
-  resetObjects = ->
-    uniqueIndex = 0
-    indexCount = {}
-
-    patternIntern = {
-      internSuccess: 0,
-      internCheck: 0,
-      attributeShutDown: 0,
-      startTagOpenDeriv: 0
-    }
-
   setSkipAttributes = (skip) =>
     prevSkip = skipAttributes
-    skipAttributes = !!skip
+    skipAttributes = skip
     return prevSkip
 
   setDebug = (debug) =>
@@ -101,10 +90,10 @@ define (require) ->
       when 'list' then new List children[0]
       when 'attribute'
         if skipAttributes
-          new Empty("#{attr}")
+          attr = new Empty("#{attr}")
         else
           attr = new Attribute children[0], children[1]
-          attr
+        attr
       when 'ref' then new Ref h.getNodeAttr(node, "name"), defines
       when 'oneOrMore' then new OneOrMore children[0]
       when 'choice' then new Choice children[0], children[1]
@@ -379,11 +368,11 @@ define (require) ->
       patt = @startTagOpenDeriv(node)
       if patt instanceof NotAllowed
         return patt
-      unless skipAttributes
-      for attr in h.getNodeAttributes(node)
-        patt = patt.attDeriv(attr)
-        if patt instanceof NotAllowed
-          return patt
+      if not skipAttributes
+        for attr in h.getNodeAttributes(node)
+          patt = patt.attDeriv(attr)
+          if patt instanceof NotAllowed
+            return patt
       patt = patt.startTagCloseDeriv(node)
       if patt instanceof NotAllowed
         return patt

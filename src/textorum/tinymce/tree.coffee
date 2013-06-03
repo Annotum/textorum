@@ -317,4 +317,6 @@ define (require) ->
            nodes[i].attr(name, null)
 
   # Module return
-  return TextorumTree
+  return {
+    TextorumTree: TextorumTree
+  }

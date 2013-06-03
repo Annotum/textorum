@@ -125,7 +125,8 @@ define (require) ->
         console.log "defines are", @defines
         console.log "start is", @start
 
-    process: (text) ->
+    process: (text, skipAttributes) ->
+      o.setSkipAttributes skipAttributes
       @parser.write(text)
       @parser.close()
       if @errors.length > 0
@@ -135,4 +136,6 @@ define (require) ->
 
 
 
-  return RNGParser
+  return {
+    RNGParser: RNGParser
+  }

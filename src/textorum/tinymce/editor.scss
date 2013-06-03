@@ -195,6 +195,14 @@ $black: #333;
 	content: '\f0c7';
 }
 
+.defaultSkin span.mce_txt_validate_attrs:before {
+	content: '\f0c8';
+}
+
+.defaultSkin span.mce_txt_validate_noattrs:before {
+	content: '\f0c9';
+}
+
 .defaultSkin span.mce_sup,
 .defaultSkin span.mce_sub {
 	background-image: url(/tinymce/jscripts/tiny_mce/themes/advanced/img/icons.gif);
