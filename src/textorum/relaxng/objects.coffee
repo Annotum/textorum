@@ -30,6 +30,8 @@ define (require) ->
   DEBUG = false
 
   uniqueIndex = 0
+  indexCount = {}
+
   patternIntern = {
     internSuccess: 0,
     internCheck: 0,
@@ -65,14 +67,14 @@ define (require) ->
     if node instanceof Pattern
       return node
     if not node
-      return new NotAllowed("trying to load empty pattern")
+      return builder.notAllowed("trying to load empty pattern")
 
     children = node.childNodes
 
     pattern = switch h.getLocalName(node)
       when 'element' then new Element children[0], children[1]
       when 'define' then new Define h.getNodeAttr(node, "name"), children[0]
-      when 'notAllowed' then new NotAllowed("not allowed by pattern", node)
+      when 'notAllowed' then builder.notAllowed("not allowed by pattern", node)
       when 'empty' then builder.empty(undefined, node)
       when 'text' then new Text()
       when 'data' then new Data h.getNodeAttr(node, "datatypeLibrary"), h.getNodeAttr(node, "type"), children
@@ -103,7 +105,9 @@ define (require) ->
       @choiceMap = {}
       patternIntern['empty'] = new Empty()
       patternIntern['notallowed'] = new NotAllowed()
-    notAllowed: ->
+    notAllowed: (message, pattern, childnode, priority) ->
+      if message isnt undefined
+        return new NotAllowed(message, pattern, childnode, priority)
       return patternIntern['notallowed']
     empty: (message, node) ->
       return patternIntern['empty']
@@ -134,7 +138,7 @@ define (require) ->
         return @internChoice(pattern1, pattern2)
       else
         if @choiceMap[pattern.uniqueIndex] isnt undefined
-          return new NotAllowed()
+          return @notAllowed()
       return pattern
 
     choice: (pattern1, pattern2) ->
@@ -300,6 +304,8 @@ define (require) ->
         @uniqueIndex = "empty"
       else
         @uniqueIndex = uniqueIndex++
+        indexCount[@constructor.name] ||= 0
+        indexCount[@constructor.name]++
 
     choiceLeaves: ->
       [@uniqueIndex]
@@ -317,7 +323,7 @@ define (require) ->
       return node._memoizedStartTagOpenDeriv[this.uniqueIndex]
 
     _startTagOpenDeriv: (node) ->
-      return new NotAllowed("expected #{this}", this, node)
+      return builder.notAllowed("expected #{this}", this, node)
 
     startTagCloseDeriv: (node) ->
       if node._memoizedstartTagCloseDeriv is undefined
@@ -339,12 +345,12 @@ define (require) ->
     _endTagDeriv: (node) ->
       if this instanceof NotAllowed
         return this
-      return new NotAllowed("invalid pattern: #{this}", this, node)
+      return builder.notAllowed("invalid pattern: #{this}", this, node)
 
     attDeriv: (attribute) ->
       if h.getNamespacePrefix(attribute.name) is "xml"
         return this
-      return new NotAllowed("unknown attribute #{attribute.name} (value #{attribute.value}", this, attribute)
+      return builder.notAllowed("unknown attribute #{attribute.name} (value #{attribute.value}", this, attribute)
 
     childDeriv: (node, descend = false) ->
       _nodelog(node, "starting childDeriv", node, this)
@@ -365,7 +371,7 @@ define (require) ->
           descend = descend - 1
         patt = patt.childrenDeriv(node.childNodes, descend)
       else
-        return new After(builder.empty("skipping 1"), builder.empty("skipping descent"))
+        return builder.after(builder.empty("skipping 1"), builder.empty("skipping descent"))
       if patt instanceof NotAllowed
         return patt
       return patt.endTagDeriv(node)
@@ -393,7 +399,7 @@ define (require) ->
       return patt
 
     textDeriv: (node) ->
-      return new NotAllowed("#{this}", this, node)
+      return builder.notAllowed("#{this}", this, node)
 
     toString: ->
       if @_toStringCache is undefined
@@ -751,7 +757,7 @@ define (require) ->
       @dataType = dataType
       @type = type
       @params = []
-      @except = new NotAllowed()
+      @except = builder.notAllowed()
       for param in paramList
         if param.local is "param"
           @params.push getPattern param
@@ -804,7 +810,7 @@ define (require) ->
     _startTagCloseDeriv: (node) ->
       patternIntern['attributeShutDown'] += 1
       return globalNotAllowed
-      return new NotAllowed("attr StartTagCloseDeriv #{this}", this, node)
+      return builder.notAllowed("attr StartTagCloseDeriv #{this}", this, node)
     matchAttrName: (attribute) ->
 
     attDeriv: (attribute) ->
@@ -850,7 +856,7 @@ define (require) ->
       if nameCheck
         builder.after @pattern, builder.empty()
       else
-        new NotAllowed("expecting #{@name}", @name, node, 5 + h.depth(node))
+        builder.notAllowed("expecting #{@name}", @name, node, 5 + h.depth(node))
 
     _toString: ->
       "element #{@name} { #{@pattern} }"
@@ -868,17 +874,17 @@ define (require) ->
       @dereference()
       if @pattern?
         return @pattern.startTagOpenDeriv(node)
-      return new NotAllowed("cannot find reference '#{@refname}'", this, node)
+      return builder.notAllowed("cannot find reference '#{@refname}'", this, node)
     _endTagDeriv: (node) ->
       @dereference()
       if @pattern?
         return @pattern.endTagDeriv(node)
-      return new NotAllowed("cannot find reference '#{@refname}'", this, node)
+      return builder.notAllowed("cannot find reference '#{@refname}'", this, node)
     attDeriv: (attribute) ->
       @dereference()
       if @pattern?
         return @pattern.attDeriv(attribute)
-      return new NotAllowed("cannot find reference '#{@refname}'", this, node)
+      return builder.notAllowed("cannot find reference '#{@refname}'", this, node)
 
     _toString: ->
       @refname
@@ -928,5 +934,5 @@ define (require) ->
     Ref,
     Text,
     Value,
-    patternIntern, uniqueIndex
+    patternIntern, uniqueIndex, indexCount
   }
