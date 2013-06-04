@@ -34,19 +34,25 @@ define (require) ->
       schema = @editor.plugins.textorum.schema
       schemaUri = schema.schemaURI
       @schema = helper.getXHR(schemaUri).responseText
+      @validatorNoAttributes = new RNGParser()
+      @validatorNoAttributes.process(@schema, true)
+      @validatorAttributes = new RNGParser()
+      @validatorAttributes.process(@schema, false)
 
       @editor.addCommand 'validateWithAttributes', @validateWithAttributes, this
       @editor.addCommand 'validateWithoutAttributes', @validateWithoutAttributes, this
       @editor.addButton 'txt_validate_attrs', {cmd: 'validateWithAttributes', title: 'Full Validation'}
       @editor.addButton 'txt_validate_noattrs', {cmd: 'validateWithoutAttributes', title: 'Validation (Ignoring Attributes)'}
 
-    validate: (skipAttributes = false) ->
-      rngparser = new RNGParser()
-      # rngparser.debug = true
-      rngparser.process(@schema, skipAttributes)
+    validateFullEditor: (skipAttributes = false) ->
       docdom = (new window.DOMParser()).parseFromString(@editor.getContent(), "text/xml")
 
-      res = rngparser.start.childDeriv(docdom.documentElement, true)
+      if skipAttributes
+        @validatorNoAttributes.getObjects().setSkipAttributes true
+        res = @validatorNoAttributes.start.childDeriv(docdom.documentElement, true)
+      else
+        @validatorAttributes.getObjects().setSkipAttributes false
+        res = @validatorAttributes.start.childDeriv(docdom.documentElement, true)
       if res instanceof objects.Empty
         $(@validationOutputSelector).html('<b>No errors detected</b>')
       else
@@ -58,14 +64,14 @@ define (require) ->
           @editor.nodeChanged()
           $(target).effect("highlight", {}, 500)
           @editor.focus()
-        $(@validationOutputSelector).html("<i>Error:</i> #{res}")
+        $(@validationOutputSelector).html("<ul><li><i>Error:</i> #{res}</li></ul>")
       return res
 
     validateWithoutAttributes: ->
-      @validate(true)
+      @validateFullEditor(true)
 
     validateWithAttributes: ->
-      @validate(false)
+      @validateFullEditor(false)
 
 
 

@@ -125,6 +125,9 @@ define (require) ->
         console.log "defines are", @defines
         console.log "start is", @start
 
+    getObjects: ->
+      return o
+
     process: (text, skipAttributes) ->
       o.setSkipAttributes skipAttributes
       @parser.write(text)
