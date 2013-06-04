@@ -44,6 +44,32 @@ define (require) ->
       @editor.addButton 'txt_validate_attrs', {cmd: 'validateWithAttributes', title: 'Full Validation'}
       @editor.addButton 'txt_validate_noattrs', {cmd: 'validateWithoutAttributes', title: 'Validation (Ignoring Attributes)'}
 
+    validatePartialOpportunistic: (node, skipAttributes = false, descend = false) ->
+      if skipAttributes
+        validator = @validatorNoAttributes
+      else
+        validator = @validatorAttributes
+      na = validator.getObjects().NotAllowed
+      validator.getObjects().setSkipAttributes skipAttributes
+      # validator.debug = true
+      # validator.getObjects().setDebug true
+
+      possiblePatterns = []
+      for name, define of validator.defines
+        res = define.startTagOpenDeriv(node)
+        unless res instanceof na
+          possiblePatterns.push define
+      index = possiblePatterns.length
+      res = na
+      while index--
+        res = possiblePatterns[index].childDeriv(node, descend)
+        unless res instanceof na
+          return true
+      return false
+
+
+
+
     validateFullEditor: (skipAttributes = false) ->
       docdom = (new window.DOMParser()).parseFromString(@editor.getContent(), "text/xml")
 

@@ -119,11 +119,36 @@ define (require) ->
 
     # Given a list of keys, return a function to generate a list of submenu
     # items for a given action
-    _submenuItemsForAction: (keys) =>
+    _submenuItemsForAction: (keys, treenode) =>
       (action) =>
+        if @editor.plugins.textorum.validator
+          validator = @editor.plugins.textorum.validator
+          validKeys = []
+          target = $(@editor.dom.select("##{treenode.attr('name')}"))
+          for key, details of keys
+            editorNode = $(document.createElement(@editor.plugins.textorum.translateElement(key)))
+            editorNode.attr 'data-xmlel', key
+            editorNode.addClass key
+            switch action
+              when "before"
+                editorNode.insertBefore(target)
+                res = validator.validatePartialOpportunistic(target.parents()[0], true, 1)
+              when "after"
+                editorNode.insertAfter(target)
+                res = validator.validatePartialOpportunistic(target.parents()[0], true, 1)
+              when "inside"
+                editorNode.appendTo(target)
+                res = validator.validatePartialOpportunistic(target[0], true, 1)
+            editorNode.remove()
+            if res
+              validKeys[key] = details
+        else
+          validKeys = {}
+          for key, details of keys
+            validKeys[key] = details
         inserts = {}
         inserted = false
-        for key of keys
+        for key of validKeys
           inserted = true
           inserts["#{action}-#{key}"] =
             label: key
@@ -156,8 +181,8 @@ define (require) ->
         else
           {}
       )
-      submenu = @_submenuItemsForAction(validNodes)
-      siblingSubmenu = @_submenuItemsForAction(siblingNodes)
+      submenu = @_submenuItemsForAction(validNodes, node)
+      siblingSubmenu = @_submenuItemsForAction(siblingNodes, node)
       if (x for own x of schema.defs?[node.attr('data-xmlel')]?.attr).length
         editDisabled = false
       else

@@ -76,7 +76,7 @@ define (require) ->
     if not node
       return builder.notAllowed("trying to load empty pattern")
 
-    children = node.childNodes
+    children = h.getChildNodes(node)
 
     pattern = switch h.getLocalName(node)
       when 'element' then new Element children[0], children[1]
@@ -361,6 +361,14 @@ define (require) ->
         return this
       return builder.notAllowed("unknown attribute #{attribute.name} (value #{attribute.value})", this, attribute)
 
+    topLevelAfterSecondOperandChoice: ->
+      if @pattern1? and @pattern2?
+        return builder.choice(@pattern1.topLevelAfterSecondOperandChoice(), @pattern2.topLevelAfterSecondOperandChoice())
+      if @pattern?
+        return @pattern.topLevelAfterSecondOperandChoice()
+      return this
+
+
     childDeriv: (node, descend = false) ->
       _nodelog(node, "starting childDeriv", node, this)
       if h.getNodeType(node) is Node.TEXT_NODE
@@ -379,9 +387,12 @@ define (require) ->
       if descend
         unless descend is true
           descend = descend - 1
-        patt = patt.childrenDeriv(node.childNodes, descend)
+        patt = patt.childrenDeriv(h.getChildNodes(node), descend)
       else
-        return builder.after(builder.empty("skipping 1"), builder.empty("skipping descent"))
+        next = patt.endTagDeriv(node)
+        if next instanceof NotAllowed
+          return patt.topLevelAfterSecondOperandChoice()
+        return next
       if patt instanceof NotAllowed
         return patt
       return patt.endTagDeriv(node)
@@ -512,6 +523,8 @@ define (require) ->
         return @pattern2
       else
         return new MissingContent("missing #{@pattern1} before close", this, node)
+    topLevelAfterSecondOperandChoice: ->
+      return @pattern2
     attDeriv: (attribute) ->
       if @pattern2 instanceof NotAllowed
         return @pattern2
