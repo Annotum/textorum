@@ -274,7 +274,6 @@ define (require) ->
       id = node.attr('name');
       if (id)
         node = @editor.dom.select('#'+id);
-        #node.append('<span class="empty_tag_remove_me"></span>');
 
         nodeEl = node[0]
         @editor.getWin().scrollTo(0, @editor.dom.getPos(nodeEl).y - 10);
@@ -282,6 +281,10 @@ define (require) ->
           @editor.selection.select(nodeEl)
           @editor.nodeChanged()
         else
+          unless $(node).children('[data-mce-bogus="1"],br').length
+            placeholder = $(document.createElement('br'))
+            placeholder.attr('data-mce-bogus', 1)
+            placeholder.appendTo(node)
           @editor.selection.setCursorLocation(nodeEl, 0)
           @editor.nodeChanged()
           $(node).effect("highlight", {}, 350)

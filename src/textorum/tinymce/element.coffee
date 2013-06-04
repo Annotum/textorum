@@ -178,6 +178,9 @@ define (require) ->
                 editorNode = $(document.createElement(thiseditor.plugins.textorum.translateElement(newtagname)))
                 editorNode.attr 'data-xmlel', newtagname
                 editorNode.addClass newtagname
+                placeholder = $(document.createElement('br'))
+                placeholder.attr('data-mce-bogus', 1)
+                placeholder.appendTo(editorNode)
 
               attrwindow.find("li.textorum-attr").each (e) ->
                 attrli = $(this)
@@ -200,6 +203,8 @@ define (require) ->
                     editorNode.appendTo(target)
               thiseditor.undoManager.add()
               thiseditor.execCommand('mceRepaint')
+              thiseditor.selection.select(placeholder[0])
+              thiseditor.nodeChanged()
               thiseditor.plugins.textorum.updateTree()
 
               thiseditor.focus()
