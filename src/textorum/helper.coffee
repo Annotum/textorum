@@ -139,11 +139,11 @@ define (require) ->
       return node
 
 
-    pathForNode: (node) ->
+    pathForNode: (node, root) ->
       while node.ownerElement?
         node = node.ownerElement
       path = []
-      while parent = node.parentNode
+      while parent = node.parentNode and parent isnt root
         index = 0
         if node.previousSibling
           sibling = node.previousSibling
@@ -156,6 +156,22 @@ define (require) ->
         node = parent
       return path
 
+    getChildNodes: (node) ->
+      if node.hasAttribute and node.hasAttribute('data-xmlel')
+        children = []
+        remaining = []
+        for child in node.childNodes
+          remaining.push child
+        while child = remaining.shift()
+          if child.hasAttribute and child.hasAttribute('data-xmlel')
+            children.push child
+          else
+            if child.childNodes and child.childNodes.length
+              for grandchild in child.childNodes
+                remaining.unshift grandchild
+        return children
+
+      return node.childNodes
 
     getNextSiblingElement: (node, tagName) ->
       node = node.nextSibling
@@ -267,6 +283,8 @@ define (require) ->
         return node._localNameCache
       if typeof node is "string"
         return @getQname(node).local
+      if node.hasAttribute? and node.hasAttribute('data-xmlel')
+        return node._localNameCache = node.attributes['data-xmlel'].value
       if node.localName isnt undefined
         return node._localNameCache = node.localName
       if node.local isnt undefined
