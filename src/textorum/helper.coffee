@@ -90,6 +90,73 @@ define (require) ->
           node = @getNextSiblingElement(node, tagName)
       node
 
+
+    followPath: (path, node) ->
+      while path.length
+        waypoint = path.shift()
+        currentIndex = 0
+        for child in node.childNodes
+          if child.nodeType isnt @ELEMENT_NODE
+            continue
+          namematch = @getQname(child.nodeName).local is waypoint.local
+          urimatch = not child.namespaceURI? or child.namespaceURI is waypoint.nsuri
+          indexmatch = currentIndex is waypoint.index
+          if namematch and urimatch
+            if indexmatch
+              node = child
+              break
+            currentIndex += 1
+        if node isnt child
+          return false
+      return node
+
+    followTextorumPath: (path, node) ->
+      while waypoint = path.shift()
+        currentIndex = 0
+        childNodes = []
+        for child in node.childNodes
+          childNodes.push(child)
+        while child = childNodes.shift()
+          if child.nodeType isnt @ELEMENT_NODE
+            continue
+          if child.hasAttribute? and child.hasAttribute('data-xmlel')
+            namematch = child.attributes['data-xmlel'].value.toLowerCase() is waypoint.local.toLowerCase()
+            urimatch = not waypoint.nsuri?
+            urimatch = urimatch or not child.hasAttribute['data-nsuribk']?
+            urimatch = urimatch or child.attributes['data-nsuribk'].value is waypoint.nsuri
+            indexmatch = currentIndex is waypoint.index
+            if namematch and urimatch
+              if indexmatch
+                node = child
+                break
+              currentIndex += 1
+          else
+            for grandchild in child.childNodes
+              childNodes.push(grandchild)
+            continue
+        if node isnt child
+          break
+      return node
+
+
+    pathForNode: (node) ->
+      while node.ownerElement?
+        node = node.ownerElement
+      path = []
+      while parent = node.parentNode
+        index = 0
+        if node.previousSibling
+          sibling = node.previousSibling
+          while sibling
+            if sibling.nodeType is @ELEMENT_NODE and sibling.nodeName is node.nodeName
+              index += 1
+            sibling = sibling.previousSibling
+        qname = @getQname(node.nodeName)
+        path.unshift({local: qname.local, nsuri: node.namespaceURI, index: index})
+        node = parent
+      return path
+
+
     getNextSiblingElement: (node, tagName) ->
       node = node.nextSibling
       while node and node.nodeType isnt @ELEMENT_NODE

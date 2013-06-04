@@ -101,10 +101,10 @@ define (require) ->
       when 'list' then new List children[0]
       when 'attribute'
         if skipAttributes
-        new Empty("#{attr}")
+          new Empty("#{attr}")
         else
           attr = new Attribute children[0], children[1]
-        attr
+          attr
       when 'ref' then new Ref h.getNodeAttr(node, "name"), defines
       when 'oneOrMore' then new OneOrMore children[0]
       when 'choice' then new Choice children[0], children[1]
