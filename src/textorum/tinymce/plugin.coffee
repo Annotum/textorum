@@ -135,6 +135,10 @@ define (require) ->
 
         editor.currentNode = element
         that.tree.navigateTreeCallback(element, collapsed, extra)
+        schema = editor.plugins.textorum.schema.defs
+        schemaElement = schema[editor.currentNode.getAttribute('data-xmlel')]
+        for button in ['bold', 'italic', 'underline', 'sub', 'sup']
+          controlManager.setDisabled(button, schemaElement.contains[button]?)
 
       editor.onPreInit.add (editor) ->
         editor.parser.addAttributeFilter 'data-textorum-nsurl', _nsurlAttributeFilterGenerator(editor)
