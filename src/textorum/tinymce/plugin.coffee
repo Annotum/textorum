@@ -107,7 +107,12 @@ define (require) ->
         that.tree.updateTreeCallback()
       editor.onKeyUp.add (editor, evt) ->
         if that.removePlaceholderTag
-          editor.$('[class="textorum_placeholder"]').remove();
+          that.removePlaceholderTag = false
+          editor.$('[data-mce-bogus="1"]').each (idx, element) ->
+            element = $(element)
+            contents = element.contents()
+            element.replaceWith(contents)
+
         if evt.which > 36 and evt.which < 41
           return
         if editor.currentNode
@@ -123,6 +128,11 @@ define (require) ->
           that.tree.updateTreeCallback()
 
       editor.onNodeChange.add (editor, controlManager, element, collapsed, extra) ->
+        that.removePlaceholderTag = true
+        root = editor.dom.getRoot()
+        while not element.hasAttribute('data-xmlel') and element isnt root and element.parentElement
+          element = element.parentElement
+
         editor.currentNode = element
         that.tree.navigateTreeCallback(element, collapsed, extra)
 

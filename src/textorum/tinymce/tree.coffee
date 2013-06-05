@@ -284,7 +284,7 @@ define (require) ->
           unless $(node).children('[data-mce-bogus="1"],br').length
             placeholder = $(document.createElement('br'))
             placeholder.attr('data-mce-bogus', 1)
-            placeholder.appendTo(node)
+            placeholder.prependTo(node)
           @editor.selection.setCursorLocation(nodeEl, 0)
           @editor.nodeChanged()
           $(node).effect("highlight", {}, 350)
