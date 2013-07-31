@@ -1,5 +1,5 @@
 ###
-# testload.coffee - Test XSLT loading/saving
+# loader.coffee - Textorum XSLT-filtered loading/saving
 #
 # Copyright (C) 2013 Crowd Favorite, Ltd. All rights reserved.
 #
@@ -28,23 +28,24 @@
 define (require) ->
   helper = require('../helper')
 
-  tinymce = window.tinymce
-  $ = window.jQuery
+  processor = undefined
+  revprocessor = undefined
 
-  processor = new XSLTProcessor()
-  forwardStylesheet = helper.getXML "xsl/xml2cke.xsl"
-  processor.importStylesheet(forwardStylesheet)
-  # TODO: Switch to class setup, get these params from main textorum plugin
-  # Elements to bring across as <span> rather than <div>
-  processor.setParameter(null, "inlineelements", "bold,italic,monospace,underline,sub," +
-    "sup,named-content,ext-link,inline-graphic,inline-formula,xref")
-  # Elements to bring over without changing their element name
-  processor.setParameter(null, "fixedelements", "table,thead,tbody,td,tr,th")
+  initProcessors = (textorumPath = "") ->
+    processor = new XSLTProcessor()
+    textorumPath = helper.trailingslashit textorumPath
+    forwardStylesheet = helper.getXML textorumPath + "xsl/xml2cke.xsl"
+    processor.importStylesheet(forwardStylesheet)
+    # TODO: Switch to class setup, get these params from main textorum plugin
+    # Elements to bring across as <span> rather than <div>
+    processor.setParameter(null, "inlineelements", "bold,italic,monospace,underline,sub," +
+      "sup,named-content,ext-link,inline-graphic,inline-formula,xref")
+    # Elements to bring over without changing their element name
+    processor.setParameter(null, "fixedelements", "table,thead,tbody,td,tr,th")
 
-
-  revprocessor = new XSLTProcessor()
-  revStylesheet = helper.getXML "xsl/cke2xml.xsl"
-  revprocessor.importStylesheet(revStylesheet)
+    revprocessor = new XSLTProcessor()
+    revStylesheet = helper.getXML textorumPath + "xsl/cke2xml.xsl"
+    revprocessor.importStylesheet(revStylesheet)
 
   serializeError = (xmlDoc) ->
     try
@@ -73,44 +74,10 @@ define (require) ->
       # XSLT 1.0 doesn't support params in <xsl:output>, so use a placeholder
       # Chrome adds an unneeded xmlns:xml
 
-  loadDataHandler = ->
-    uri = $('#datafile').val()
-    data = helper.getXML uri
-    if data
-      tinymce.EditorManager.get('editor1').setContent(data)
+  bindHandler = (editor, textorumPath) ->
+    if not processor
+      initProcessors(textorumPath)
 
-  clickLoadDataHandler = (event) ->
-    uri = $('#datafile').val()
-    browseruri = window.location + ""
-    browseruri = browseruri.replace(/\?.*$/, "")
-    browseruri = browseruri + "?s=" + encodeURIComponent(uri)
-    if history?.pushState
-      history.pushState {
-        uri: uri
-      }, "uri #{uri}", browseruri
-    loadDataHandler()
-
-  popStateHandler = (event) ->
-    #console.log event
-    if event.originalEvent?.state?.uri
-      $('#datafile').val(event.originalEvent.state.uri)
-      loadDataHandler()
-
-  saveDataHandler = (event) ->
-    $('#mainform').submit()
-
-  getDataHandler = (event) ->
-    # console.log "getdata", event
-    if event.editor.mode isnt "source"
-      event.data.dataValue = saveFromText(event.data.dataValue)
-
-  setDataHandler = (event) ->
-    # console.log "setdata", event
-    if event.editor.mode isnt "source"
-      event.editor.plugins.textorum.nsmap = {}
-      event.data.dataValue = loadFromText(event.data.dataValue)
-
-  bindHandler = (editor) ->
     editor.onBeforeSetContent.add (ed, o) ->
       if o.format is "raw"
         return
@@ -124,13 +91,6 @@ define (require) ->
 
       if o.get
         o.content = saveFromText(o.content)
-
-  $(window).on('popstate', popStateHandler)
-  $('#loaddata').on('click', clickLoadDataHandler)
-  $('#savedata').on('click', saveDataHandler)
-  $('.filenames').on 'click', 'li', (e) ->
-    $('#datafile').val($(e.target).text())
-    $('#loaddata').click()
 
   return {
     bindHandler: bindHandler

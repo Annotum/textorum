@@ -71,6 +71,8 @@ define (require) ->
           show_at_node: true
           items: @contextMenuItemsCallback
         plugins: ['json_data', 'ui', 'themes', 'contextmenu']
+        themes:
+          url: "[dummy]"
 
     depthWalkCallback: (depth, node) =>
       if not node.getAttribute?
@@ -323,6 +325,8 @@ define (require) ->
       treeInstance = @jsTree.jstree('get_instance')
       #treeInstance.close_all(-1, false)
       if not node.getAttribute
+        return null
+      if not treeInstance.open_node
         return null
       firstNode = treeInstance._get_node("[name='#{node.getAttribute('id')}']")
       if firstNode

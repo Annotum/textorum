@@ -77,6 +77,10 @@ Or from git (tracking master branch until Textorum release):
 
 	npm run-script watch
 
+### To build the distribution (for use with Annotum):
+
+	npm run-script dist
+
 ## Example instructions
 
 - Open <http://textorum.example.com/tinymce.html> (adjusted for where you installed Textorum)

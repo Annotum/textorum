@@ -1,4 +1,5 @@
 do ->
+  localjquery = undefined
   require.config
     baseUrl: "lib"
 
@@ -16,3 +17,9 @@ do ->
       func = ->
 
       Stream: func
+
+  unless require.defined("jquery")
+    define "jquery", ->
+      if !localjquery
+        localjquery = window.jQuery
+      return localjquery

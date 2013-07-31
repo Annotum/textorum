@@ -25,8 +25,8 @@
 # THE SOFTWARE.
 
 define (require) ->
-  pluginCss = require('text!./plugin.css')
-  testload = require('./testload')
+  pluginCss = require('text!../../plugin.css')
+  textorumloader = require('./loader')
   helper = require('../helper')
   {TextorumTree} = require('./tree')
   {TextorumValidator} = require('./validator')
@@ -45,19 +45,21 @@ define (require) ->
 
   $ = window.jQuery
 
-  _getSchema = (schemaUri) ->
+  _getSchema = (schemaUri, baseUri = "") ->
     if not schemaUri
       return ""
     schemaprocessor = new XSLTProcessor()
-    schemaStylesheet = helper.getXML "xsl/rng2js.xsl"
+    schemaStylesheet = helper.getXML baseUri + "xsl/rng2js.xsl"
     schemaprocessor.importStylesheet(schemaStylesheet)
-    xmlschema = helper.getXML(schemaUri)
+    xmlschemaresp = helper.getXHR baseUri + schemaUri, 'text/xml'
+    xmlschema = xmlschemaresp.responseXML
     xsltschema = schemaprocessor.transformToDocument(xmlschema)
     schemadoc = xsltschema.documentElement
     schematext = (schemadoc.text || schemadoc.textContent || schemadoc.innerHTML)
     schema = ($.parseJSON || tinymce.util.JSON.parse)(schematext)
     schema ||= {}
     schema.schemaURI = schemaUri
+    schema.schemaXML = xmlschemaresp.responseText
     schema.containedBy ||= {}
     schema.defs ||= {}
     schema.$root ||= []
@@ -86,7 +88,7 @@ define (require) ->
       fixedelements: "table thead tbody td tr th".split(/\s+/)
     }
 
-  tinymce.create 'tinymce.plugins.textorum.loader', {
+  tinymce.create 'tinymce.plugins.textorum', {
     elementMap: elementMap
     updateTree: () ->
       @tree.updateTreeCallback()
@@ -96,13 +98,14 @@ define (require) ->
 
     init: (@editor, url) ->
       that = this
+      that.url = url
       if tinymce.adapter
         tinymce.adapter.patchEditor(editor)
-      @schema = _getSchema("test/rng/kipling-jp3-xsl.srng")
+      @schema = _getSchema("schema/kipling-jp3.srng", helper.trailingslashit(url))
       @tree = new TextorumTree '#editortree', editor
       @validator = new TextorumValidator '#editorvalidation', editor
 
-      testload.bindHandler editor
+      textorumloader.bindHandler editor, url
       editor.onSetContent.add (ed, o) ->
         that.tree.updateTreeCallback()
       editor.onKeyUp.add (editor, evt) ->
@@ -138,7 +141,7 @@ define (require) ->
         schema = editor.plugins.textorum.schema.defs
         schemaElement = schema[editor.currentNode.getAttribute('data-xmlel')]
         for button in ['bold', 'italic', 'underline', 'sub', 'sup']
-          controlManager.setDisabled(button, !(schemaElement.contains[button]?))
+          controlManager.setDisabled(button, !(schemaElement?.contains?[button]?))
 
       editor.onPreInit.add (editor) ->
         editor.parser.addAttributeFilter 'data-textorum-nsurl', _nsurlAttributeFilterGenerator(editor)
@@ -168,4 +171,4 @@ define (require) ->
 
 
   }
-  tinymce.PluginManager.add('textorum', tinymce.plugins.textorum.loader)
+  tinymce.PluginManager.add('textorum', tinymce.plugins.textorum)

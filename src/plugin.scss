@@ -1,5 +1,5 @@
 /*
- * plugin.scss - Textorum formatting for Kipling schema subset
+ * plugin.scss - Textorum formatting for Kipling schema subset (tinymce content)
  *
  * Copyright (C) 2013 Crowd Favorite, Ltd. All rights reserved.
  *
@@ -26,21 +26,8 @@
  * THE SOFTWARE.
  *
  */
-$dark: #006b94;
-$mid: #99d1dd;
-$light: #f0f0f0;
-$black: #333;
 
-$defaultback: #444444;
-$defaultfront: #cccccc;
-
-$smalltext: 70%;
-$normaltext: 80%;
-$largetext: 85%;
-
-$border: 1px dashed #333;
-$highlight: 1px dotted #ddf556;
-$lowlight: 1px dotted #589dac;
+@import "textorum";
 
 body {
 	font-size: 75%;

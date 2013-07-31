@@ -32,8 +32,11 @@ define (require) ->
   class TextorumValidator
     constructor: (@validationOutputSelector, @editor) ->
       schema = @editor.plugins.textorum.schema
-      schemaUri = schema.schemaURI
-      @schema = helper.getXHR(schemaUri).responseText
+      if schema.schemaXML
+        @schema = schema.schemaXML
+      else
+        schemaUri = schema.schemaURI
+        @schema = helper.getXHR(schemaUri).responseText
       @validatorNoAttributes = new RNGParser()
       @validatorNoAttributes.process(@schema, true)
       @validatorAttributes = new RNGParser()

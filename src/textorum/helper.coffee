@@ -305,11 +305,12 @@ define (require) ->
             result += child.nodeValue
       result
 
-    getXHR: (url) ->
+    getXHR: (url, content_type) ->
       resp = null
       if window.tinymce?.util?.XHR?
         tinymce.util.XHR.send {
           url: url,
+          content_type: content_type
           async: false,
           success: (text, response) ->
             resp = response
@@ -319,6 +320,12 @@ define (require) ->
       xmlhttp.open("GET", url, false)
       xmlhttp.send('')
       return xmlhttp
+
+    trailingslashit: (path) ->
+      return path unless path and path.length
+      switch path[path.length - 1]
+        when "/" then path
+        else path + "/"
 
     getXML: (url) ->
       xslDoc = null
