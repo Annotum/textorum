@@ -28,6 +28,7 @@ define (require) ->
   helper = require('../helper')
   {RNGParser} = require('../relaxng/parse')
   objects = require('../relaxng/objects')
+  $ = require('jquery')
 
   class TextorumValidator
     constructor: (@validationOutputSelector, @editor, alternateStart) ->
