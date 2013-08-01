@@ -165,87 +165,89 @@
 	border-color: darken($mid, 10%);
 }
 
-.defaultSkin span.mceIcon {
-	background-image: none;
-}
+.defaultSkin,.wp_themeSkin {
+	span.mceIcon {
+		background-image: none;
+	}
 
-.defaultSkin span.mceIcon:before {
-	color: #2e5a63;
-	content: '';
-	display: block;
-	float: left;
-	font-family: FontAwesome;
-	font-size: 14px;
-	padding-top: 3px;
-	text-align: center;
-	-webkit-font-smoothing: antialiased;
-	width: 20px;
-}
+	span.mceIcon:before {
+		color: #2e5a63;
+		content: '';
+		display: block;
+		float: left;
+		font-family: FontAwesome;
+		font-size: 14px;
+		padding-top: 3px;
+		text-align: center;
+		-webkit-font-smoothing: antialiased;
+		width: 20px;
+	}
 
-.defaultSkin span.mce_undo:before {
-	content: '\f112';
-}
+	span.mce_undo:before {
+		content: '\f112';
+	}
 
-.defaultSkin span.mce_redo:before {
-	content: '\f064';
-}
+	span.mce_redo:before {
+		content: '\f064';
+	}
 
-.defaultSkin span.mce_help:before {
-	content: '\f059';
-}
+	span.mce_help:before {
+		content: '\f059';
+	}
 
-.defaultSkin span.mce_visualaid:before {
-	content: '\f00a';
-}
+	span.mce_visualaid:before {
+		content: '\f00a';
+	}
 
-.defaultSkin span.mce_bold:before {
-	content: '\f032';
-}
+	span.mce_bold:before {
+		content: '\f032';
+	}
 
-.defaultSkin span.mce_italic:before {
-	content: '\f033';
-}
+	span.mce_italic:before {
+		content: '\f033';
+	}
 
-.defaultSkin span.mce_underline:before {
-	content: '\f0cd';
-	padding-top: 4px;
-}
+	span.mce_underline:before {
+		content: '\f0cd';
+		padding-top: 4px;
+	}
 
-.defaultSkin span.mce_code:before {
-	content: '\f0f6';
-}
+	span.mce_code:before {
+		content: '\f0f6';
+	}
 
-.defaultSkin span.mce_fullscreen:before {
-	content: '\f0b2';
-}
+	span.mce_fullscreen:before {
+		content: '\f0b2';
+	}
 
-.defaultSkin span.mce_save:before {
-	content: '\f0c7';
-}
+	span.mce_save:before {
+		content: '\f0c7';
+	}
 
-.defaultSkin span.mce_txt_validate_attrs:before {
-	content: '\f0c8';
-}
+	span.mce_txt_validate_attrs:before {
+		content: '\f0c8';
+	}
 
-.defaultSkin span.mce_txt_validate_noattrs:before {
-	content: '\f0c9';
-}
+	span.mce_txt_validate_noattrs:before {
+		content: '\f0c9';
+	}
 
-.defaultSkin span.mce_sup:before {
-	content: '\f12b'; // icon-superscript
-}
+	span.mce_sup:before {
+		content: '\f12b'; // icon-superscript
+	}
 
-.defaultSkin span.mce_sub:before {
-	content: '\f12c'; // icon-subscript
-}
+	span.mce_sub:before {
+		content: '\f12c'; // icon-subscript
+	}
 
-.defaultSkin .mceToolbar a.mceButtonActive,
-.defaultSkin .mceToolbar a.mceButtonSelected,
-.defaultSkin .mceToolbar a.mceButtonEnabled:hover {
-	border: 1px solid #86c3d0;
-	background-color: #bee3eb;
-}
+	.mceToolbar a.mceButtonActive,
+	.mceToolbar a.mceButtonSelected,
+	.mceToolbar a.mceButtonEnabled:hover {
+		border: 1px solid #86c3d0;
+		background-color: #bee3eb;
+	}
 
+}
 // Edit Attributes Pop Up
 .ui-dialog {
 	border-color: $black;
