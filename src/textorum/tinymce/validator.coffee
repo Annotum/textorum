@@ -30,7 +30,7 @@ define (require) ->
   objects = require('../relaxng/objects')
 
   class TextorumValidator
-    constructor: (@validationOutputSelector, @editor) ->
+    constructor: (@validationOutputSelector, @editor, alternateStart) ->
       schema = @editor.plugins.textorum.schema
       if schema.schemaXML
         @schema = schema.schemaXML
@@ -42,12 +42,30 @@ define (require) ->
       @validatorAttributes = new RNGParser()
       @validatorAttributes.process(@schema, false)
 
+      @validationAttributesStart = @validatorAttributes.start
+      @validationNoAttributesStart = @validatorNoAttributes.start
+      if alternateStart
+        if @validatorAttributes.defines[alternateStart]
+          @validationAttributesStart = validatorAttributes.defines[alternateStart]
+        if @validatorNoAttributes.defines[alternateStart]
+          @validationNoAttributesStart = validatorNoAttributes.defines[alternateStart]
+
       @editor.addCommand 'validateWithAttributes', @validateWithAttributes, this
       @editor.addCommand 'validateWithoutAttributes', @validateWithoutAttributes, this
       @editor.addButton 'txt_validate_attrs', {cmd: 'validateWithAttributes', title: 'Full Validation'}
       @editor.addButton 'txt_validate_noattrs', {cmd: 'validateWithoutAttributes', title: 'Validation (Ignoring Attributes)'}
 
     validatePartialOpportunistic: (node, skipAttributes = false, descend = false) ->
+      if skipAttributes
+        validator = @validatorNoAttributes
+      else
+        validator = @validatorAttributes
+      res = @validatePartialOpportunisticResult(node, skipAttributes, descend)
+      if res instanceof validator.getObjects().NotAllowed
+        return false
+      return true
+
+    validatePartialOpportunisticResult: (node, skipAttributes = false, descend = false) ->
       if skipAttributes
         validator = @validatorNoAttributes
       else
@@ -63,25 +81,30 @@ define (require) ->
         unless res instanceof na
           possiblePatterns.push define
       index = possiblePatterns.length
+      if not index
+        return na
       res = na
       while index--
         res = possiblePatterns[index].childDeriv(node, descend)
         unless res instanceof na
-          return true
-      return false
+          return res
+      return res
 
-
-
-
-    validateFullEditor: (skipAttributes = false) ->
+    validateFullEditor: (skipAttributes = false, opportunistic = false) ->
       docdom = (new window.DOMParser()).parseFromString(@editor.getContent(), "text/xml")
 
       if skipAttributes
-        @validatorNoAttributes.getObjects().setSkipAttributes true
-        res = @validatorNoAttributes.start.childDeriv(docdom.documentElement, true)
+        if opportunistic
+          res = @validatePartialOpportunisticResult docdom.documentElement, true
+        else
+          @validatorNoAttributes.getObjects().setSkipAttributes true
+          res = @validationNoAttributesStart.childDeriv(docdom.documentElement, true)
       else
-        @validatorAttributes.getObjects().setSkipAttributes false
-        res = @validatorAttributes.start.childDeriv(docdom.documentElement, true)
+        if opportunistic
+          res = @validatePartialOpportunisticResult docdom.documentElement, false
+        else
+          @validatorAttributes.getObjects().setSkipAttributes false
+          res = @validationAttributesStart.childDeriv(docdom.documentElement, true)
       if res instanceof objects.Empty
         $(@validationOutputSelector).html('<b>No errors detected</b>')
       else
