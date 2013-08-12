@@ -167,7 +167,7 @@
 
 .defaultSkin,.wp_themeSkin {
 	span.mceIcon {
-		background-image: none;
+		background-image: none !important;
 	}
 
 	span.mceIcon:before {
@@ -248,6 +248,11 @@
 	}
 
 }
+
+.wp_themeSkin .mceToolbarRow2 .mceSeparator {
+	display: none;
+}
+
 // Edit Attributes Pop Up
 .ui-dialog {
 	border-color: $black;
