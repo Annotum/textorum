@@ -34,6 +34,7 @@ Clone this repository to a web-accessible directory.  The instructions below ass
 
 ### In the textorum dir:
 
+	npm install -g grunt-cli
 	npm install
 	bundle install
 
@@ -71,15 +72,15 @@ Or from git (tracking master branch until Textorum release):
 
 ### To compile the SASS and CoffeeScript to CSS and JavaScript:
 
-	npm run-script build
+	grunt
 
 ### To watch (continually compile) the SASS and CoffeeScript:
 
-	npm run-script watch
+	grunt watch
 
 ### To build the distribution (for use with Annotum):
 
-	npm run-script dist
+	grunt dist
 
 ## Example instructions
 
