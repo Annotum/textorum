@@ -315,7 +315,7 @@ task 'test:phantom', 'Run tests via phantomJS', ->
 
           # Output statistics on completion
           when 'done'
-            console.log "\nFinished in #{obj.result.runtime/1000}s".grey
+            console.log "\nFinished in #{obj.result.runtime / 1000}s".grey
             if obj.result.failed
               console.error "#{fail}  #{obj.result.passed} tests passed, #{obj.result.failed} tests failed (#{Math.round(obj.result.passed / obj.result.total * 100)}%)"
               process.exit -1

@@ -1,28 +1,36 @@
 {
-	"name": "textorum",
-	"repository": "https://github.com/Annotum/textorum.git",
-	"version": "0.1.0",
-	"devDependencies": {},
-	"dependencies": {
-		"requirejs": "",
-		"coffee-script": "",
-		"coffeelint": "",
-
-		"uglify-js": "",
-		"wrench": "",
-		"colors": "",
-		"docco": "",
-		"temp": "",
-		"q": ""
-	},
-	"optionalDependencies": {
-		"kexec": "",
-		"growl": ""
-	},
-	"scripts": {
-		"watch": "cake watch",
-		"build": "cake build",
-		"dist": "cake dist"
-	},
-	"private": true
+  "name": "textorum",
+  "repository": "https://github.com/Annotum/textorum.git",
+  "version": "0.1.0",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-watch": "~0.5.1",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-requirejs": "~0.4.1",
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt-contrib-sass": "~0.4.1",
+    "grunt-sync": "0.0.4",
+    "grunt-contrib-concat": "~0.3.0"
+  },
+  "dependencies": {
+    "requirejs": "",
+    "coffee-script": "",
+    "coffeelint": "",
+    "uglify-js": "",
+    "wrench": "",
+    "colors": "",
+    "docco": "",
+    "temp": "",
+    "q": ""
+  },
+  "optionalDependencies": {
+    "kexec": "",
+    "growl": ""
+  },
+  "scripts": {
+    "watch": "cake watch",
+    "build": "cake build",
+    "dist": "cake dist"
+  },
+  "private": true
 }
