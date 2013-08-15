@@ -65,7 +65,14 @@ define (require) ->
   saveFromText = (text) ->
     xmlDoc = helper.parseXML text
     if helper.hasDomError(xmlDoc)
-      return serializeError(xmlDoc)
+      # FIXME: temporary textorum wrapper for multi-element roots
+      text = '<div data-xmlel="textorum">' + text + '</div>'
+      newXmlDoc = helper.parseXML text
+      if helper.hasDomError(newXmlDoc)
+        return serializeError(xmlDoc)
+      xmlDoc = newXmlDoc
+    # if helper.hasDomError(xmlDoc)
+    #   return serializeError(xmlDoc)
     revNewDoc = revprocessor.transformToDocument(xmlDoc)
     (new XMLSerializer()).serializeToString(revNewDoc)
       .replace(/\/\/TEXTORUM\/\/DOCTYPE-SYSTEM\/\//,
