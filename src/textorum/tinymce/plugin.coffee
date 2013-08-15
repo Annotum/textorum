@@ -106,6 +106,7 @@ define (require) ->
       @schema = _getSchema("schema/kipling-jp3.srng", helper.trailingslashit(url))
       @tree = new TextorumTree '#editortree', editor
       @validator = new TextorumValidator '#editorvalidation', editor
+      @helper = helper
 
       textorumloader.bindHandler editor, url, @elementMap.inlineelements.join(','), @elementMap.fixedelements.join(',')
       editor.onSetContent.add (ed, o) ->
