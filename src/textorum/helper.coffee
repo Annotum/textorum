@@ -293,6 +293,10 @@ define (require) ->
         return node._localNameCache = @getQname(node.nodeName).local
       return @getQname(node).local
 
+    testNameIs: (localName) ->
+      (node) ->
+        h.getLocalName(node) is localName
+
     textContent: (node) ->
       return node.textContent if node.textContent
       return node if typeof node is "string"
@@ -410,4 +414,5 @@ define (require) ->
           node = node.nextSibling
 
 
-  new Helpers()
+  h = new Helpers()
+  h
