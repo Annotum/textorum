@@ -83,8 +83,10 @@ define (require) ->
         node.remove()
 
   elementMap = {
-      inlineelements: "bold italic monospace underline sub sup named-content
-        ext-link inline-graphic inline-formula xref".split(/\s+/)
+      inlineelements: "bold italic monospace underline sub     
+        sup named-content ext-link inline-graphic alt-text lbl long-desc
+        copyright-statement copyright-holder license license-p disp-quote
+        attrib inline-formula xref".split(/\s+/)
       fixedelements: "table thead tbody td tr th".split(/\s+/)
     }
 
@@ -105,7 +107,7 @@ define (require) ->
       @tree = new TextorumTree '#editortree', editor
       @validator = new TextorumValidator '#editorvalidation', editor
 
-      textorumloader.bindHandler editor, url
+      textorumloader.bindHandler editor, url, @elementMap.inlineelements.join(','), @elementMap.fixedelements.join(',')
       editor.onSetContent.add (ed, o) ->
         that.tree.updateTreeCallback()
       editor.onKeyUp.add (editor, evt) ->

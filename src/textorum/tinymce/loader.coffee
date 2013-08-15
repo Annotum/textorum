@@ -31,17 +31,17 @@ define (require) ->
   processor = undefined
   revprocessor = undefined
 
-  initProcessors = (textorumPath = "") ->
+  initProcessors = (textorumPath = "", inlineElements = null, fixedElements = null) ->
     processor = new XSLTProcessor()
     textorumPath = helper.trailingslashit textorumPath
     forwardStylesheet = helper.getXML textorumPath + "xsl/xml2cke.xsl"
     processor.importStylesheet(forwardStylesheet)
     # TODO: Switch to class setup, get these params from main textorum plugin
     # Elements to bring across as <span> rather than <div>
-    processor.setParameter(null, "inlineelements", "bold,italic,monospace,underline,sub," +
-      "sup,named-content,ext-link,inline-graphic,inline-formula,xref")
+    processor.setParameter(null, "inlineelements", inlineElements)
+
     # Elements to bring over without changing their element name
-    processor.setParameter(null, "fixedelements", "table,thead,tbody,td,tr,th")
+    processor.setParameter(null, "fixedelements", fixedElements)
 
     revprocessor = new XSLTProcessor()
     revStylesheet = helper.getXML textorumPath + "xsl/cke2xml.xsl"
@@ -74,9 +74,9 @@ define (require) ->
       # XSLT 1.0 doesn't support params in <xsl:output>, so use a placeholder
       # Chrome adds an unneeded xmlns:xml
 
-  bindHandler = (editor, textorumPath) ->
+  bindHandler = (editor, textorumPath, inlineElements, fixedElements) ->
     if not processor
-      initProcessors(textorumPath)
+      initProcessors(textorumPath, inlineElements, fixedElements)
 
     editor.onBeforeSetContent.add (ed, o) ->
       if o.format is "raw"
