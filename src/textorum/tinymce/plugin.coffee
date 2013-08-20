@@ -87,7 +87,7 @@ define (require) ->
         sup named-content ext-link inline-graphic alt-text lbl long-desc
         copyright-statement copyright-holder license license-p disp-quote
         attrib inline-formula xref".split(/\s+/)
-      fixedelements: "table thead tbody td tr th".split(/\s+/)
+      fixedelements: "textorum table thead tbody td tr th".split(/\s+/)
     }
 
   tinymce.create 'tinymce.plugins.textorum', {

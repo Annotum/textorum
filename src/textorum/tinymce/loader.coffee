@@ -56,13 +56,24 @@ define (require) ->
       throw e
 
   loadFromText = (text) ->
+    is_wrapped = false
     xmlDoc = helper.parseXML text
     if helper.hasDomError(xmlDoc)
-      return serializeError(xmlDoc)
+      # FIXME: temporary textorum wrapper for multi-element roots
+      text = '<textorum>' + text + '</textorum>'
+      newXmlDoc = helper.parseXML text
+      if helper.hasDomError(newXmlDoc)
+        return serializeError(xmlDoc)
+      is_wrapped = true
+      xmlDoc = newXmlDoc
     newDoc = processor.transformToDocument(xmlDoc)
-    (new XMLSerializer()).serializeToString(newDoc)
+    xmlString = (new XMLSerializer()).serializeToString(newDoc)
+    if is_wrapped # unwrap
+      xmlString = xmlString.replace(/<\/?textorum[^>]*>/g, '')
+    xmlString
 
   saveFromText = (text) ->
+    is_wrapped = false
     xmlDoc = helper.parseXML text
     if helper.hasDomError(xmlDoc)
       # FIXME: temporary textorum wrapper for multi-element roots
@@ -70,16 +81,20 @@ define (require) ->
       newXmlDoc = helper.parseXML text
       if helper.hasDomError(newXmlDoc)
         return serializeError(xmlDoc)
+      is_wrapped = true
       xmlDoc = newXmlDoc
-    # if helper.hasDomError(xmlDoc)
-    #   return serializeError(xmlDoc)
     revNewDoc = revprocessor.transformToDocument(xmlDoc)
-    (new XMLSerializer()).serializeToString(revNewDoc)
+    xmlString = (new XMLSerializer()).serializeToString(revNewDoc)
       .replace(/\/\/TEXTORUM\/\/DOCTYPE-SYSTEM\/\//,
         "http://dtd.nlm.nih.gov/publishing/3.0/journalpublishing3.dtd")
       .replace(/^(<!DOCTYPE[^>]*>\s*<[^>]*?)[ ]?xmlns:xml="http:\/\/www.w3.org\/XML\/1998\/namespace"/g, "$1")
       # XSLT 1.0 doesn't support params in <xsl:output>, so use a placeholder
       # Chrome adds an unneeded xmlns:xml
+    if is_wrapped # unwrap
+      xmlString = xmlString
+        .replace(/^.*<textorum>/, '')
+        .replace(/<\/textorum>.*$/, '')
+    xmlString
 
   bindHandler = (editor, textorumPath, inlineElements, fixedElements) ->
     if not processor
