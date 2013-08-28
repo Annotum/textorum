@@ -404,9 +404,7 @@ define (require) ->
           depth += 1
           node = node.firstChild
         else
-          while node.nextSibling is null
-            # FIXME: On fullscreen, I believe at some point parentNode is null,
-            # resulting call to node.nextSibling in the while above error.
+          while node.nextSibling is null and node.parentNode isnt null
             node = node.parentNode
             depth -= 1
             if handler.endTag
