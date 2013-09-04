@@ -166,10 +166,6 @@
 }
 
 .defaultSkin,.wp_themeSkin {
-	span.mceIcon {
-		background-image: none !important;
-	}
-
 	span.mceIcon:before {
 		color: #2e5a63;
 		content: '';
@@ -183,61 +179,103 @@
 		width: 20px;
 	}
 
-	span.mce_undo:before {
-		content: '\f112';
+	span.mce_undo.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f112';
+		}
 	}
 
-	span.mce_redo:before {
-		content: '\f064';
+	span.mce_redo.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f064';
+		}
 	}
 
-	span.mce_help:before {
-		content: '\f059';
+	span.mce_help.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f059';
+		}
 	}
 
-	span.mce_visualaid:before {
-		content: '\f00a';
+	span.mce_visualaid.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f00a';
+		}
 	}
 
-	span.mce_bold:before {
-		content: '\f032';
+	span.mce_bold.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f032';
+		}
 	}
 
-	span.mce_italic:before {
-		content: '\f033';
+	span.mce_italic.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f033';
+		}
 	}
 
-	span.mce_underline:before {
-		content: '\f0cd';
-		padding-top: 4px;
+	span.mce_underline.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f0cd';
+			padding-top: 4px;
+		}
 	}
 
-	span.mce_code:before {
-		content: '\f0f6';
+	span.mce_code.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f0f6';
+		}
 	}
 
-	span.mce_fullscreen:before {
-		content: '\f0b2';
+	span.mce_fullscreen.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f0b2';
+		}
 	}
 
-	span.mce_save:before {
-		content: '\f0c7';
+	span.mce_save.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f0c7';
+		}
 	}
 
-	span.mce_txt_validate_attrs:before {
-		content: '\f0c8';
+	span.mce_txt_validate_attrs.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f0c8';
+		}
 	}
 
-	span.mce_txt_validate_noattrs:before {
-		content: '\f0c9';
+	span.mce_txt_validate_noattrs.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f0c9';
+		}
 	}
 
-	span.mce_sup:before {
-		content: '\f12b'; // icon-superscript
+	span.mce_sup.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f12b'; // icon-superscript
+		}
 	}
 
-	span.mce_sub:before {
-		content: '\f12c'; // icon-subscript
+	span.mce_sub.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f12c'; // icon-subscript
+		}
 	}
 
 	.mceToolbar a.mceButtonActive,
