@@ -30,6 +30,7 @@ Clone this repository to a web-accessible directory.  The instructions below ass
 ### Otherwise:
 
 - Install node.js and npm (using a package manager or from the [download page](http://nodejs.org/download/))
+- Use the commands from [this page](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager) to install Node via a package manager (Ubuntu, etc.)
 - Install Ruby (1.9.3-p194 is known to work; later patchlevels may have problems) and RubyGems (using a package manager or from [ruby](http://www.ruby-lang.org/en/downloads/), [rubygems](https://rubygems.org/pages/download))
 
 ### In the textorum dir:
