@@ -30,6 +30,7 @@ Clone this repository to a web-accessible directory.  The instructions below ass
 ### Otherwise:
 
 - Install node.js (v0.8.16 or later is known to work) and npm (v1.1.70 or later is known to work), using a package manager or from the [download page](http://nodejs.org/download/)
+- Use the commands from [this page](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager) to install Node via a package manager (Ubuntu, etc.)
 - Install Ruby (1.9.3-p194 is known to work; later patchlevels may have problems) and RubyGems (using a package manager or from [ruby](http://www.ruby-lang.org/en/downloads/), [rubygems](https://rubygems.org/pages/download))
 
 ### In the textorum dir:
@@ -81,6 +82,24 @@ Or from git (tracking master branch until Textorum release):
 ### To build the distribution (for use with Annotum):
 
 	grunt dist
+
+### Ubuntu Cheat Sheet for Dev
+
+```
+cd ~/Web/wordpress/wp-content
+sudo rm -rf themes
+git clone git@github.com:Annotum/Annotum.git themes
+cd themes
+git checkout textorum-integration 
+git submodule update --init
+cd annotum-base/js/textorum/
+git checkout develop
+sudo npm install -g grunt-cli
+sudo npm install
+sudo bundle install
+grunt dist
+
+```
 
 ## Example instructions
 
