@@ -31,6 +31,8 @@ Clone this repository to a web-accessible directory.  The instructions below ass
 
 - Install node.js (v0.8.16 or later is known to work) and npm (v1.1.70 or later is known to work), using a package manager or from the [download page](http://nodejs.org/download/)
 - Use the commands from [this page](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager) to install Node via a package manager (Ubuntu, etc.)
+- Install node.js and npm (using a package manager or from the [download page](http://nodejs.org/download/))
+- Use the commands from [this page](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager) to install Node via a package manager (Ubuntu, etc.)
 - Install Ruby (1.9.3-p194 is known to work; later patchlevels may have problems) and RubyGems (using a package manager or from [ruby](http://www.ruby-lang.org/en/downloads/), [rubygems](https://rubygems.org/pages/download))
 
 ### In the textorum dir:
@@ -49,7 +51,7 @@ From an archive:
 	unzip v.pre1.0.zip
 	mv jstree-v.pre1.0 jstree
 
-Or from git: 
+Or from git:
 
 Known good revision: `9c41e435d5aee9647e26500200e30b359bb96ae0`; tracking v.pre1.0 release branch in development
 
@@ -66,7 +68,7 @@ From an archive:
 
 Or from git (tracking master branch until Textorum release):
 
-	git clone https://github.com/tinymce/tinymce.git	
+	git clone https://github.com/tinymce/tinymce.git
 	cd tinymce
 	ant
 	cd ..
@@ -90,7 +92,7 @@ cd ~/Web/wordpress/wp-content
 sudo rm -rf themes
 git clone git@github.com:Annotum/Annotum.git themes
 cd themes
-git checkout textorum-integration 
+git checkout textorum-integration
 git submodule update --init
 cd annotum-base/js/textorum/
 git checkout develop
@@ -123,7 +125,7 @@ With the goal of tracking compatibility with (and potentially dependence on) the
 
 ## Caveats
 
-Many.  This is currently a very incomplete 
+Many.  This is currently a very incomplete
 
 (this space intentionally left blank)
 
