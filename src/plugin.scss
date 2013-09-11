@@ -420,6 +420,12 @@ div[data-xmlel="sec"] {
 	vertical-align: top;
 }
 
+.sup {
+	font-size: $smalltext;
+	line-height: 12px;
+	vertical-align: super;
+}
+
 .sub {
 	font-size: $smalltext;
 	line-height: 12px;
