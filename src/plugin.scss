@@ -409,7 +409,7 @@ div[data-xmlel="sec"] {
 	margin-bottom: 20px;
 }
 
-.xref {
+div[data-xmlel="xref"] {
 	color: $dark;
 	font-weight: bold;
 }
@@ -420,13 +420,13 @@ div[data-xmlel="sec"] {
 	vertical-align: top;
 }
 
-.sup {
+div[data-xmlel="sup"] {
 	font-size: $smalltext;
 	line-height: 12px;
 	vertical-align: super;
 }
 
-.sub {
+div[data-xmlel="sub"] {
 	font-size: $smalltext;
 	line-height: 12px;
 	vertical-align: bottom;
@@ -526,18 +526,14 @@ div[data-xmlel="caption"]:before {
 	display: none;
 }
 
-.label {
+div[data-xmlel="label"] {
 	font-weight: bold;
 	padding: 0 4px;
 }
 
-.table-wrap {
-	padding-top: 30px;
+div[data-xmlel="table"] {
+	margin-bottom: 10px;
 }
-
-	.table {
-		margin-bottom: 10px;
-	}
 
 //-------------------------------------------------------
 // Figures
@@ -547,7 +543,7 @@ div[data-xmlel="fig"]:before {
 	display: none;
 }
 
-.fig {
+div[data-xmlel="fig"] {
 	padding-bottom: 30px;
 }
 
@@ -596,7 +592,7 @@ div[data-xmlel="pub-id"]:before {
 	margin-left: 0;
 }
 
-.p .bold:first-child {
+div[data-xmlel="p"] span[data-xmlel="bold"]:first-child {
 	margin-right: 6px;
 }
 
@@ -632,9 +628,9 @@ div[data-xmlel="kwd"]:hover {
 
 // Dark Highlight on White (content area)
 
-.sec .p:hover,
+div[data-xmlel="sec"] div[data-xmlel="p"]:hover,
 div[data-xmlel="mixed-citation"]:hover,
-.label:hover {
+div[data-xmlel="label"]:hover {
 	background: $light;
 	outline: $lowlight;
 }
@@ -645,7 +641,7 @@ div[data-xmlel="mixed-citation"] div[data-xmlel="pub-id"]:hover {
 
 // Reference Highlights
 
-.sec .p div[data-xmlel="xref"]:hover {
+div[data-xmlel="sec"] div[data-xmlel="p"] div[data-xmlel="xref"]:hover {
 	background: $dark;
 	color: $light;
 }
