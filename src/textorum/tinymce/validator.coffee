@@ -125,6 +125,38 @@ define (require) ->
 
     validateWithAttributes: ->
       @validateFullEditor(false)
+    
+    validElementsForNode: (target, location = "inside", returnType = "array") =>
+      validator = @editor.plugins.textorum.validator
+      dom = @editor.dom
+      checkElements =  @editor.plugins.textorum.schema.defs?[dom.getAttrib(target, 'data-xmlel')]?.contains
+      validKeys = []
+      validElements = {}
+      parent = target.parentNode
+      
+      for key, details of checkElements
+        editorNode = dom.create(@editor.plugins.textorum.translateElement(key), {
+          'data-xmlel': key, 
+          class: key
+        })
+        switch location
+          when "before"
+            parent.insertBefore(editorNode, target)
+            res = @validatePartialOpportunistic(parent, true, 1)
+          when "after"
+            dom.insertAfter(editorNode, target)
+            res = @validatePartialOpportunistic(parent, true, 1)
+          when "inside"
+            target.appendChild(editorNode)
+            res = @validatePartialOpportunistic(target, true, 1)
+        dom.remove(editorNode)
+        if res
+          validKeys.push(key)
+          validElements[key] = details
+      if returnType is "array"
+        return validKeys
+      else
+        return validElements
 
 
 
