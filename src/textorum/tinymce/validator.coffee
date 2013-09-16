@@ -129,11 +129,20 @@ define (require) ->
     validElementsForNode: (target, location = "inside", returnType = "array") =>
       validator = @editor.plugins.textorum.validator
       dom = @editor.dom
-      checkElements =  @editor.plugins.textorum.schema.defs?[dom.getAttrib(target, 'data-xmlel')]?.contains
+      parent = target.parentNode
+
+      switch location
+        when "before"
+          container = parent
+        when "after"
+          container = parent
+        when "inside"
+          container = target
+          
+      checkElements =  @editor.plugins.textorum.schema.defs?[dom.getAttrib(container, 'data-xmlel')]?.contains
       validKeys = []
       validElements = {}
-      parent = target.parentNode
-      
+
       for key, details of checkElements
         editorNode = dom.create(@editor.plugins.textorum.translateElement(key), {
           'data-xmlel': key, 
@@ -157,7 +166,6 @@ define (require) ->
         return validKeys
       else
         return validElements
-
 
 
   return {
