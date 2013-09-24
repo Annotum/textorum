@@ -437,6 +437,8 @@ div[data-xmlel="sub"] {
 //-------------------------------------------------------
 
 span[data-xmlel="bold"]:before,
+span[data-xmlel="underline"]:before,
+span[data-xmlel="monospace"]:before,
 span[data-xmlel="italic"]:before {
 	display: none;
 }
@@ -446,9 +448,37 @@ span[data-xmlel="bold"] {
 	font-weight: bold;
 }
 
+span[data-xmlel="sup"] {
+	display: inline;
+	vertical-align: super;
+	font-size:x-small;
+}
+
+span[data-xmlel="sub"] {
+	display: inline;
+	vertical-align: sub;
+	font-size:x-small;
+}
+
+span[data-xmlel="monospace"] {
+	display: inline;
+	font-family: monospace;
+}
+
+span[data-xmlel="underline"] {
+	display: inline;
+	text-decoration: underline;
+}
+
 span[data-xmlel="italic"] {
 	display: inline;
 	font-style: italic;
+}
+
+div[data-xmlel="preformat"] {
+	display: inline;
+	font-style: monospace;
+	white-space: pre;
 }
 
 //-------------------------------------------------------
