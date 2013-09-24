@@ -671,7 +671,7 @@ div[data-xmlel="mixed-citation"] div[data-xmlel="pub-id"]:hover {
 
 // Reference Highlights
 
-div[data-xmlel="sec"] div[data-xmlel="p"] div[data-xmlel="xref"]:hover {
+div[data-xmlel="sec"] div[data-xmlel="p"] span[data-xmlel="xref"]:hover {
 	background: $dark;
 	color: $light;
 }
