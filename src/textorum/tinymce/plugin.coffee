@@ -107,6 +107,7 @@ define (require) ->
       @tree = new TextorumTree '#editortree', editor
       @validator = new TextorumValidator '#editorvalidation', editor
       @helper = helper
+      @filters = {}
 
       textorumloader.bindHandler editor, url, @elementMap.inlineelements.join(','), @elementMap.fixedelements.join(',')
       editor.onSetContent.add (ed, o) ->
@@ -154,7 +155,7 @@ define (require) ->
       if editor.theme.onResolveName
         editor.theme.onResolveName.add (theme, path_object) ->
           if path_object.node.getAttribute?('data-xmlel')
-            path_object.name = path_object.node.getAttribute('data-xmlel');
+            path_object.name = path_object.node.getAttribute('data-xmlel')
 
     getInfo: ->
       {
@@ -164,6 +165,7 @@ define (require) ->
         infourl : 'https://github.com/Annotum/textorum/',
         version : "0.1"
       }
+
     translateElement: (elementName) ->
       if elementName in @elementMap.fixedelements
         elementName
@@ -172,6 +174,31 @@ define (require) ->
       else
         "div"
 
+    addFilter: do =>
+      last_id = 0
+      (filter, callback, id = null) ->
+
+        unless @filters[filter]?
+          @filters[filter] = {}
+
+        unless id?
+          id = ++last_id
+
+        @filters[filter][id] = callback
+        id
+
+    removeFilter: (filter, id) ->
+      return false  unless @filters[filter]?
+      return false  unless @filters[filter][id]?
+
+      delete @filters[filter][id]
+      delete @filters[filter] unless (f for own f of @filter[filter]).length
+
+    applyFilters: (filter, value) ->
+      return value unless @filters[filter]?
+      for own f of @filters[filter]
+        value = @filters[filter][f](value)
+      value
 
   }
   tinymce.PluginManager.add('textorum', tinymce.plugins.textorum)

@@ -104,15 +104,21 @@ define (require) ->
       if o.format is "raw"
         return
       # console.log "beforesetcontent", o, [o.content]
+      o.content = editor.plugins.textorum.applyFilters('before_loadFromText', o.content)
       o.content = loadFromText(o.content)
+      o.content = editor.plugins.textorum.applyFilters('after_loadFromText', o.content)
 
     editor.onPostProcess.add (ed, o) ->
       # console.log "postprocess", o
       if o.set and not o.format is "raw"
+        o.content = editor.plugins.textorum.applyFilters('before_loadFromText', o.content)
         o.content = loadFromText(o.content)
+        o.content = editor.plugins.textorum.applyFilters('after_loadFromText', o.content)
 
       if o.get
+        o.content = editor.plugins.textorum.applyFilters('before_saveFromText', o.content)
         o.content = saveFromText(o.content)
+        o.content = editor.plugins.textorum.applyFilters('after_saveFromText', o.content)
 
   return {
     bindHandler: bindHandler
