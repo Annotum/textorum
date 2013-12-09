@@ -90,6 +90,8 @@ define (require) ->
       .replace(/^(<!DOCTYPE[^>]*>\s*<[^>]*?)[ ]?xmlns:xml="http:\/\/www.w3.org\/XML\/1998\/namespace"/g, "$1")
       # XSLT 1.0 doesn't support params in <xsl:output>, so use a placeholder
       # Chrome adds an unneeded xmlns:xml
+      .replace(/^<\?xml[^>]*>/, '')
+      # FF adds the leading `<?xml` tag which is particularly undesirable
     if is_wrapped # unwrap
       xmlString = xmlString
         .replace(/^.*<textorum>/, '')
