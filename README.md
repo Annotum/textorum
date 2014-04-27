@@ -96,6 +96,7 @@ cd annotum-base/js/textorum/
 git checkout develop
 sudo npm install -g grunt-cli
 sudo npm install
+sudo gem install bundler #if not already installed
 sudo bundle install
 grunt dist
 
