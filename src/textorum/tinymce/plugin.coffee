@@ -152,10 +152,11 @@ define (require) ->
         editor.serializer.addAttributeFilter 'id', that.tree.attributeFilterCallback
       editor.onInit.add (editor) ->
 
-      if editor.theme.onResolveName
-        editor.theme.onResolveName.add (theme, path_object) ->
-          if path_object.node.getAttribute?('data-xmlel')
-            path_object.name = path_object.node.getAttribute('data-xmlel')
+      editor.on('ResolveName', (e) ->
+        path_object = e.target
+        if path_object.getAttribute?('data-xmlel')
+          e.name = path_object.getAttribute('data-xmlel')
+      )
 
     getInfo: ->
       {

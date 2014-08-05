@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-    exclude-result-prefixes="#default xml">
+    exclude-result-prefixes="xml">
     <xsl:output method="html" standalone="no"/>
     <xsl:param name="inlineelements">
         <xsl:text>span</xsl:text>
+    </xsl:param>
+    <xsl:param name="bold">
+        <xsl:text>strong</xsl:text>
+    </xsl:param>
+    <xsl:param name="italic">
+        <xsl:text>em</xsl:text>
+    </xsl:param>
+    <xsl:param name="underline">
+        <xsl:text>u</xsl:text>
+    </xsl:param>
+    <xsl:param name="monospace">
+        <xsl:text>tt</xsl:text>
     </xsl:param>
     <xsl:param name="fixedelements">
         <xsl:text/>
@@ -44,6 +56,22 @@
                 <xsl:when
                     test="contains(concat(',', $inlineelements, ','), concat(',',local-name(.),','))">
                     <xsl:text>span</xsl:text>
+                </xsl:when>
+                <xsl:when
+                    test="contains(concat(',', $bold, ','), concat(',',local-name(.),','))">
+                    <xsl:text>strong</xsl:text>
+                </xsl:when>
+                <xsl:when
+                    test="contains(concat(',', $italic, ','), concat(',',local-name(.),','))">
+                    <xsl:text>em</xsl:text>
+                </xsl:when>
+                <xsl:when
+                    test="contains(concat(',', $monospace, ','), concat(',',local-name(.),','))">
+                    <xsl:text>tt</xsl:text>
+                </xsl:when>
+                <xsl:when
+                    test="contains(concat(',', $underline, ','), concat(',',local-name(.),','))">
+                    <xsl:text>u</xsl:text>
                 </xsl:when>
                 <xsl:when
                     test="contains(concat(',', $fixedelements, ','), concat(',',local-name(.),','))">
