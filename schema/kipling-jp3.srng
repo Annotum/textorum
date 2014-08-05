@@ -1,0 +1,4314 @@
+<?xml version="1.0"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+  <start>
+    <choice>
+      <ref name="article-idm289392934304"/>
+      <ref name="hr-idm289392576608"/>
+    </choice>
+  </start>
+  <define name="article-idm289392934304">
+    <element>
+      <name ns="">article</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">article-type</name>
+                    <text/>
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="http://www.w3.org/XML/1998/namespace">lang</name>
+                    <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="NMTOKEN"/>
+                  </attribute>
+                </choice>
+              </group>
+              <ref name="front-idm289392927328"/>
+            </group>
+            <ref name="body-idm289392673248"/>
+          </group>
+          <choice>
+            <empty/>
+            <ref name="back-idm289392534192"/>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="response-idm289392484864"/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="front-idm289392927328">
+    <element>
+      <name ns="">front</name>
+      <group>
+        <ref name="journal-meta-idm289392924496"/>
+        <ref name="article-meta-idm289392900528"/>
+      </group>
+    </element>
+  </define>
+  <define name="journal-meta-idm289392924496">
+    <element>
+      <name ns="">journal-meta</name>
+      <group>
+        <group>
+          <group>
+            <oneOrMore>
+              <ref name="journal-id-idm289392919568"/>
+            </oneOrMore>
+            <choice>
+              <empty/>
+              <oneOrMore>
+                <ref name="journal-title-group-idm289392916656"/>
+              </oneOrMore>
+            </choice>
+          </group>
+          <oneOrMore>
+            <ref name="issn-idm289392911392"/>
+          </oneOrMore>
+        </group>
+        <choice>
+          <empty/>
+          <ref name="publisher-idm289392907936"/>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="journal-id-idm289392919568">
+    <element>
+      <name ns="">journal-id</name>
+      <group>
+        <choice>
+          <empty/>
+          <attribute>
+            <name ns="">journal-id-type</name>
+            <text/>
+          </attribute>
+        </choice>
+        <text/>
+      </group>
+    </element>
+  </define>
+  <define name="journal-title-group-idm289392916656">
+    <element>
+      <name ns="">journal-title-group</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <ref name="journal-title-idm289392913904"/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="journal-title-idm289392913904">
+    <element>
+      <name ns="">journal-title</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <text/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="issn-idm289392911392">
+    <element>
+      <name ns="">issn</name>
+      <group>
+        <choice>
+          <empty/>
+          <attribute>
+            <name ns="">pub-type</name>
+            <text/>
+          </attribute>
+        </choice>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <text/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="publisher-idm289392907936">
+    <element>
+      <name ns="">publisher</name>
+      <group>
+        <ref name="publisher-name-idm289392904864"/>
+        <choice>
+          <empty/>
+          <ref name="publisher-loc-idm289392902656"/>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="publisher-name-idm289392904864">
+    <element>
+      <name ns="">publisher-name</name>
+      <text/>
+    </element>
+  </define>
+  <define name="publisher-loc-idm289392902656">
+    <element>
+      <name ns="">publisher-loc</name>
+      <text/>
+    </element>
+  </define>
+  <define name="article-meta-idm289392900528">
+    <element>
+      <name ns="">article-meta</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <group>
+                      <group>
+                        <group>
+                          <group>
+                            <group>
+                              <group>
+                                <group>
+                                  <group>
+                                    <choice>
+                                      <empty/>
+                                      <oneOrMore>
+                                        <ref name="article-id-idm289392885776"/>
+                                      </oneOrMore>
+                                    </choice>
+                                    <choice>
+                                      <empty/>
+                                      <ref name="article-categories-idm289392869968"/>
+                                    </choice>
+                                  </group>
+                                  <ref name="title-group-idm289392860368"/>
+                                </group>
+                                <ref name="contrib-group-idm289392850992"/>
+                              </group>
+                              <oneOrMore>
+                                <ref name="pub-date-idm289392804160"/>
+                              </oneOrMore>
+                            </group>
+                            <choice>
+                              <empty/>
+                              <ref name="volume-idm289392784544"/>
+                            </choice>
+                          </group>
+                          <choice>
+                            <empty/>
+                            <ref name="issue-idm289392782416"/>
+                          </choice>
+                        </group>
+                        <choice>
+                          <empty/>
+                          <oneOrMore>
+                            <ref name="issue-title-idm289392780288"/>
+                          </oneOrMore>
+                        </choice>
+                      </group>
+                      <choice>
+                        <empty/>
+                        <ref name="elocation-id-idm289392778160"/>
+                      </choice>
+                    </group>
+                    <choice>
+                      <empty/>
+                      <ref name="history-idm289392776032"/>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty/>
+                    <ref name="permissions-idm289392754192"/>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <ref name="self-uri-idm289392677136"/>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <oneOrMore>
+                  <ref name="related-article-idm289392748752"/>
+                </oneOrMore>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <ref name="abstract-idm289392731456"/>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <oneOrMore>
+              <ref name="kwd-group-idm289392727264"/>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="funding-group-idm289392721008"/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="article-id-idm289392885776">
+    <element>
+      <name ns="">article-id</name>
+      <group>
+        <choice>
+          <empty/>
+          <attribute>
+            <name ns="">pub-id-type</name>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <choice>
+                                  <value ns="" type="token" datatypeLibrary="">art-access-id</value>
+                                  <value ns="" type="token" datatypeLibrary="">coden</value>
+                                </choice>
+                                <value ns="" type="token" datatypeLibrary="">doaj</value>
+                              </choice>
+                              <value ns="" type="token" datatypeLibrary="">doi</value>
+                            </choice>
+                            <value ns="" type="token" datatypeLibrary="">manuscript</value>
+                          </choice>
+                          <value ns="" type="token" datatypeLibrary="">medline</value>
+                        </choice>
+                        <value ns="" type="token" datatypeLibrary="">other</value>
+                      </choice>
+                      <value ns="" type="token" datatypeLibrary="">pii</value>
+                    </choice>
+                    <value ns="" type="token" datatypeLibrary="">pmcid</value>
+                  </choice>
+                  <value ns="" type="token" datatypeLibrary="">pmid</value>
+                </choice>
+                <value ns="" type="token" datatypeLibrary="">publisher-id</value>
+              </choice>
+              <value ns="" type="token" datatypeLibrary="">sici</value>
+            </choice>
+          </attribute>
+        </choice>
+        <text/>
+      </group>
+    </element>
+  </define>
+  <define name="article-categories-idm289392869968">
+    <element>
+      <name ns="">article-categories</name>
+      <oneOrMore>
+        <ref name="subj-group-idm289392867568"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="subj-group-idm289392867568">
+    <element>
+      <name ns="">subj-group</name>
+      <group>
+        <group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="">subj-group-type</name>
+              <text/>
+            </attribute>
+          </choice>
+          <oneOrMore>
+            <ref name="subject-idm289392863376"/>
+          </oneOrMore>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="subj-group-idm289392867568"/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="subject-idm289392863376">
+    <element>
+      <name ns="">subject</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <choice>
+            <text/>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <ref name="bold-idm289392450992"/>
+                      <ref name="italic-idm289392447536"/>
+                    </choice>
+                    <ref name="monospace-idm289392444000"/>
+                  </choice>
+                  <ref name="underline-idm289392440464"/>
+                </choice>
+                <ref name="sup-idm289392458096"/>
+              </choice>
+              <ref name="sub-idm289392454544"/>
+            </choice>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="title-group-idm289392860368">
+    <element>
+      <name ns="">title-group</name>
+      <group>
+        <ref name="article-title-idm289392857152"/>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="subtitle-idm289392854064"/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="article-title-idm289392857152">
+    <element>
+      <name ns="">article-title</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <choice>
+            <text/>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <ref name="bold-idm289392450992"/>
+                      <ref name="italic-idm289392447536"/>
+                    </choice>
+                    <ref name="monospace-idm289392444000"/>
+                  </choice>
+                  <ref name="underline-idm289392440464"/>
+                </choice>
+                <ref name="sup-idm289392458096"/>
+              </choice>
+              <ref name="sub-idm289392454544"/>
+            </choice>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="subtitle-idm289392854064">
+    <element>
+      <name ns="">subtitle</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <choice>
+            <text/>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <ref name="bold-idm289392450992"/>
+                      <ref name="italic-idm289392447536"/>
+                    </choice>
+                    <ref name="monospace-idm289392444000"/>
+                  </choice>
+                  <ref name="underline-idm289392440464"/>
+                </choice>
+                <ref name="sup-idm289392458096"/>
+              </choice>
+              <ref name="sub-idm289392454544"/>
+            </choice>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="contrib-group-idm289392850992">
+    <element>
+      <name ns="">contrib-group</name>
+      <group>
+        <oneOrMore>
+          <ref name="contrib-idm289392847664"/>
+        </oneOrMore>
+        <choice>
+          <empty/>
+          <ref name="author-comment-idm289392806672"/>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="contrib-idm289392847664">
+    <element>
+      <name ns="">contrib</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">contrib-type</name>
+                      <text/>
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">corresp</name>
+                      <choice>
+                        <value ns="" type="token" datatypeLibrary="">no</value>
+                        <value ns="" type="token" datatypeLibrary="">yes</value>
+                      </choice>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">equal-contrib</name>
+                    <choice>
+                      <value ns="" type="token" datatypeLibrary="">no</value>
+                      <value ns="" type="token" datatypeLibrary="">yes</value>
+                    </choice>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <ref name="collab-idm289392834112"/>
+                <ref name="name-idm289392830320"/>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <oneOrMore>
+                <ref name="degrees-idm289392808720"/>
+              </oneOrMore>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <ref name="email-idm289392468880"/>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <choice>
+              <choice>
+                <ref name="aff-idm289392466832"/>
+                <ref name="bio-idm289392460512"/>
+              </choice>
+              <ref name="ext-link-idm289392436928"/>
+            </choice>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="collab-idm289392834112">
+    <element>
+      <name ns="">collab</name>
+      <group>
+        <choice>
+          <empty/>
+          <attribute>
+            <name ns="">collab-type</name>
+            <text/>
+          </attribute>
+        </choice>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <choice>
+              <text/>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <ref name="bold-idm289392450992"/>
+                        <ref name="italic-idm289392447536"/>
+                      </choice>
+                      <ref name="monospace-idm289392444000"/>
+                    </choice>
+                    <ref name="underline-idm289392440464"/>
+                  </choice>
+                  <ref name="sup-idm289392458096"/>
+                </choice>
+                <ref name="sub-idm289392454544"/>
+              </choice>
+            </choice>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="name-idm289392830320">
+    <element>
+      <name ns="">name</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">content-type</name>
+                    <text/>
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">name-style</name>
+                    <choice>
+                      <choice>
+                        <value ns="" type="token" datatypeLibrary="">western</value>
+                        <value ns="" type="token" datatypeLibrary="">eastern</value>
+                      </choice>
+                      <value ns="" type="token" datatypeLibrary="">islensk</value>
+                    </choice>
+                  </attribute>
+                </choice>
+              </group>
+              <ref name="surname-idm289392819600"/>
+            </group>
+            <choice>
+              <empty/>
+              <ref name="given-names-idm289392817168"/>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <ref name="prefix-idm289392814592"/>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <ref name="suffix-idm289392812096"/>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="surname-idm289392819600">
+    <element>
+      <name ns="">surname</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <text/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="given-names-idm289392817168">
+    <element>
+      <name ns="">given-names</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <text/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="prefix-idm289392814592">
+    <element>
+      <name ns="">prefix</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <text/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="suffix-idm289392812096">
+    <element>
+      <name ns="">suffix</name>
+      <group>
+        <choice>
+          <empty/>
+          <attribute>
+            <name ns="">content-type</name>
+            <text/>
+          </attribute>
+        </choice>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <text/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="degrees-idm289392808720">
+    <element>
+      <name ns="">degrees</name>
+      <text/>
+    </element>
+  </define>
+  <define name="author-comment-idm289392806672">
+    <element>
+      <name ns="">author-comment</name>
+      <oneOrMore>
+        <ref name="p-idm289392664992"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="pub-date-idm289392804160">
+    <element>
+      <name ns="">pub-date</name>
+      <group>
+        <group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="">pub-type</name>
+              <text/>
+            </attribute>
+          </choice>
+          <choice>
+            <empty/>
+            <choice>
+              <group>
+                <choice>
+                  <empty/>
+                  <ref name="day-idm289392792896"/>
+                </choice>
+                <choice>
+                  <empty/>
+                  <ref name="month-idm289392790848"/>
+                </choice>
+              </group>
+              <ref name="season-idm289392788800"/>
+            </choice>
+          </choice>
+        </group>
+        <ref name="year-idm289392786672"/>
+      </group>
+    </element>
+  </define>
+  <define name="date-idm289392798400">
+    <element>
+      <name ns="">date</name>
+      <group>
+        <group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="">date-type</name>
+              <text/>
+            </attribute>
+          </choice>
+          <choice>
+            <empty/>
+            <choice>
+              <group>
+                <choice>
+                  <empty/>
+                  <ref name="day-idm289392792896"/>
+                </choice>
+                <choice>
+                  <empty/>
+                  <ref name="month-idm289392790848"/>
+                </choice>
+              </group>
+              <ref name="season-idm289392788800"/>
+            </choice>
+          </choice>
+        </group>
+        <ref name="year-idm289392786672"/>
+      </group>
+    </element>
+  </define>
+  <define name="day-idm289392792896">
+    <element>
+      <name ns="">day</name>
+      <text/>
+    </element>
+  </define>
+  <define name="month-idm289392790848">
+    <element>
+      <name ns="">month</name>
+      <text/>
+    </element>
+  </define>
+  <define name="season-idm289392788800">
+    <element>
+      <name ns="">season</name>
+      <text/>
+    </element>
+  </define>
+  <define name="year-idm289392786672">
+    <element>
+      <name ns="">year</name>
+      <text/>
+    </element>
+  </define>
+  <define name="volume-idm289392784544">
+    <element>
+      <name ns="">volume</name>
+      <text/>
+    </element>
+  </define>
+  <define name="issue-idm289392782416">
+    <element>
+      <name ns="">issue</name>
+      <text/>
+    </element>
+  </define>
+  <define name="issue-title-idm289392780288">
+    <element>
+      <name ns="">issue-title</name>
+      <text/>
+    </element>
+  </define>
+  <define name="elocation-id-idm289392778160">
+    <element>
+      <name ns="">elocation-id</name>
+      <text/>
+    </element>
+  </define>
+  <define name="history-idm289392776032">
+    <element>
+      <name ns="">history</name>
+      <oneOrMore>
+        <ref name="date-idm289392798400"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="copyright-holder-idm289392773552">
+    <element>
+      <name ns="">copyright-holder</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <choice>
+            <choice>
+              <text/>
+              <ref name="sup-idm289392458096"/>
+            </choice>
+            <ref name="sub-idm289392454544"/>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="copyright-statement-idm289392769536">
+    <element>
+      <name ns="">copyright-statement</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <choice>
+            <text/>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <ref name="bold-idm289392450992"/>
+                      <ref name="italic-idm289392447536"/>
+                    </choice>
+                    <ref name="monospace-idm289392444000"/>
+                  </choice>
+                  <ref name="underline-idm289392440464"/>
+                </choice>
+                <ref name="sup-idm289392458096"/>
+              </choice>
+              <ref name="sub-idm289392454544"/>
+            </choice>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="copyright-year-idm289392766544">
+    <element>
+      <name ns="">copyright-year</name>
+      <text/>
+    </element>
+  </define>
+  <define name="license-idm289392764480">
+    <element>
+      <name ns="">license</name>
+      <group>
+        <group>
+          <group>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="">license-type</name>
+                <text/>
+              </attribute>
+            </choice>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="http://www.w3.org/1999/xlink">type</name>
+                <value ns="" type="token" datatypeLibrary="">simple</value>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="http://www.w3.org/1999/xlink">href</name>
+              <text/>
+            </attribute>
+          </choice>
+        </group>
+        <oneOrMore>
+          <ref name="license-p-idm289392757888"/>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="license-p-idm289392757888">
+    <element>
+      <name ns="">license-p</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <choice>
+            <choice>
+              <text/>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <ref name="bold-idm289392450992"/>
+                                <ref name="italic-idm289392447536"/>
+                              </choice>
+                              <ref name="monospace-idm289392444000"/>
+                            </choice>
+                            <ref name="underline-idm289392440464"/>
+                          </choice>
+                          <ref name="sup-idm289392458096"/>
+                        </choice>
+                        <ref name="sub-idm289392454544"/>
+                      </choice>
+                      <ref name="named-content-idm289392416272"/>
+                    </choice>
+                    <ref name="ext-link-idm289392436928"/>
+                  </choice>
+                  <ref name="inline-graphic-idm289392618144"/>
+                </choice>
+                <ref name="inline-formula-idm289392561760"/>
+              </choice>
+            </choice>
+            <ref name="xref-idm289392429616"/>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="permissions-idm289392754192">
+    <element>
+      <name ns="">permissions</name>
+      <group>
+        <group>
+          <group>
+            <choice>
+              <empty/>
+              <oneOrMore>
+                <ref name="copyright-statement-idm289392769536"/>
+              </oneOrMore>
+            </choice>
+            <choice>
+              <empty/>
+              <oneOrMore>
+                <ref name="copyright-year-idm289392766544"/>
+              </oneOrMore>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <oneOrMore>
+              <ref name="copyright-holder-idm289392773552"/>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="license-idm289392764480"/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="related-article-idm289392748752">
+    <element>
+      <name ns="">related-article</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <group>
+                      <group>
+                        <group>
+                          <group>
+                            <group>
+                              <choice>
+                                <empty/>
+                                <attribute>
+                                  <name ns="">id</name>
+                                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                                </attribute>
+                              </choice>
+                              <attribute>
+                                <name ns="">related-article-type</name>
+                                <text/>
+                              </attribute>
+                            </group>
+                            <choice>
+                              <empty/>
+                              <attribute>
+                                <name ns="">ext-link-type</name>
+                                <text/>
+                              </attribute>
+                            </choice>
+                          </group>
+                          <choice>
+                            <empty/>
+                            <attribute>
+                              <name ns="">vol</name>
+                              <text/>
+                            </attribute>
+                          </choice>
+                        </group>
+                        <choice>
+                          <empty/>
+                          <attribute>
+                            <name ns="">page</name>
+                            <text/>
+                          </attribute>
+                        </choice>
+                      </group>
+                      <choice>
+                        <empty/>
+                        <attribute>
+                          <name ns="">issue</name>
+                          <text/>
+                        </attribute>
+                      </choice>
+                    </group>
+                    <choice>
+                      <empty/>
+                      <attribute>
+                        <name ns="">elocation-id</name>
+                        <text/>
+                      </attribute>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">journal-id</name>
+                      <text/>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">journal-id-type</name>
+                    <text/>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="http://www.w3.org/1999/xlink">type</name>
+                  <value ns="" type="token" datatypeLibrary="">simple</value>
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="http://www.w3.org/1999/xlink">href</name>
+                <text/>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="http://www.w3.org/1999/xlink">title</name>
+              <text/>
+            </attribute>
+          </choice>
+        </group>
+        <text/>
+      </group>
+    </element>
+  </define>
+  <define name="abstract-idm289392731456">
+    <element>
+      <name ns="">abstract</name>
+      <group>
+        <group>
+          <choice>
+            <empty/>
+            <ref name="title-idm289392652592"/>
+          </choice>
+          <choice>
+            <empty/>
+            <oneOrMore>
+              <ref name="p-idm289392664992"/>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="sec-idm289392659744"/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="kwd-group-idm289392727264">
+    <element>
+      <name ns="">kwd-group</name>
+      <group>
+        <choice>
+          <empty/>
+          <attribute>
+            <name ns="">kwd-group-type</name>
+            <text/>
+          </attribute>
+        </choice>
+        <oneOrMore>
+          <ref name="kwd-idm289392723920"/>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="kwd-idm289392723920">
+    <element>
+      <name ns="">kwd</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <choice>
+            <text/>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <ref name="bold-idm289392450992"/>
+                      <ref name="italic-idm289392447536"/>
+                    </choice>
+                    <ref name="monospace-idm289392444000"/>
+                  </choice>
+                  <ref name="underline-idm289392440464"/>
+                </choice>
+                <ref name="sup-idm289392458096"/>
+              </choice>
+              <ref name="sub-idm289392454544"/>
+            </choice>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="funding-group-idm289392721008">
+    <element>
+      <name ns="">funding-group</name>
+      <group>
+        <group>
+          <choice>
+            <empty/>
+            <oneOrMore>
+              <ref name="award-group-idm289392709760"/>
+            </oneOrMore>
+          </choice>
+          <choice>
+            <empty/>
+            <oneOrMore>
+              <ref name="funding-statement-idm289392716592"/>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <ref name="open-access-idm289392712112"/>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="funding-statement-idm289392716592">
+    <element>
+      <name ns="">funding-statement</name>
+      <group>
+        <choice>
+          <empty/>
+          <attribute>
+            <name ns="">rid</name>
+            <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="IDREFS"/>
+          </attribute>
+        </choice>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <choice>
+              <text/>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <ref name="bold-idm289392450992"/>
+                        <ref name="italic-idm289392447536"/>
+                      </choice>
+                      <ref name="monospace-idm289392444000"/>
+                    </choice>
+                    <ref name="underline-idm289392440464"/>
+                  </choice>
+                  <ref name="sup-idm289392458096"/>
+                </choice>
+                <ref name="sub-idm289392454544"/>
+              </choice>
+            </choice>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="open-access-idm289392712112">
+    <element>
+      <name ns="">open-access</name>
+      <oneOrMore>
+        <ref name="p-idm289392664992"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="award-group-idm289392709760">
+    <element>
+      <name ns="">award-group</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <group>
+                      <group>
+                        <choice>
+                          <empty/>
+                          <attribute>
+                            <name ns="">id</name>
+                            <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                          </attribute>
+                        </choice>
+                        <choice>
+                          <empty/>
+                          <attribute>
+                            <name ns="">rid</name>
+                            <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="IDREFS"/>
+                          </attribute>
+                        </choice>
+                      </group>
+                      <choice>
+                        <empty/>
+                        <attribute>
+                          <name ns="">award-type</name>
+                          <text/>
+                        </attribute>
+                      </choice>
+                    </group>
+                    <choice>
+                      <empty/>
+                      <attribute>
+                        <name ns="http://www.w3.org/1999/xlink">type</name>
+                        <value ns="" type="token" datatypeLibrary="">simple</value>
+                      </attribute>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="http://www.w3.org/1999/xlink">href</name>
+                      <text/>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="http://www.w3.org/1999/xlink">title</name>
+                    <text/>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <oneOrMore>
+                  <ref name="funding-source-idm289392695424"/>
+                </oneOrMore>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <oneOrMore>
+                <ref name="award-id-idm289392684736"/>
+              </oneOrMore>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <oneOrMore>
+              <ref name="principal-award-recipient-idm289392681472"/>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="principal-investigator-idm289392679344"/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="funding-source-idm289392695424">
+    <element>
+      <name ns="">funding-source</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">id</name>
+                      <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">rid</name>
+                      <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="IDREFS"/>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">source-type</name>
+                    <text/>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">country</name>
+                  <text/>
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="http://www.w3.org/1999/xlink">type</name>
+                <value ns="" type="token" datatypeLibrary="">simple</value>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="http://www.w3.org/1999/xlink">href</name>
+              <text/>
+            </attribute>
+          </choice>
+        </group>
+        <text/>
+      </group>
+    </element>
+  </define>
+  <define name="award-id-idm289392684736">
+    <element>
+      <name ns="">award-id</name>
+      <group>
+        <choice>
+          <empty/>
+          <attribute>
+            <name ns="">rid</name>
+            <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="IDREFS"/>
+          </attribute>
+        </choice>
+        <text/>
+      </group>
+    </element>
+  </define>
+  <define name="principal-award-recipient-idm289392681472">
+    <element>
+      <name ns="">principal-award-recipient</name>
+      <text/>
+    </element>
+  </define>
+  <define name="principal-investigator-idm289392679344">
+    <element>
+      <name ns="">principal-investigator</name>
+      <text/>
+    </element>
+  </define>
+  <define name="self-uri-idm289392677136">
+    <element>
+      <name ns="">self-uri</name>
+      <group>
+        <choice>
+          <empty/>
+          <attribute>
+            <name ns="">content-type</name>
+            <value ns="" datatypeLibrary="" type="string">citation-string</value>
+          </attribute>
+        </choice>
+        <text/>
+      </group>
+    </element>
+  </define>
+  <define name="body-idm289392673248">
+    <element>
+      <name ns="">body</name>
+      <group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <ref name="fig-idm289392649696"/>
+                            <ref name="media-idm289392634448"/>
+                          </choice>
+                          <ref name="preformat-idm289392612944"/>
+                        </choice>
+                        <ref name="supplementary-material-idm289392610896"/>
+                      </choice>
+                      <ref name="table-wrap-idm289392598160"/>
+                    </choice>
+                    <ref name="disp-formula-idm289392559312"/>
+                  </choice>
+                  <ref name="p-idm289392664992"/>
+                </choice>
+                <ref name="list-idm289392572512"/>
+              </choice>
+              <ref name="disp-quote-idm289392551248"/>
+            </choice>
+          </oneOrMore>
+        </choice>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="sec-idm289392659744"/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="p-idm289392664992">
+    <element>
+      <name ns="">p</name>
+      <group>
+        <choice>
+          <empty/>
+          <attribute>
+            <name ns="">id</name>
+            <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+          </attribute>
+        </choice>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <choice>
+              <choice>
+                <choice>
+                  <text/>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <choice>
+                                  <choice>
+                                    <ref name="bold-idm289392450992"/>
+                                    <ref name="italic-idm289392447536"/>
+                                  </choice>
+                                  <ref name="monospace-idm289392444000"/>
+                                </choice>
+                                <ref name="underline-idm289392440464"/>
+                              </choice>
+                              <ref name="sup-idm289392458096"/>
+                            </choice>
+                            <ref name="sub-idm289392454544"/>
+                          </choice>
+                          <ref name="named-content-idm289392416272"/>
+                        </choice>
+                        <ref name="ext-link-idm289392436928"/>
+                      </choice>
+                      <ref name="inline-graphic-idm289392618144"/>
+                    </choice>
+                    <ref name="inline-formula-idm289392561760"/>
+                  </choice>
+                </choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <ref name="list-idm289392572512"/>
+                              <ref name="disp-formula-idm289392559312"/>
+                            </choice>
+                            <ref name="disp-quote-idm289392551248"/>
+                          </choice>
+                          <ref name="fig-idm289392649696"/>
+                        </choice>
+                        <ref name="table-wrap-idm289392598160"/>
+                      </choice>
+                      <ref name="preformat-idm289392612944"/>
+                    </choice>
+                    <ref name="media-idm289392634448"/>
+                  </choice>
+                  <ref name="supplementary-material-idm289392610896"/>
+                </choice>
+              </choice>
+              <ref name="xref-idm289392429616"/>
+            </choice>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="sec-idm289392659744">
+    <element>
+      <name ns="">sec</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">id</name>
+                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                </attribute>
+              </choice>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">sec-type</name>
+                  <text/>
+                </attribute>
+              </choice>
+            </group>
+            <ref name="title-idm289392652592"/>
+          </group>
+          <choice>
+            <empty/>
+            <oneOrMore>
+              <choice>
+                <ref name="p-idm289392664992"/>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <ref name="list-idm289392572512"/>
+                              <ref name="disp-formula-idm289392559312"/>
+                            </choice>
+                            <ref name="disp-quote-idm289392551248"/>
+                          </choice>
+                          <ref name="fig-idm289392649696"/>
+                        </choice>
+                        <ref name="table-wrap-idm289392598160"/>
+                      </choice>
+                      <ref name="preformat-idm289392612944"/>
+                    </choice>
+                    <ref name="media-idm289392634448"/>
+                  </choice>
+                  <ref name="supplementary-material-idm289392610896"/>
+                </choice>
+              </choice>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="sec-idm289392659744"/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="title-idm289392652592">
+    <element>
+      <name ns="">title</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <choice>
+            <text/>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <ref name="bold-idm289392450992"/>
+                              <ref name="italic-idm289392447536"/>
+                            </choice>
+                            <ref name="monospace-idm289392444000"/>
+                          </choice>
+                          <ref name="underline-idm289392440464"/>
+                        </choice>
+                        <ref name="sup-idm289392458096"/>
+                      </choice>
+                      <ref name="sub-idm289392454544"/>
+                    </choice>
+                    <ref name="named-content-idm289392416272"/>
+                  </choice>
+                  <ref name="ext-link-idm289392436928"/>
+                </choice>
+                <ref name="inline-graphic-idm289392618144"/>
+              </choice>
+              <ref name="inline-formula-idm289392561760"/>
+            </choice>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="fig-idm289392649696">
+    <element>
+      <name ns="">fig</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">id</name>
+                      <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">position</name>
+                      <choice>
+                        <choice>
+                          <value ns="" type="token" datatypeLibrary="">anchor</value>
+                          <value ns="" type="token" datatypeLibrary="">float</value>
+                        </choice>
+                        <value ns="" type="token" datatypeLibrary="">margin</value>
+                      </choice>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">fig-type</name>
+                    <text/>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <ref name="label-idm289392539216"/>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <ref name="caption-idm289392637264"/>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <oneOrMore>
+              <choice>
+                <ref name="media-idm289392634448"/>
+                <ref name="preformat-idm289392612944"/>
+              </choice>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <ref name="permissions-idm289392754192"/>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="caption-idm289392637264">
+    <element>
+      <name ns="">caption</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">id</name>
+                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                </attribute>
+              </choice>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">content-type</name>
+                  <text/>
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="">style</name>
+                <text/>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <ref name="title-idm289392652592"/>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="p-idm289392664992"/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="media-idm289392634448">
+    <element>
+      <name ns="">media</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <choice>
+                      <empty/>
+                      <attribute>
+                        <name ns="">mimetype</name>
+                        <text/>
+                      </attribute>
+                    </choice>
+                    <choice>
+                      <empty/>
+                      <attribute>
+                        <name ns="">mime-subtype</name>
+                        <text/>
+                      </attribute>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="http://www.w3.org/1999/xlink">type</name>
+                      <value ns="" type="token" datatypeLibrary="">simple</value>
+                    </attribute>
+                  </choice>
+                </group>
+                <attribute>
+                  <name ns="http://www.w3.org/1999/xlink">href</name>
+                  <text/>
+                </attribute>
+              </group>
+              <choice>
+                <empty/>
+                <ref name="alt-text-idm289392543760"/>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <ref name="long-desc-idm289392541712"/>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <oneOrMore>
+              <ref name="uri-idm289392624464"/>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <ref name="permissions-idm289392754192"/>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="uri-idm289392624464">
+    <element>
+      <name ns="">uri</name>
+      <group>
+        <group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="http://www.w3.org/1999/xlink">type</name>
+              <value ns="" type="token" datatypeLibrary="">simple</value>
+            </attribute>
+          </choice>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="http://www.w3.org/1999/xlink">href</name>
+              <text/>
+            </attribute>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <attribute>
+            <name ns="">content-type</name>
+            <text/>
+          </attribute>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="inline-graphic-idm289392618144">
+    <element>
+      <name ns="">inline-graphic</name>
+      <group>
+        <group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="http://www.w3.org/1999/xlink">type</name>
+              <value ns="" type="token" datatypeLibrary="">simple</value>
+            </attribute>
+          </choice>
+          <attribute>
+            <name ns="http://www.w3.org/1999/xlink">href</name>
+            <text/>
+          </attribute>
+        </group>
+        <choice>
+          <empty/>
+          <ref name="alt-text-idm289392543760"/>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="preformat-idm289392612944">
+    <element>
+      <name ns="">preformat</name>
+      <text/>
+    </element>
+  </define>
+  <define name="supplementary-material-idm289392610896">
+    <element>
+      <name ns="">supplementary-material</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">id</name>
+                      <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">position</name>
+                      <choice>
+                        <choice>
+                          <value ns="" type="token" datatypeLibrary="">anchor</value>
+                          <value ns="" type="token" datatypeLibrary="">float</value>
+                        </choice>
+                        <value ns="" type="token" datatypeLibrary="">margin</value>
+                      </choice>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">content-type</name>
+                    <text/>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <ref name="label-idm289392539216"/>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <ref name="caption-idm289392637264"/>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <oneOrMore>
+              <choice>
+                <ref name="media-idm289392634448"/>
+                <ref name="preformat-idm289392612944"/>
+              </choice>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <ref name="permissions-idm289392754192"/>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="table-wrap-idm289392598160">
+    <element>
+      <name ns="">table-wrap</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">id</name>
+                      <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">position</name>
+                      <choice>
+                        <choice>
+                          <value ns="" type="token" datatypeLibrary="">anchor</value>
+                          <value ns="" type="token" datatypeLibrary="">float</value>
+                        </choice>
+                        <value ns="" type="token" datatypeLibrary="">margin</value>
+                      </choice>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <ref name="label-idm289392539216"/>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <ref name="caption-idm289392637264"/>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <oneOrMore>
+                <choice>
+                  <ref name="media-idm289392634448"/>
+                  <ref name="table-idm289392349792"/>
+                </choice>
+              </oneOrMore>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <ref name="table-wrap-foot-idm289392586400"/>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <ref name="permissions-idm289392754192"/>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="table-wrap-foot-idm289392586400">
+    <element>
+      <name ns="">table-wrap-foot</name>
+      <oneOrMore>
+        <ref name="p-idm289392664992"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="th-idm289392583904">
+    <element>
+      <name ns="">th</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <group>
+                      <group>
+                        <group>
+                          <group>
+                            <group>
+                              <choice>
+                                <empty/>
+                                <attribute>
+                                  <name ns="">id</name>
+                                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                                </attribute>
+                              </choice>
+                              <choice>
+                                <empty/>
+                                <attribute>
+                                  <name ns="">content-type</name>
+                                  <text/>
+                                </attribute>
+                              </choice>
+                            </group>
+                            <choice>
+                              <empty/>
+                              <attribute>
+                                <name ns="">style</name>
+                                <text/>
+                              </attribute>
+                            </choice>
+                          </group>
+                          <choice>
+                            <empty/>
+                            <attribute>
+                              <name ns="">abbr</name>
+                              <data datatypeLibrary="" type="string"/>
+                            </attribute>
+                          </choice>
+                        </group>
+                        <choice>
+                          <empty/>
+                          <attribute>
+                            <name ns="">axis</name>
+                            <text/>
+                          </attribute>
+                        </choice>
+                      </group>
+                      <choice>
+                        <empty/>
+                        <attribute>
+                          <name ns="">headers</name>
+                          <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="IDREFS"/>
+                        </attribute>
+                      </choice>
+                    </group>
+                    <choice>
+                      <empty/>
+                      <attribute>
+                        <name ns="">scope</name>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <value ns="" type="token" datatypeLibrary="">row</value>
+                              <value ns="" type="token" datatypeLibrary="">col</value>
+                            </choice>
+                            <value ns="" type="token" datatypeLibrary="">rowgroup</value>
+                          </choice>
+                          <value ns="" type="token" datatypeLibrary="">colgroup</value>
+                        </choice>
+                      </attribute>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">rowspan</name>
+                      <data datatypeLibrary="" type="string"/>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">colspan</name>
+                    <data datatypeLibrary="" type="string"/>
+                  </attribute>
+                </choice>
+              </group>
+              <group>
+                <group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">align</name>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <value ns="" type="token" datatypeLibrary="">left</value>
+                              <value ns="" type="token" datatypeLibrary="">center</value>
+                            </choice>
+                            <value ns="" type="token" datatypeLibrary="">right</value>
+                          </choice>
+                          <value ns="" type="token" datatypeLibrary="">justify</value>
+                        </choice>
+                        <value ns="" type="token" datatypeLibrary="">char</value>
+                      </choice>
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">char</name>
+                      <data datatypeLibrary="" type="string"/>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">charoff</name>
+                    <data datatypeLibrary="" type="string"/>
+                  </attribute>
+                </choice>
+              </group>
+            </group>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="">valign</name>
+                <choice>
+                  <choice>
+                    <choice>
+                      <value ns="" type="token" datatypeLibrary="">top</value>
+                      <value ns="" type="token" datatypeLibrary="">middle</value>
+                    </choice>
+                    <value ns="" type="token" datatypeLibrary="">bottom</value>
+                  </choice>
+                  <value ns="" type="token" datatypeLibrary="">baseline</value>
+                </choice>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="">bgcolor</name>
+              <data datatypeLibrary="" type="string"/>
+            </attribute>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <choice>
+              <choice>
+                <choice>
+                  <text/>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <choice>
+                                  <choice>
+                                    <ref name="bold-idm289392450992"/>
+                                    <ref name="italic-idm289392447536"/>
+                                  </choice>
+                                  <ref name="monospace-idm289392444000"/>
+                                </choice>
+                                <ref name="underline-idm289392440464"/>
+                              </choice>
+                              <ref name="sup-idm289392458096"/>
+                            </choice>
+                            <ref name="sub-idm289392454544"/>
+                          </choice>
+                          <ref name="named-content-idm289392416272"/>
+                        </choice>
+                        <ref name="ext-link-idm289392436928"/>
+                      </choice>
+                      <ref name="inline-graphic-idm289392618144"/>
+                    </choice>
+                    <ref name="inline-formula-idm289392561760"/>
+                  </choice>
+                </choice>
+                <ref name="xref-idm289392429616"/>
+              </choice>
+              <ref name="break-idm289392574560"/>
+            </choice>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="td-idm289392580144">
+    <element>
+      <name ns="">td</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <group>
+                      <group>
+                        <group>
+                          <group>
+                            <group>
+                              <choice>
+                                <empty/>
+                                <attribute>
+                                  <name ns="">id</name>
+                                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                                </attribute>
+                              </choice>
+                              <choice>
+                                <empty/>
+                                <attribute>
+                                  <name ns="">content-type</name>
+                                  <text/>
+                                </attribute>
+                              </choice>
+                            </group>
+                            <choice>
+                              <empty/>
+                              <attribute>
+                                <name ns="">style</name>
+                                <text/>
+                              </attribute>
+                            </choice>
+                          </group>
+                          <choice>
+                            <empty/>
+                            <attribute>
+                              <name ns="">abbr</name>
+                              <data datatypeLibrary="" type="string"/>
+                            </attribute>
+                          </choice>
+                        </group>
+                        <choice>
+                          <empty/>
+                          <attribute>
+                            <name ns="">axis</name>
+                            <text/>
+                          </attribute>
+                        </choice>
+                      </group>
+                      <choice>
+                        <empty/>
+                        <attribute>
+                          <name ns="">headers</name>
+                          <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="IDREFS"/>
+                        </attribute>
+                      </choice>
+                    </group>
+                    <choice>
+                      <empty/>
+                      <attribute>
+                        <name ns="">scope</name>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <value ns="" type="token" datatypeLibrary="">row</value>
+                              <value ns="" type="token" datatypeLibrary="">col</value>
+                            </choice>
+                            <value ns="" type="token" datatypeLibrary="">rowgroup</value>
+                          </choice>
+                          <value ns="" type="token" datatypeLibrary="">colgroup</value>
+                        </choice>
+                      </attribute>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">rowspan</name>
+                      <data datatypeLibrary="" type="string"/>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">colspan</name>
+                    <data datatypeLibrary="" type="string"/>
+                  </attribute>
+                </choice>
+              </group>
+              <group>
+                <group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">align</name>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <value ns="" type="token" datatypeLibrary="">left</value>
+                              <value ns="" type="token" datatypeLibrary="">center</value>
+                            </choice>
+                            <value ns="" type="token" datatypeLibrary="">right</value>
+                          </choice>
+                          <value ns="" type="token" datatypeLibrary="">justify</value>
+                        </choice>
+                        <value ns="" type="token" datatypeLibrary="">char</value>
+                      </choice>
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">char</name>
+                      <data datatypeLibrary="" type="string"/>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">charoff</name>
+                    <data datatypeLibrary="" type="string"/>
+                  </attribute>
+                </choice>
+              </group>
+            </group>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="">valign</name>
+                <choice>
+                  <choice>
+                    <choice>
+                      <value ns="" type="token" datatypeLibrary="">top</value>
+                      <value ns="" type="token" datatypeLibrary="">middle</value>
+                    </choice>
+                    <value ns="" type="token" datatypeLibrary="">bottom</value>
+                  </choice>
+                  <value ns="" type="token" datatypeLibrary="">baseline</value>
+                </choice>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="">bgcolor</name>
+              <data datatypeLibrary="" type="string"/>
+            </attribute>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <choice>
+              <choice>
+                <choice>
+                  <text/>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <choice>
+                                  <choice>
+                                    <ref name="bold-idm289392450992"/>
+                                    <ref name="italic-idm289392447536"/>
+                                  </choice>
+                                  <ref name="monospace-idm289392444000"/>
+                                </choice>
+                                <ref name="underline-idm289392440464"/>
+                              </choice>
+                              <ref name="sup-idm289392458096"/>
+                            </choice>
+                            <ref name="sub-idm289392454544"/>
+                          </choice>
+                          <ref name="named-content-idm289392416272"/>
+                        </choice>
+                        <ref name="ext-link-idm289392436928"/>
+                      </choice>
+                      <ref name="inline-graphic-idm289392618144"/>
+                    </choice>
+                    <ref name="inline-formula-idm289392561760"/>
+                  </choice>
+                </choice>
+                <ref name="xref-idm289392429616"/>
+              </choice>
+              <ref name="break-idm289392574560"/>
+            </choice>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="hr-idm289392576608">
+    <element>
+      <name ns="">hr</name>
+      <rng:empty xmlns:rng="http://relaxng.org/ns/structure/1.0"/>
+    </element>
+  </define>
+  <define name="break-idm289392574560">
+    <element>
+      <name ns="">break</name>
+      <rng:empty xmlns:rng="http://relaxng.org/ns/structure/1.0"/>
+    </element>
+  </define>
+  <define name="list-idm289392572512">
+    <element>
+      <name ns="">list</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">id</name>
+                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                </attribute>
+              </choice>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">list-type</name>
+                  <text/>
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <ref name="label-idm289392539216"/>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <ref name="title-idm289392652592"/>
+          </choice>
+        </group>
+        <oneOrMore>
+          <ref name="list-item-idm289392565952"/>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="list-item-idm289392565952">
+    <element>
+      <name ns="">list-item</name>
+      <group>
+        <choice>
+          <empty/>
+          <attribute>
+            <name ns="">id</name>
+            <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+          </attribute>
+        </choice>
+        <oneOrMore>
+          <choice>
+            <ref name="p-idm289392664992"/>
+            <ref name="list-idm289392572512"/>
+          </choice>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="inline-formula-idm289392561760">
+    <element>
+      <name ns="">inline-formula</name>
+      <ref name="tex-math-idm289392554736"/>
+    </element>
+  </define>
+  <define name="disp-formula-idm289392559312">
+    <element>
+      <name ns="">disp-formula</name>
+      <group>
+        <group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="">id</name>
+              <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+            </attribute>
+          </choice>
+          <choice>
+            <empty/>
+            <ref name="label-idm289392539216"/>
+          </choice>
+        </group>
+        <ref name="tex-math-idm289392554736"/>
+      </group>
+    </element>
+  </define>
+  <define name="tex-math-idm289392554736">
+    <element>
+      <name ns="">tex-math</name>
+      <group>
+        <choice>
+          <empty/>
+          <attribute>
+            <name ns="">id</name>
+            <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+          </attribute>
+        </choice>
+        <text/>
+      </group>
+    </element>
+  </define>
+  <define name="disp-quote-idm289392551248">
+    <element>
+      <name ns="">disp-quote</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">id</name>
+                    <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty/>
+                  <ref name="label-idm289392539216"/>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <ref name="title-idm289392652592"/>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <oneOrMore>
+                <ref name="p-idm289392664992"/>
+              </oneOrMore>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <ref name="attrib-idm289392536704"/>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <ref name="permissions-idm289392754192"/>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="alt-text-idm289392543760">
+    <element>
+      <name ns="">alt-text</name>
+      <text/>
+    </element>
+  </define>
+  <define name="long-desc-idm289392541712">
+    <element>
+      <name ns="">long-desc</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <text/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="label-idm289392539216">
+    <element>
+      <name ns="">label</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <text/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="attrib-idm289392536704">
+    <element>
+      <name ns="">attrib</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <text/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="back-idm289392534192">
+    <element>
+      <name ns="">back</name>
+      <group>
+        <group>
+          <group>
+            <choice>
+              <empty/>
+              <ref name="ack-idm289392502528"/>
+            </choice>
+            <choice>
+              <empty/>
+              <ref name="app-group-idm289392498016"/>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <oneOrMore>
+              <ref name="ref-list-idm289392528864"/>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="sec-idm289392659744"/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="ref-list-idm289392528864">
+    <element>
+      <name ns="">ref-list</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">id</name>
+                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                </attribute>
+              </choice>
+              <choice>
+                <empty/>
+                <ref name="label-idm289392539216"/>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <ref name="title-idm289392652592"/>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <oneOrMore>
+              <ref name="p-idm289392664992"/>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="ref-idm289392522384"/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="ref-idm289392522384">
+    <element>
+      <name ns="">ref</name>
+      <group>
+        <group>
+          <group>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="">id</name>
+                <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+              </attribute>
+            </choice>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="">content-type</name>
+                <text/>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <ref name="label-idm289392539216"/>
+          </choice>
+        </group>
+        <oneOrMore>
+          <choice>
+            <ref name="mixed-citation-idm289392513760"/>
+            <ref name="note-idm289392516080"/>
+          </choice>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="note-idm289392516080">
+    <element>
+      <name ns="">note</name>
+      <oneOrMore>
+        <ref name="p-idm289392664992"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="mixed-citation-idm289392513760">
+    <element>
+      <name ns="">mixed-citation</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">id</name>
+                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                </attribute>
+              </choice>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">publication-type</name>
+                  <text/>
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="">publisher-type</name>
+                <text/>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="">publication-format</name>
+              <text/>
+            </attribute>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <choice>
+              <choice>
+                <text/>
+                <ref name="pub-id-idm289392505088"/>
+              </choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <ref name="bold-idm289392450992"/>
+                                <ref name="italic-idm289392447536"/>
+                              </choice>
+                              <ref name="monospace-idm289392444000"/>
+                            </choice>
+                            <ref name="underline-idm289392440464"/>
+                          </choice>
+                          <ref name="sup-idm289392458096"/>
+                        </choice>
+                        <ref name="sub-idm289392454544"/>
+                      </choice>
+                      <ref name="named-content-idm289392416272"/>
+                    </choice>
+                    <ref name="ext-link-idm289392436928"/>
+                  </choice>
+                  <ref name="inline-graphic-idm289392618144"/>
+                </choice>
+                <ref name="inline-formula-idm289392561760"/>
+              </choice>
+            </choice>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="pub-id-idm289392505088">
+    <element>
+      <name ns="">pub-id</name>
+      <group>
+        <attribute>
+          <name ns="">pub-id-type</name>
+          <text/>
+        </attribute>
+        <text/>
+      </group>
+    </element>
+  </define>
+  <define name="ack-idm289392502528">
+    <element>
+      <name ns="">ack</name>
+      <group>
+        <group>
+          <choice>
+            <empty/>
+            <ref name="title-idm289392652592"/>
+          </choice>
+          <choice>
+            <empty/>
+            <oneOrMore>
+              <ref name="p-idm289392664992"/>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="sec-idm289392659744"/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="app-group-idm289392498016">
+    <element>
+      <name ns="">app-group</name>
+      <group>
+        <choice>
+          <empty/>
+          <ref name="title-idm289392652592"/>
+        </choice>
+        <oneOrMore>
+          <ref name="app-idm289392494800"/>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="app-idm289392494800">
+    <element>
+      <name ns="">app</name>
+      <group>
+        <group>
+          <group>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="">id</name>
+                <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+              </attribute>
+            </choice>
+            <ref name="title-idm289392652592"/>
+          </group>
+          <choice>
+            <empty/>
+            <oneOrMore>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <ref name="fig-idm289392649696"/>
+                              <ref name="media-idm289392634448"/>
+                            </choice>
+                            <ref name="preformat-idm289392612944"/>
+                          </choice>
+                          <ref name="supplementary-material-idm289392610896"/>
+                        </choice>
+                        <ref name="table-wrap-idm289392598160"/>
+                      </choice>
+                      <ref name="disp-formula-idm289392559312"/>
+                    </choice>
+                    <ref name="p-idm289392664992"/>
+                  </choice>
+                  <ref name="list-idm289392572512"/>
+                </choice>
+                <ref name="disp-quote-idm289392551248"/>
+              </choice>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="sec-idm289392659744"/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="response-idm289392484864">
+    <element>
+      <name ns="">response</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">response-type</name>
+                  <text/>
+                </attribute>
+              </choice>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">id</name>
+                  <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                </attribute>
+              </choice>
+            </group>
+            <ref name="front-stub-idm289392478944"/>
+          </group>
+          <ref name="body-idm289392673248"/>
+        </group>
+        <choice>
+          <empty/>
+          <ref name="back-idm289392534192"/>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="front-stub-idm289392478944">
+    <element>
+      <name ns="">front-stub</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <group>
+                      <group>
+                        <choice>
+                          <empty/>
+                          <oneOrMore>
+                            <ref name="article-id-idm289392885776"/>
+                          </oneOrMore>
+                        </choice>
+                        <choice>
+                          <empty/>
+                          <ref name="title-group-idm289392860368"/>
+                        </choice>
+                      </group>
+                      <ref name="contrib-group-idm289392850992"/>
+                    </group>
+                    <choice>
+                      <empty/>
+                      <oneOrMore>
+                        <ref name="pub-date-idm289392804160"/>
+                      </oneOrMore>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty/>
+                    <ref name="elocation-id-idm289392778160"/>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <ref name="history-idm289392776032"/>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <ref name="permissions-idm289392754192"/>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <ref name="abstract-idm289392731456"/>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <oneOrMore>
+              <ref name="kwd-group-idm289392727264"/>
+            </oneOrMore>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="funding-group-idm289392721008"/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="email-idm289392468880">
+    <element>
+      <name ns="">email</name>
+      <text/>
+    </element>
+  </define>
+  <define name="aff-idm289392466832">
+    <element>
+      <name ns="">aff</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <choice>
+            <choice>
+              <text/>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <ref name="bold-idm289392450992"/>
+                                <ref name="italic-idm289392447536"/>
+                              </choice>
+                              <ref name="monospace-idm289392444000"/>
+                            </choice>
+                            <ref name="underline-idm289392440464"/>
+                          </choice>
+                          <ref name="sup-idm289392458096"/>
+                        </choice>
+                        <ref name="sub-idm289392454544"/>
+                      </choice>
+                      <ref name="named-content-idm289392416272"/>
+                    </choice>
+                    <ref name="ext-link-idm289392436928"/>
+                  </choice>
+                  <ref name="inline-graphic-idm289392618144"/>
+                </choice>
+                <ref name="inline-formula-idm289392561760"/>
+              </choice>
+            </choice>
+            <ref name="institution-idm289392463440"/>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="institution-idm289392463440">
+    <element>
+      <name ns="">institution</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <choice>
+            <text/>
+            <choice>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <ref name="bold-idm289392450992"/>
+                      <ref name="italic-idm289392447536"/>
+                    </choice>
+                    <ref name="monospace-idm289392444000"/>
+                  </choice>
+                  <ref name="underline-idm289392440464"/>
+                </choice>
+                <ref name="sup-idm289392458096"/>
+              </choice>
+              <ref name="sub-idm289392454544"/>
+            </choice>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="bio-idm289392460512">
+    <element>
+      <name ns="">bio</name>
+      <oneOrMore>
+        <ref name="p-idm289392664992"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="sup-idm289392458096">
+    <element>
+      <name ns="">sup</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <choice>
+            <choice>
+              <text/>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <ref name="bold-idm289392450992"/>
+                                <ref name="italic-idm289392447536"/>
+                              </choice>
+                              <ref name="monospace-idm289392444000"/>
+                            </choice>
+                            <ref name="underline-idm289392440464"/>
+                          </choice>
+                          <ref name="sup-idm289392458096"/>
+                        </choice>
+                        <ref name="sub-idm289392454544"/>
+                      </choice>
+                      <ref name="named-content-idm289392416272"/>
+                    </choice>
+                    <ref name="ext-link-idm289392436928"/>
+                  </choice>
+                  <ref name="inline-graphic-idm289392618144"/>
+                </choice>
+                <ref name="inline-formula-idm289392561760"/>
+              </choice>
+            </choice>
+            <ref name="xref-idm289392429616"/>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="sub-idm289392454544">
+    <element>
+      <name ns="">sub</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <choice>
+            <choice>
+              <text/>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <ref name="bold-idm289392450992"/>
+                                <ref name="italic-idm289392447536"/>
+                              </choice>
+                              <ref name="monospace-idm289392444000"/>
+                            </choice>
+                            <ref name="underline-idm289392440464"/>
+                          </choice>
+                          <ref name="sup-idm289392458096"/>
+                        </choice>
+                        <ref name="sub-idm289392454544"/>
+                      </choice>
+                      <ref name="named-content-idm289392416272"/>
+                    </choice>
+                    <ref name="ext-link-idm289392436928"/>
+                  </choice>
+                  <ref name="inline-graphic-idm289392618144"/>
+                </choice>
+                <ref name="inline-formula-idm289392561760"/>
+              </choice>
+            </choice>
+            <ref name="xref-idm289392429616"/>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="bold-idm289392450992">
+    <element>
+      <name ns="">bold</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <choice>
+            <choice>
+              <text/>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <ref name="bold-idm289392450992"/>
+                                <ref name="italic-idm289392447536"/>
+                              </choice>
+                              <ref name="monospace-idm289392444000"/>
+                            </choice>
+                            <ref name="underline-idm289392440464"/>
+                          </choice>
+                          <ref name="sup-idm289392458096"/>
+                        </choice>
+                        <ref name="sub-idm289392454544"/>
+                      </choice>
+                      <ref name="named-content-idm289392416272"/>
+                    </choice>
+                    <ref name="ext-link-idm289392436928"/>
+                  </choice>
+                  <ref name="inline-graphic-idm289392618144"/>
+                </choice>
+                <ref name="inline-formula-idm289392561760"/>
+              </choice>
+            </choice>
+            <ref name="xref-idm289392429616"/>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="italic-idm289392447536">
+    <element>
+      <name ns="">italic</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <choice>
+            <choice>
+              <text/>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <ref name="bold-idm289392450992"/>
+                                <ref name="italic-idm289392447536"/>
+                              </choice>
+                              <ref name="monospace-idm289392444000"/>
+                            </choice>
+                            <ref name="underline-idm289392440464"/>
+                          </choice>
+                          <ref name="sup-idm289392458096"/>
+                        </choice>
+                        <ref name="sub-idm289392454544"/>
+                      </choice>
+                      <ref name="named-content-idm289392416272"/>
+                    </choice>
+                    <ref name="ext-link-idm289392436928"/>
+                  </choice>
+                  <ref name="inline-graphic-idm289392618144"/>
+                </choice>
+                <ref name="inline-formula-idm289392561760"/>
+              </choice>
+            </choice>
+            <ref name="xref-idm289392429616"/>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="monospace-idm289392444000">
+    <element>
+      <name ns="">monospace</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <choice>
+            <choice>
+              <text/>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <ref name="bold-idm289392450992"/>
+                                <ref name="italic-idm289392447536"/>
+                              </choice>
+                              <ref name="monospace-idm289392444000"/>
+                            </choice>
+                            <ref name="underline-idm289392440464"/>
+                          </choice>
+                          <ref name="sup-idm289392458096"/>
+                        </choice>
+                        <ref name="sub-idm289392454544"/>
+                      </choice>
+                      <ref name="named-content-idm289392416272"/>
+                    </choice>
+                    <ref name="ext-link-idm289392436928"/>
+                  </choice>
+                  <ref name="inline-graphic-idm289392618144"/>
+                </choice>
+                <ref name="inline-formula-idm289392561760"/>
+              </choice>
+            </choice>
+            <ref name="xref-idm289392429616"/>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="underline-idm289392440464">
+    <element>
+      <name ns="">underline</name>
+      <choice>
+        <empty/>
+        <oneOrMore>
+          <choice>
+            <choice>
+              <text/>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <ref name="bold-idm289392450992"/>
+                                <ref name="italic-idm289392447536"/>
+                              </choice>
+                              <ref name="monospace-idm289392444000"/>
+                            </choice>
+                            <ref name="underline-idm289392440464"/>
+                          </choice>
+                          <ref name="sup-idm289392458096"/>
+                        </choice>
+                        <ref name="sub-idm289392454544"/>
+                      </choice>
+                      <ref name="named-content-idm289392416272"/>
+                    </choice>
+                    <ref name="ext-link-idm289392436928"/>
+                  </choice>
+                  <ref name="inline-graphic-idm289392618144"/>
+                </choice>
+                <ref name="inline-formula-idm289392561760"/>
+              </choice>
+            </choice>
+            <ref name="xref-idm289392429616"/>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="ext-link-idm289392436928">
+    <element>
+      <name ns="">ext-link</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">ext-link-type</name>
+                  <text/>
+                </attribute>
+              </choice>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="http://www.w3.org/1999/xlink">type</name>
+                  <value ns="" type="token" datatypeLibrary="">simple</value>
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="http://www.w3.org/1999/xlink">href</name>
+                <text/>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="http://www.w3.org/1999/xlink">title</name>
+              <text/>
+            </attribute>
+          </choice>
+        </group>
+        <text/>
+      </group>
+    </element>
+  </define>
+  <define name="xref-idm289392429616">
+    <element>
+      <name ns="">xref</name>
+      <group>
+        <group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="">ref-type</name>
+              <choice>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <value ns="" type="token" datatypeLibrary="">app</value>
+                            <value ns="" type="token" datatypeLibrary="">bibr</value>
+                          </choice>
+                          <value ns="" type="token" datatypeLibrary="">disp-formula</value>
+                        </choice>
+                        <value ns="" type="token" datatypeLibrary="">fig</value>
+                      </choice>
+                      <value ns="" type="token" datatypeLibrary="">list</value>
+                    </choice>
+                    <value ns="" type="token" datatypeLibrary="">sec</value>
+                  </choice>
+                  <value ns="" type="token" datatypeLibrary="">supplementary-material</value>
+                </choice>
+                <value ns="" type="token" datatypeLibrary="">table</value>
+              </choice>
+            </attribute>
+          </choice>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="">rid</name>
+              <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="IDREFS"/>
+            </attribute>
+          </choice>
+        </group>
+        <text/>
+      </group>
+    </element>
+  </define>
+  <define name="named-content-idm289392416272">
+    <element>
+      <name ns="">named-content</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">id</name>
+                    <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                  </attribute>
+                </choice>
+                <attribute>
+                  <name ns="">content-type</name>
+                  <text/>
+                </attribute>
+              </group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="http://www.w3.org/1999/xlink">type</name>
+                  <value ns="" type="token" datatypeLibrary="">simple</value>
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="http://www.w3.org/1999/xlink">href</name>
+                <text/>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="http://www.w3.org/1999/xlink">title</name>
+              <text/>
+            </attribute>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <choice>
+              <choice>
+                <text/>
+                <choice>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <choice>
+                                  <ref name="bold-idm289392450992"/>
+                                  <ref name="italic-idm289392447536"/>
+                                </choice>
+                                <ref name="monospace-idm289392444000"/>
+                              </choice>
+                              <ref name="underline-idm289392440464"/>
+                            </choice>
+                            <ref name="sup-idm289392458096"/>
+                          </choice>
+                          <ref name="sub-idm289392454544"/>
+                        </choice>
+                        <ref name="named-content-idm289392416272"/>
+                      </choice>
+                      <ref name="ext-link-idm289392436928"/>
+                    </choice>
+                    <ref name="inline-graphic-idm289392618144"/>
+                  </choice>
+                  <ref name="inline-formula-idm289392561760"/>
+                </choice>
+              </choice>
+              <ref name="xref-idm289392429616"/>
+            </choice>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="table-idm289392349792">
+    <element>
+      <name ns="">table</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <group>
+                      <group>
+                        <group>
+                          <group>
+                            <choice>
+                              <empty/>
+                              <attribute>
+                                <name ns="">id</name>
+                                <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                              </attribute>
+                            </choice>
+                            <choice>
+                              <empty/>
+                              <attribute>
+                                <name ns="">content-type</name>
+                                <text/>
+                              </attribute>
+                            </choice>
+                          </group>
+                          <choice>
+                            <empty/>
+                            <attribute>
+                              <name ns="">style</name>
+                              <text/>
+                            </attribute>
+                          </choice>
+                        </group>
+                        <choice>
+                          <empty/>
+                          <attribute>
+                            <name ns="">summary</name>
+                            <data datatypeLibrary="" type="string"/>
+                          </attribute>
+                        </choice>
+                      </group>
+                      <choice>
+                        <empty/>
+                        <attribute>
+                          <name ns="">width</name>
+                          <data datatypeLibrary="" type="string"/>
+                        </attribute>
+                      </choice>
+                    </group>
+                    <choice>
+                      <empty/>
+                      <attribute>
+                        <name ns="">border</name>
+                        <data datatypeLibrary="" type="string"/>
+                      </attribute>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">frame</name>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <choice>
+                                <choice>
+                                  <choice>
+                                    <choice>
+                                      <value ns="" type="token" datatypeLibrary="">void</value>
+                                      <value ns="" type="token" datatypeLibrary="">above</value>
+                                    </choice>
+                                    <value ns="" type="token" datatypeLibrary="">below</value>
+                                  </choice>
+                                  <value ns="" type="token" datatypeLibrary="">hsides</value>
+                                </choice>
+                                <value ns="" type="token" datatypeLibrary="">lhs</value>
+                              </choice>
+                              <value ns="" type="token" datatypeLibrary="">rhs</value>
+                            </choice>
+                            <value ns="" type="token" datatypeLibrary="">vsides</value>
+                          </choice>
+                          <value ns="" type="token" datatypeLibrary="">box</value>
+                        </choice>
+                        <value ns="" type="token" datatypeLibrary="">border</value>
+                      </choice>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">rules</name>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <value ns="" type="token" datatypeLibrary="">none</value>
+                            <value ns="" type="token" datatypeLibrary="">groups</value>
+                          </choice>
+                          <value ns="" type="token" datatypeLibrary="">rows</value>
+                        </choice>
+                        <value ns="" type="token" datatypeLibrary="">cols</value>
+                      </choice>
+                      <value ns="" type="token" datatypeLibrary="">all</value>
+                    </choice>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">cellspacing</name>
+                  <data datatypeLibrary="" type="string"/>
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="">cellpadding</name>
+                <data datatypeLibrary="" type="string"/>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="">bgcolor</name>
+              <data datatypeLibrary="" type="string"/>
+            </attribute>
+          </choice>
+        </group>
+        <group>
+          <choice>
+            <choice>
+              <empty/>
+              <oneOrMore>
+                <ref name="col-idm289392315408"/>
+              </oneOrMore>
+            </choice>
+            <choice>
+              <empty/>
+              <oneOrMore>
+                <ref name="colgroup-idm289392322544"/>
+              </oneOrMore>
+            </choice>
+          </choice>
+          <choice>
+            <group>
+              <group>
+                <choice>
+                  <empty/>
+                  <ref name="thead-idm289392336064"/>
+                </choice>
+                <choice>
+                  <empty/>
+                  <ref name="tfoot-idm289392331680"/>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <oneOrMore>
+                  <ref name="tbody-idm289392327328"/>
+                </oneOrMore>
+              </choice>
+            </group>
+            <oneOrMore>
+              <ref name="tr-idm289392307616"/>
+            </oneOrMore>
+          </choice>
+        </group>
+      </group>
+    </element>
+  </define>
+  <define name="thead-idm289392336064">
+    <element>
+      <name ns="">thead</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">id</name>
+                    <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">content-type</name>
+                    <text/>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">style</name>
+                  <text/>
+                </attribute>
+              </choice>
+            </group>
+            <group>
+              <group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">align</name>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <value ns="" type="token" datatypeLibrary="">left</value>
+                            <value ns="" type="token" datatypeLibrary="">center</value>
+                          </choice>
+                          <value ns="" type="token" datatypeLibrary="">right</value>
+                        </choice>
+                        <value ns="" type="token" datatypeLibrary="">justify</value>
+                      </choice>
+                      <value ns="" type="token" datatypeLibrary="">char</value>
+                    </choice>
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">char</name>
+                    <data datatypeLibrary="" type="string"/>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">charoff</name>
+                  <data datatypeLibrary="" type="string"/>
+                </attribute>
+              </choice>
+            </group>
+          </group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="">valign</name>
+              <choice>
+                <choice>
+                  <choice>
+                    <value ns="" type="token" datatypeLibrary="">top</value>
+                    <value ns="" type="token" datatypeLibrary="">middle</value>
+                  </choice>
+                  <value ns="" type="token" datatypeLibrary="">bottom</value>
+                </choice>
+                <value ns="" type="token" datatypeLibrary="">baseline</value>
+              </choice>
+            </attribute>
+          </choice>
+        </group>
+        <oneOrMore>
+          <ref name="tr-idm289392307616"/>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="tfoot-idm289392331680">
+    <element>
+      <name ns="">tfoot</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">id</name>
+                    <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">content-type</name>
+                    <text/>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">style</name>
+                  <text/>
+                </attribute>
+              </choice>
+            </group>
+            <group>
+              <group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">align</name>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <value ns="" type="token" datatypeLibrary="">left</value>
+                            <value ns="" type="token" datatypeLibrary="">center</value>
+                          </choice>
+                          <value ns="" type="token" datatypeLibrary="">right</value>
+                        </choice>
+                        <value ns="" type="token" datatypeLibrary="">justify</value>
+                      </choice>
+                      <value ns="" type="token" datatypeLibrary="">char</value>
+                    </choice>
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">char</name>
+                    <data datatypeLibrary="" type="string"/>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">charoff</name>
+                  <data datatypeLibrary="" type="string"/>
+                </attribute>
+              </choice>
+            </group>
+          </group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="">valign</name>
+              <choice>
+                <choice>
+                  <choice>
+                    <value ns="" type="token" datatypeLibrary="">top</value>
+                    <value ns="" type="token" datatypeLibrary="">middle</value>
+                  </choice>
+                  <value ns="" type="token" datatypeLibrary="">bottom</value>
+                </choice>
+                <value ns="" type="token" datatypeLibrary="">baseline</value>
+              </choice>
+            </attribute>
+          </choice>
+        </group>
+        <oneOrMore>
+          <ref name="tr-idm289392307616"/>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="tbody-idm289392327328">
+    <element>
+      <name ns="">tbody</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">id</name>
+                    <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">content-type</name>
+                    <text/>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">style</name>
+                  <text/>
+                </attribute>
+              </choice>
+            </group>
+            <group>
+              <group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">align</name>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <value ns="" type="token" datatypeLibrary="">left</value>
+                            <value ns="" type="token" datatypeLibrary="">center</value>
+                          </choice>
+                          <value ns="" type="token" datatypeLibrary="">right</value>
+                        </choice>
+                        <value ns="" type="token" datatypeLibrary="">justify</value>
+                      </choice>
+                      <value ns="" type="token" datatypeLibrary="">char</value>
+                    </choice>
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">char</name>
+                    <data datatypeLibrary="" type="string"/>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">charoff</name>
+                  <data datatypeLibrary="" type="string"/>
+                </attribute>
+              </choice>
+            </group>
+          </group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="">valign</name>
+              <choice>
+                <choice>
+                  <choice>
+                    <value ns="" type="token" datatypeLibrary="">top</value>
+                    <value ns="" type="token" datatypeLibrary="">middle</value>
+                  </choice>
+                  <value ns="" type="token" datatypeLibrary="">bottom</value>
+                </choice>
+                <value ns="" type="token" datatypeLibrary="">baseline</value>
+              </choice>
+            </attribute>
+          </choice>
+        </group>
+        <oneOrMore>
+          <ref name="tr-idm289392307616"/>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+  <define name="colgroup-idm289392322544">
+    <element>
+      <name ns="">colgroup</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <group>
+                    <choice>
+                      <empty/>
+                      <attribute>
+                        <name ns="">id</name>
+                        <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                      </attribute>
+                    </choice>
+                    <choice>
+                      <empty/>
+                      <attribute>
+                        <name ns="">content-type</name>
+                        <text/>
+                      </attribute>
+                    </choice>
+                  </group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">style</name>
+                      <text/>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">span</name>
+                    <data datatypeLibrary="" type="string"/>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">width</name>
+                  <data datatypeLibrary="" type="string"/>
+                </attribute>
+              </choice>
+            </group>
+            <group>
+              <group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">align</name>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <value ns="" type="token" datatypeLibrary="">left</value>
+                            <value ns="" type="token" datatypeLibrary="">center</value>
+                          </choice>
+                          <value ns="" type="token" datatypeLibrary="">right</value>
+                        </choice>
+                        <value ns="" type="token" datatypeLibrary="">justify</value>
+                      </choice>
+                      <value ns="" type="token" datatypeLibrary="">char</value>
+                    </choice>
+                  </attribute>
+                </choice>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">char</name>
+                    <data datatypeLibrary="" type="string"/>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">charoff</name>
+                  <data datatypeLibrary="" type="string"/>
+                </attribute>
+              </choice>
+            </group>
+          </group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="">valign</name>
+              <choice>
+                <choice>
+                  <choice>
+                    <value ns="" type="token" datatypeLibrary="">top</value>
+                    <value ns="" type="token" datatypeLibrary="">middle</value>
+                  </choice>
+                  <value ns="" type="token" datatypeLibrary="">bottom</value>
+                </choice>
+                <value ns="" type="token" datatypeLibrary="">baseline</value>
+              </choice>
+            </attribute>
+          </choice>
+        </group>
+        <choice>
+          <empty/>
+          <oneOrMore>
+            <ref name="col-idm289392315408"/>
+          </oneOrMore>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="col-idm289392315408">
+    <element>
+      <name ns="">col</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">id</name>
+                      <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">content-type</name>
+                      <text/>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">style</name>
+                    <text/>
+                  </attribute>
+                </choice>
+              </group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">span</name>
+                  <data datatypeLibrary="" type="string"/>
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="">width</name>
+                <data datatypeLibrary="" type="string"/>
+              </attribute>
+            </choice>
+          </group>
+          <group>
+            <group>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">align</name>
+                  <choice>
+                    <choice>
+                      <choice>
+                        <choice>
+                          <value ns="" type="token" datatypeLibrary="">left</value>
+                          <value ns="" type="token" datatypeLibrary="">center</value>
+                        </choice>
+                        <value ns="" type="token" datatypeLibrary="">right</value>
+                      </choice>
+                      <value ns="" type="token" datatypeLibrary="">justify</value>
+                    </choice>
+                    <value ns="" type="token" datatypeLibrary="">char</value>
+                  </choice>
+                </attribute>
+              </choice>
+              <choice>
+                <empty/>
+                <attribute>
+                  <name ns="">char</name>
+                  <data datatypeLibrary="" type="string"/>
+                </attribute>
+              </choice>
+            </group>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="">charoff</name>
+                <data datatypeLibrary="" type="string"/>
+              </attribute>
+            </choice>
+          </group>
+        </group>
+        <choice>
+          <empty/>
+          <attribute>
+            <name ns="">valign</name>
+            <choice>
+              <choice>
+                <choice>
+                  <value ns="" type="token" datatypeLibrary="">top</value>
+                  <value ns="" type="token" datatypeLibrary="">middle</value>
+                </choice>
+                <value ns="" type="token" datatypeLibrary="">bottom</value>
+              </choice>
+              <value ns="" type="token" datatypeLibrary="">baseline</value>
+            </choice>
+          </attribute>
+        </choice>
+      </group>
+    </element>
+  </define>
+  <define name="tr-idm289392307616">
+    <element>
+      <name ns="">tr</name>
+      <group>
+        <group>
+          <group>
+            <group>
+              <group>
+                <group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">id</name>
+                      <data datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" type="ID"/>
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">content-type</name>
+                      <text/>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">style</name>
+                    <text/>
+                  </attribute>
+                </choice>
+              </group>
+              <group>
+                <group>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">align</name>
+                      <choice>
+                        <choice>
+                          <choice>
+                            <choice>
+                              <value ns="" type="token" datatypeLibrary="">left</value>
+                              <value ns="" type="token" datatypeLibrary="">center</value>
+                            </choice>
+                            <value ns="" type="token" datatypeLibrary="">right</value>
+                          </choice>
+                          <value ns="" type="token" datatypeLibrary="">justify</value>
+                        </choice>
+                        <value ns="" type="token" datatypeLibrary="">char</value>
+                      </choice>
+                    </attribute>
+                  </choice>
+                  <choice>
+                    <empty/>
+                    <attribute>
+                      <name ns="">char</name>
+                      <data datatypeLibrary="" type="string"/>
+                    </attribute>
+                  </choice>
+                </group>
+                <choice>
+                  <empty/>
+                  <attribute>
+                    <name ns="">charoff</name>
+                    <data datatypeLibrary="" type="string"/>
+                  </attribute>
+                </choice>
+              </group>
+            </group>
+            <choice>
+              <empty/>
+              <attribute>
+                <name ns="">valign</name>
+                <choice>
+                  <choice>
+                    <choice>
+                      <value ns="" type="token" datatypeLibrary="">top</value>
+                      <value ns="" type="token" datatypeLibrary="">middle</value>
+                    </choice>
+                    <value ns="" type="token" datatypeLibrary="">bottom</value>
+                  </choice>
+                  <value ns="" type="token" datatypeLibrary="">baseline</value>
+                </choice>
+              </attribute>
+            </choice>
+          </group>
+          <choice>
+            <empty/>
+            <attribute>
+              <name ns="">bgcolor</name>
+              <data datatypeLibrary="" type="string"/>
+            </attribute>
+          </choice>
+        </group>
+        <oneOrMore>
+          <choice>
+            <ref name="th-idm289392583904"/>
+            <ref name="td-idm289392580144"/>
+          </choice>
+        </oneOrMore>
+      </group>
+    </element>
+  </define>
+</grammar>

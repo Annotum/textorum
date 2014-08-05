@@ -4,20 +4,26 @@
 #
 # This file is part of Textorum.
 #
-# Textorum is free software; you can redistribute it and/or modify it
-# under the terms of the GNU General Public License as published by the
-# Free Software Foundation; either version 2 of the License, or (at your
-# option) any later version.
+# Licensed under the MIT license:
 #
-# Textorum is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# General Public License for more details.
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
 
 define (require) ->
   # Check if a given name is:
@@ -27,6 +33,13 @@ define (require) ->
   __name_matcher = (names, nombre) ->
     return nombre == names or names[nombre]? or nombre in names
 
+  entityMap =
+    "&": "&amp;"
+    "<": "&lt;"
+    ">": "&gt;"
+    '"': '&quot;'
+    "'": '&#39;'
+    "/": '&#x2F;'
 
   class Helpers
     ELEMENT_NODE: 1
@@ -77,6 +90,89 @@ define (require) ->
           node = @getNextSiblingElement(node, tagName)
       node
 
+
+    followPath: (path, node) ->
+      while path.length
+        waypoint = path.shift()
+        currentIndex = 0
+        for child in node.childNodes
+          if child.nodeType isnt @ELEMENT_NODE
+            continue
+          namematch = @getQname(child.nodeName).local is waypoint.local
+          urimatch = not child.namespaceURI? or child.namespaceURI is waypoint.nsuri
+          indexmatch = currentIndex is waypoint.index
+          if namematch and urimatch
+            if indexmatch
+              node = child
+              break
+            currentIndex += 1
+        if node isnt child
+          return false
+      return node
+
+    followTextorumPath: (path, node) ->
+      while waypoint = path.shift()
+        currentIndex = 0
+        childNodes = []
+        for child in node.childNodes
+          childNodes.push(child)
+        while child = childNodes.shift()
+          if child.nodeType isnt @ELEMENT_NODE
+            continue
+          if child.hasAttribute? and child.hasAttribute('data-xmlel')
+            namematch = child.attributes['data-xmlel'].value.toLowerCase() is waypoint.local.toLowerCase()
+            urimatch = not waypoint.nsuri?
+            urimatch = urimatch or not child.hasAttribute['data-nsuribk']?
+            urimatch = urimatch or child.attributes['data-nsuribk'].value is waypoint.nsuri
+            indexmatch = currentIndex is waypoint.index
+            if namematch and urimatch
+              if indexmatch
+                node = child
+                break
+              currentIndex += 1
+          else
+            for grandchild in child.childNodes
+              childNodes.push(grandchild)
+            continue
+        if node isnt child
+          break
+      return node
+
+
+    pathForNode: (node, root) ->
+      while node.ownerElement?
+        node = node.ownerElement
+      path = []
+      while parent = node.parentNode and parent isnt root
+        index = 0
+        if node.previousSibling
+          sibling = node.previousSibling
+          while sibling
+            if sibling.nodeType is @ELEMENT_NODE and sibling.nodeName is node.nodeName
+              index += 1
+            sibling = sibling.previousSibling
+        qname = @getQname(node.nodeName)
+        path.unshift({local: qname.local, nsuri: node.namespaceURI, index: index})
+        node = parent
+      return path
+
+    getChildNodes: (node) ->
+      if node.hasAttribute and node.hasAttribute('data-xmlel')
+        children = []
+        remaining = []
+        for child in node.childNodes
+          remaining.push child
+        while child = remaining.shift()
+          if child.hasAttribute and child.hasAttribute('data-xmlel')
+            children.push child
+          else
+            if child.childNodes and child.childNodes.length
+              for grandchild in child.childNodes
+                remaining.unshift grandchild
+        return children
+
+      return node.childNodes
+
     getNextSiblingElement: (node, tagName) ->
       node = node.nextSibling
       while node and node.nodeType isnt @ELEMENT_NODE
@@ -87,6 +183,13 @@ define (require) ->
           node = node.nextSibling
       return node
 
+    depth: (node) ->
+      nodeDepth = 0
+      while node.parentElement and node isnt prevnode
+        prevnode = node
+        nodeDepth += 1
+        node = node.parentElement
+      return nodeDepth
 
     getChildByName: (node, names, namespaceURI) ->
       for child in node.childNodes
@@ -105,27 +208,98 @@ define (require) ->
           children.push child
       children
 
-    getNamespacePrefix: (nodeName) ->
+    getQname: (nodeName) ->
+      nodeName = "" + nodeName
+      i = nodeName.indexOf(":")
+      qualName = (if i < 0 then ["", nodeName] else nodeName.split(":"))
+      prefix = qualName[0]
+      local = qualName[1]
+
+      # <x "xmlns"="http://foo">
+      if nodeName is "xmlns"
+        prefix = "xmlns"
+        local = ""
+      prefix: prefix
+      local: local
+
+    getNamespacePrefix: (nodeName) =>
       return '' if not nodeName?
-      if nodeName.indexOf(':') isnt -1
-        nodeName.split(':')[0]
-      else
-        ''
+      return @getQname(nodeName).prefix
+
+    escapeHtml: (string) ->
+      String(string).replace /[&<>"'\/]/g, (s) ->
+        return entityMap[s]
+
+    getNodeAttr: (node, target) ->
+      attrs = @getNodeAttributes(node)
+      if attrs[target]?.value isnt undefined
+        return attrs[target].value
+      if attrs[target] isnt undefined
+        return attrs[target]
+      index = attrs.length
+      while index--
+        if attrs[index].name is target
+          return attrs[index].value
+      return undefined
+
+    getNodeAttributes: (node) ->
+      if node.hasAttribute? and node.hasAttribute('data-xmlel')
+        lastindex = node.attributes.length - 1
+        attrs = []
+        for attrindex in [0..lastindex]
+          attr = node.attributes[attrindex]
+          switch attr.name
+            when "data-xmlel", "data-nsbk", "data-nsuribk" then continue
+            when "data-clsbk"
+              newattr = document.createAttribute('class')
+              newattr.value = attr.value
+              attrs[attrindex] = newattr
+            when "class" then continue
+            else
+              if attr.value.substr(0, 9) is "tmp_tree_"
+                continue
+              attrs[attrindex] = attr
+        return attrs
+      if node.attributes?
+        return node.attributes
+      return []
+
+
+    getNodeType: (node) ->
+      switch true
+        when node?.nodeType? then node.nodeType
+        when typeof node is "string" then Node.TEXT_NODE
+        else undefined
+
+    isNodeWhitespace: (node) =>
+      if @getNodeType(node) is Node.TEXT_NODE
+        if @textContent(node).replace(/^\s+|\s+$/gm, "") is ""
+          return true
+      return false
 
     getLocalName: (node) ->
-      return "" if not node?
-      if node?.localName?
-        return node.localName
-      if not node.nodeName?
-        return ""
-      colonIdx = node.nodeName.indexOf ":"
-      if colonIdx < 0
-        node.nodeName
-      else
-        node.nodeName.substr colonIdx + 1
+      return "" if node is undefined
+      if node._localNameCache isnt undefined
+        return node._localNameCache
+      if typeof node is "string"
+        return @getQname(node).local
+      if node.hasAttribute? and node.hasAttribute('data-xmlel')
+        return node._localNameCache = node.attributes['data-xmlel'].value
+      if node.localName isnt undefined
+        return node._localNameCache = node.localName
+      if node.local isnt undefined
+        return node._localNameCache = node.local
+      if node.nodeName isnt undefined
+        return node._localNameCache = @getQname(node.nodeName).local
+      return @getQname(node).local
+
+    testNameIs: (localName) ->
+      (node) ->
+        h.getLocalName(node) is localName
 
     textContent: (node) ->
       return node.textContent if node.textContent
+      return node if typeof node is "string"
       result = ''
       for child in node.childNodes
         switch child.nodeType
@@ -134,6 +308,28 @@ define (require) ->
           when @ATTRIBUTE_NODE, @TEXT_NODE, @CDATA_SECTION_NODE
             result += child.nodeValue
       result
+
+    getXHR: (url, content_type) ->
+      resp = null
+      if window.tinymce?.util?.XHR?
+        tinymce.util.XHR.send {
+          url: url,
+          content_type: content_type
+          async: false,
+          success: (text, response) ->
+            resp = response
+        }
+        return resp
+      xmlhttp = new XMLHttpRequest()
+      xmlhttp.open("GET", url, false)
+      xmlhttp.send('')
+      return xmlhttp
+
+    trailingslashit: (path) ->
+      return path unless path and path.length
+      switch path[path.length - 1]
+        when "/" then path
+        else path + "/"
 
     getXML: (url) ->
       xslDoc = null
@@ -169,7 +365,7 @@ define (require) ->
 
     parseJSON: (text) ->
       (window.jQuery?.parseJSON || window.tinymce?.util?.JSON?.parse)(text)
-      
+
     hasDomError: (dom) ->
       errorNS = "http://www.mozilla.org/newlayout/xml/parsererror.xml"
       (!dom or
@@ -177,26 +373,46 @@ define (require) ->
         dom.documentElement.namespaceURI == errorNS or
         (dom.getElementsByTagName("parsererror").length > 0)
       )
-      
 
-    depthFirstWalk: (node, callback) ->
+    # Iteratively traverse a DOM fragment via depth first pre-order
+    #
+    # @overload depthFirstIterativePreorderEvents(root, handlerFunction)
+    #   Calls handlerFunction once at the start of visiting every node, with 'this' set to the node
+    #   @param [Node] root Root DOM node to traverse
+    #   @param [Function] handler Function to call with 'this' set to every node as it is entered;
+    #     two arguments (depth, node)
+    #
+    # @overload depthFirstIterativePreorderEvents(root, handlerObject)
+    #   Calls handlerObject.startTag when entering a node and handlerObject.endTag when leaving a node
+    #   @param [Node] root Root DOM node to traverse
+    #   @param [Object] handler Handler object; startTag and endTag methods are called with
+    #     two arguments (node, depth)
+    #
+    # @note To prune all children of a node (and not visit them), return 'false' from the handler function or startTag
+    #
+    depthFirstIterativePreorder: (root, handler) ->
+      node = root
       depth = 0
-      skip = false
-      done = false
-      tmp = undefined
-      while depth >= 0 and not done
-        if not skip
-          skip = (callback.call(node, depth) == false)
-        if not skip and tmp = node.firstChild
-          depth += 1
-        else if tmp = node.nextSibling
-          skip = false
+      while node isnt null
+        if handler.startTag
+          processChildren = handler.startTag(node, depth)
+        else if typeof handler is 'function'
+          processChildren = handler.call(node, depth, node)
         else
-          tmp = node.parentNode
-          depth -= 1
-          if depth == 0
-            done = true
-          skip = true
-        node = tmp
-      undefined
-  new Helpers()
+          processChildren = true
+        if node.hasChildNodes() and processChildren isnt false
+          depth += 1
+          node = node.firstChild
+        else
+          while node.nextSibling is null and node.parentNode isnt null
+            node = node.parentNode
+            depth -= 1
+            if handler.endTag
+              handler.endTag(node, depth)
+            if node is root
+              return
+          node = node.nextSibling
+
+
+  h = new Helpers()
+  h

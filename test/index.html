@@ -16,23 +16,38 @@
 
     <!-- Module loaders & bootstrap -->
     <script src="../vendor/require.js"></script>
+    <script src="../lib/require-config.js"></script>
     <script>
-        require.config({
-            baseUrl: "../lib",
-            urlArgs: "bust=" +  (new Date()).getTime()
-            });
-	(function () {
+    require.config({
+        baseUrl: "../lib",
+        paths: {
+            "test": "../test"
+        }
+    });
 
-	QUnit.config.autostart = false;
+    (function () {
 
-	// Local requirejs syntax - .js only
-	var testModules = [
-	  "./lib/specs/spec-example.js",
-	  "./lib/test-main.js"
-	];
+    QUnit.config.autostart = false;
 
-	require(testModules, QUnit.start);
-	}());
+    pavlov.specify.extendAssertions({
+        isEqualTo: function(actual, expected, message) {
+            equal(actual, expected, message);
+        },
+        isInstanceOf: function(actual, expected, message) {
+            var res = actual instanceof expected;
+            ok(res, message);
+        }
+    });
+
+    // Local requirejs syntax - .js only
+    var testModules = [
+      "./lib/specs/spec-example.js",
+      "./lib/specs/spec-simplerng.js",
+      "./lib/test-main.js"
+    ];
+
+    require(testModules, QUnit.start);
+    }());
         // require( ["textorum"] );
     </script>
   </head>

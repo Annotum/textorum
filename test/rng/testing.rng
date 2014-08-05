@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar 
+    xmlns="http://relaxng.org/ns/structure/1.0"
+    xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+    datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <start>
+        <choice>
+            <ref name="head"/>
+        </choice>
+    </start>
+    <define name="head">
+        <element>
+            <name>head</name>
+            <zeroOrMore>
+                <ref name="head-group-or-zeroormore"/>
+            </zeroOrMore>
+        </element>
+    </define>
+    <define name="head-group-or-zeroormore">
+        <element>
+            <name>group-zeroormore</name>
+            <ref name="group-or-zeroormore"/>
+        </element>
+    </define>
+    <define name="group-or-zeroormore">
+        <choice>
+            <group>
+                <ref name="a"/>
+                <ref name="b"/>
+            </group>
+            <zeroOrMore>
+                <ref name="c"/>
+            </zeroOrMore>
+        </choice>
+    </define>
+    <define name="a">
+        <element>
+            <name>a</name>
+            <empty/>
+        </element>
+    </define>
+    <define name="b">
+        <element>
+            <name>b</name>
+            <empty/>
+        </element>
+    </define>
+    <define name="c">
+        <element>
+            <name>c</name>
+            <choice>
+                <empty/>
+                <attribute name="foobar">
+                    <data type="token"/>
+                </attribute>
+            </choice>
+        </element>
+    </define>
+</grammar>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<head>
+    <!-- c* a -->
+    <group-zeroormore>
+        <c/>
+        <c/>
+        <a/>
+    </group-zeroormore>
+</head>

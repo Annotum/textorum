@@ -1,59 +1,75 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<?php
-/*
-Copyright (c) 2003-2012, CKSource - Frederico Knabben. All rights reserved.
-For licensing, see LICENSE.html or http://ckeditor.com/license
-*/
-?>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html>
 <head>
+	<title>Posted data test</title>
+	<meta charset="utf-8" />
+	<style>
+		body {
+			padding:10px 30px;
+			color: #333333;
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 75%;
+		}
+
+		table {
+			width: 100%;
+			table-layout: fixed;
+			border-collapse: collapse;
+		}
+		th {
+			vertical-align: top;
+			padding: 5px;
+		}
+		th, td {
+			border: 1px solid black;
+
+		}
+		pre {
+			font-family: monospace,monospace;
+			font-size: 1em;
+			margin: 5px;
+			background-color: #f7f7f7;
+			border: 1px solid #d7d7d7;
+			overflow: auto;
+			padding: .25em .25em 1em .25em;
+		}
+
+		.prewrap {
+			white-space: pre-wrap;
+		}
+
+	</style>
 	<title>Sample &mdash; TinyMCE Output</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link type="text/css" rel="stylesheet" href="sample.css" />
 </head>
 <body>
-	<h1 class="samples">
-		CKEditor &mdash; Posted Data
-	</h1>
-	<table border="1" cellspacing="0" id="outputSample">
+	<table>
 		<colgroup><col width="120" /></colgroup>
 		<thead>
 			<tr>
-				<th>Field&nbsp;Name</th>
+				<th>Field Name</th>
 				<th>Value</th>
 			</tr>
 		</thead>
 <?php
-
-if ( isset( $_POST ) )
-	$postArray = &$_POST ;			// 4.1.0 or later, use $_POST
-else
-	$postArray = &$HTTP_POST_VARS ;	// prior to 4.1.0, use HTTP_POST_VARS
-
-foreach ( $postArray as $sForm => $value )
-{
-	if ( get_magic_quotes_gpc() )
-		$postedValue = htmlspecialchars( stripslashes( $value ) ) ;
-	else
-		$postedValue = htmlspecialchars( $value ) ;
-
+foreach ( $_POST as $field => $value ) {
 ?>
 		<tr>
-			<th style="vertical-align: top"><?php echo htmlspecialchars($sForm); ?></th>
-			<td><pre class="samples"><?php echo $postedValue?></pre></td>
+			<th><?php echo htmlspecialchars($field); ?></th>
+			<td><pre><?php echo htmlspecialchars($value)?></pre></td>
 		</tr>
-	<?php
+<?php
 }
 ?>
 	</table>
-	<div id="footer">
-		<hr />
-		<p>
-			CKEditor - The text editor for the Internet - <a class="samples" href="http://ckeditor.com/">http://ckeditor.com</a>
-		</p>
-		<p id="copy">
-			Copyright &copy; 2003-2012, <a class="samples" href="http://cksource.com/">CKSource</a> - Frederico Knabben. All rights reserved.
-		</p>
-	</div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script>
+		jQuery(function($) {
+			$('pre').on('click', function() {
+				$(this).toggleClass('prewrap');
+			});
+		});
+	</script>
 </body>
 </html>

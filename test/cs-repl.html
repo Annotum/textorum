@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
+  <script src="../vendor/purl.js"></script>
+  <script src="../vendor/jquery.scrollintoview.js"></script>
+  <script src="../vendor/coffee-script.js"></script>
+  <!-- <script src="/sarissa-full-0.9.9.6/gr/abiss/js/sarissa/sarissa.js"></script> -->
+  <script src="../vendor/require.js"></script>
+  <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/base/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css" href="../vendor/docs.css"/>
+</head>
+<body>
+
+    <div class="navigation try active">
+      <div class="button">
+        CoffeeScript / Textorum REPL
+        <div class="repl_bridge"></div>
+      </div>
+      <div class="contents repl_wrapper">
+        <div class="code">
+          <div class="screenshadow tl"></div>
+          <div class="screenshadow tr"></div>
+          <div class="screenshadow bl"></div>
+          <div class="screenshadow br"></div>
+          <div id="repl_source_wrap">
+            <textarea id="repl_source" rows="100" spellcheck="false">req = ["textorum/relaxng/parse", "textorum/relaxng/objects", "textorum/helper"]
+require req, (parser, objects, helper) ->
+  rng = 'rng/kipling-jp3-xsl.srng'
+  xml = 'xml/related-article.xml'
+  rngparser = new parser.RNGParser()
+  # objects.setDebug true # show the rng validation tree
+  # rngparser.debug = true # log the rng defines and start elements once loaded
+  rngparser.process(helper.getXHR(rng).responseText)
+  xmldoc = helper.getXML(xml)
+  window.rngparser = rngparser
+  window.xmldoc = xmldoc
+  res = rngparser.start.childDeriv(xmldoc.documentElement, true)
+  window.res = res
+  console.log res
+  </textarea>
+          </div>
+          <div id="repl_results_wrap"><pre id="repl_results"></pre></div>
+          <div class="minibutton dark run" title="Ctrl-Enter">Run</div>
+          <a class="minibutton permalink" id="repl_permalink">Link</a>
+          <br class="clear" />
+        </div>
+      </div>
+    </div>
+  <script src="../lib/require-config.js"></script>
+  <script>
+  require.config({
+      baseUrl: "../lib",
+      paths: {
+          "test": "../test"
+      }
+  });
+  </script>
+  <script type="text/coffeescript">
+  require ['textorum/relaxng/parse', 'textorum/relaxng/objects', 'textorum/helper'], ->
+  </script>
+   <script type="text/coffeescript">
+    sourceFragment = "try:"
+
+    # Set up the compilation function, to run when you stop typing.
+    compileSource = ->
+      source = $('#repl_source').val()
+      window.compiledJS = ''
+      try
+        window.compiledJS = CoffeeScript.compile source, bare: on
+        el = $('#repl_results')[0]
+        if el.innerText
+          el.innerText = window.compiledJS
+        else
+          $(el).text window.compiledJS
+        $('#error').hide()
+      catch {location, message}
+        if location?
+          message = "Error on line #{location.first_line + 1}: #{message}"
+        $('#error').text(message).show()
+
+      # Update permalink
+      $('#repl_permalink').attr 'href', "##{sourceFragment}#{encodeURIComponent source}"
+
+    # Listen for keypresses and recompile.
+    $('#repl_source').keyup -> compileSource()
+
+    # Eval the compiled js.
+    evalJS = ->
+      eval window.compiledJS
+
+    # Load the console with a string of CoffeeScript.
+    window.loadConsole = (coffee) ->
+      $('#repl_source').val coffee
+      compileSource()
+      $('.navigation.try').addClass('active')
+      false
+
+    # Helper to hide the menus.
+    closeMenus = ->
+      $('.navigation.active').removeClass 'active'
+
+    $('.minibutton.run').click -> evalJS()
+
+    # Bind navigation buttons to open the menus.
+    $('.navigation').click (e) ->
+      return if e.target.tagName.toLowerCase() is 'a'
+      return false if $(e.target).closest('.repl_wrapper').length
+      if $(this).hasClass('active')
+        closeMenus()
+      else
+        closeMenus()
+        $(this).addClass 'active'
+      false
+
+    # Dismiss console if Escape pressed or click falls outside console
+    # Trigger Run button on Ctrl-Enter
+    $(document.body)
+      .keydown (e) ->
+        closeMenus() if e.which == 27
+        evalJS() if e.which == 13 and (e.metaKey or e.ctrlKey)
+      .click (e) ->
+        return false if $(e.target).hasClass('minibutton')
+        closeMenus()
+
+    $("#repl_permalink").click (e) ->
+        window.location = $(this).attr("href")
+        false
+
+    # If source code is included in location.hash, display it.
+    hash = decodeURIComponent location.hash.replace(/^#/, '')
+    if hash.indexOf(sourceFragment) == 0
+        src = hash.substr sourceFragment.length
+        loadConsole src
+
+    compileSource()
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE article SYSTEM "http://dtd.nlm.nih.gov/publishing/3.0/journalpublishing3.dtd">
+<article article-type="research-article" xml:lang="en">
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="nlm-ta">Perspect Medicin Chem</journal-id>
+      <journal-title-group>
+        <journal-title>Perspectives in Medicinal Chemistry</journal-title>
+        <xlink:title>Persp!</xlink:title>
+      </journal-title-group>
+      <issn pub-type="epub">1177-391X</issn>
+      <publisher>
+        <publisher-name>Libertas Academica</publisher-name>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="publisher-id">pmc-5-2011-019</article-id>
+      <title-group>
+        <article-title>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod, nisi, enim provident maiores aspernatur quibusdam itaque repudiandae earum dolorum accusamus necessitatibus vel optio id asperiores officiis tenetur nulla sint fugit</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author" corresp="yes">
+          <name name-style="western">
+            <surname>Goldberg</surname>
+            <given-names>Joel S.</given-names>
+          </name>
+        </contrib>
+      </contrib-group>
+      <pub-date pub-type="collection">
+        <year>2011</year>
+      </pub-date>
+      <volume>5</volume>
+      <abstract>
+        <p>Ullam volobore nonse nummy iuscipit nonsenibhiscinim psusto sis odionsequip, facin iril vullan. Rud ed vulputeisis elis landrem susto verostin si dolore. Eumsandre tatet loborper aut. Vivamus vulla illuptatie dionull. Lut dictum urna esting magniat, metus erit nulla core facidunt iliquiscipis feugiamet faccum adionse. Ipsumsan tionulla niam ulputat augue obor suscipit, issectem susciduipit veliquat, acipisl faccumsan ipis amconsendre. </p>
+      </abstract>
+      <related-article related-article-type="testing" id="test-related-article" xlink:type="simple" xlink:href="foo"/>
+    </article-meta>
+  </front>
+  <body>
+    <sec>
+      <title>Section Title</title>
+      <p>Section Body</p>
+    </sec>
+  </body>
+  <back>
+    <ack>
+      <p>The author would like to acknowledge acipisl leo te numsan numsandre facilisis iure lobor adipiscing ationullaoret conulluptat.</p>
+    </ack>
+    <ref-list>
+      <title>References</title>
+      <ref id="b1-pmc-5-2011-019">
+        <label>1.</label>
+        <mixed-citation>Furlan AD, Sandoval JA, Mailis-Gagnon A, Tunks E. Opioids for chronic noncancer pain: a meta-analysis of effectiveness and side effects. <italic>CMAJ</italic>. 5232006;<bold>174</bold>:(11)1589–94.<pub-id pub-id-type="pmid">16717269</pub-id></mixed-citation>
+      </ref>
+    </ref-list>
+    <sec sec-type="notes-group">
+      <title>Notes</title>
+      <p>Some notes go here: Sum aliquet am blam odio odipsumsan odolor od estio. </p>
+    </sec>
+  </back>
+</article>

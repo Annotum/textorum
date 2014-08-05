@@ -1,0 +1,22 @@
+<!DOCTYPE article SYSTEM "http://dtd.nlm.nih.gov/publishing/3.0/journalpublishing3.dtd">
+<article article-type="research-article" xml:lang="en" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="nlm-ta">Perspect Medicin Chem</journal-id>
+      </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="doi">10.4137/PMC.S6803</article-id>
+    </article-meta>
+  </front>
+  <back>
+    <ack>
+      <p>The author would like to acknowledge acipisl leo te numsan numsandre facilisis iure lobor adipiscing ationullaoret conulluptat.</p>
+    </ack>    
+  </back>
+  <body>
+    <sec>
+      <title>Section Title</title>
+      <p>Section Body</p>
+    </sec>
+  </body>
+</article>

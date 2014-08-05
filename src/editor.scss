@@ -1,0 +1,423 @@
+/*
+ * editor.scss - Textorum styling for popups, tree view, et cetera
+ *
+ * Copyright (C) 2013 Crowd Favorite, Ltd. All rights reserved.
+ *
+ * This file is part of Textorum.
+ *
+ * Licensed under the MIT license:
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ */
+
+@import "textorum";
+
+@font-face {
+	font-family: 'FontAwesome';
+	src: url('../fonts/fontawesome/fontawesome-webfont.eot?v=3.2.1');
+	src: url('../fonts/fontawesome/fontawesome-webfont.eot?#iefix&v=3.2.1') format('embedded-opentype'),
+		 url('../fonts/fontawesome/fontawesome-webfont.woff?v=3.2.1') format('woff'),
+		 url('../fonts/fontawesome/fontawesome-webfont.ttf?v=3.2.1') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+
+@import "jstree";
+
+.treewrapper {
+	background: $light;
+	border: 1px solid #ccc;
+	float: left;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 20px;
+	max-height: 400px;
+	min-height: 650px;
+	overflow-y: auto;
+	overflow-x: auto;
+	width: 29%;
+
+	padding: 4px;
+	.jstree-default.jstree-focused {
+		background-color: transparent;
+	}
+
+	.jstree a {
+		height: 20px;
+	}
+}
+
+#vakata-contextmenu {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 20px;
+}
+
+#vakata-contextmenu.jstree-default-context,
+#vakata-contextmenu.jstree-default-context li ul {
+	//can't win w/specificty so forced to use !important
+	background-color: #f6f6f6 !important;
+	border-color: #ccc !important;
+	padding: 8px 10px;
+}
+
+#vakata-contextmenu.jstree-default-context ul li.vakata-separator {
+	margin: 8px 0;
+}
+
+#vakata-contextmenu.jstree-default-context ins {
+	display: none;
+}
+
+// Remove the vertical lines on jstree list items
+.jstree.jstree-default li {
+	background-image: none;
+}
+
+// Remove the default open/closed arrows on jstree list item icons
+.jstree.jstree-default ins {
+	background-image: none;
+	cursor: pointer;
+}
+
+// Default icon - large "+" cross
+.jstree li ins:before,
+.insert-tag:before,
+.remove-tag:before,
+.edit-tag:before,
+.tag:before {
+	color: #2e5a63;
+	content: '\f067';
+	display: block;
+	float: left;
+	font-family: FontAwesome;
+	font-size: 14px;
+	-webkit-font-smoothing: antialiased;
+	width: 20px;
+}
+
+
+// Closed-folder icon
+.jstree li ins:before,
+.jstree li.jstree-open li.jstree-closed ins:before {
+	content: '\f07b';
+}
+
+// Open-folder icon
+.jstree li.jstree-open ins:before {
+	content: '\f07c';
+}
+
+.jstree li a > ins:before {
+	content: '';
+}
+
+.jstree li a > ins,
+.jstree li a .jstree-icon {
+	display: none;
+}
+
+// < > icon for leaves
+.jstree li.jstree-leaf ins:before,
+.jstree li.jstree-open li.jstree-leaf ins:before {
+	content: '\f104  \f105';
+}
+
+.remove-tag:before {
+	content: '\f068';
+}
+
+.edit-tag:before {
+	content: '\f044';
+}
+
+.tag:before {
+	content: '\f02b';
+}
+
+.jstree-contextmenu-disabled:before {
+	color: silver;
+}
+
+.jstree.jstree-default .jstree-clicked {
+	background-color: $mid;
+	border-color: darken($mid, 10%);
+}
+
+.defaultSkin,.wp_themeSkin {
+	span.mceIcon:before {
+		color: #2e5a63;
+		content: '';
+		display: block;
+		float: left;
+		font-family: FontAwesome;
+		font-size: 14px;
+		padding-top: 3px;
+		text-align: center;
+		-webkit-font-smoothing: antialiased;
+		width: 20px;
+	}
+
+	span.mce_undo.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f112';
+		}
+	}
+
+	span.mce_redo.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f064';
+		}
+	}
+
+	span.mce_help.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f059';
+		}
+	}
+
+	span.mce_visualaid.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f00a';
+		}
+	}
+
+	span.mce_bold.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f032';
+		}
+	}
+
+	span.mce_italic.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f033';
+		}
+	}
+
+	span.mce_underline.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f0cd';
+			padding-top: 4px;
+		}
+	}
+
+	span.mce_code.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f0f6';
+		}
+	}
+
+	span.mce_fullscreen.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f0b2';
+		}
+	}
+
+	span.mce_save.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f0c7';
+		}
+	}
+
+	span.mce_txt_validate_attrs.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f0c8';
+		}
+	}
+
+	span.mce_txt_validate_noattrs.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f0c9';
+		}
+	}
+
+	span.mce_sup.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f12b'; // icon-superscript
+		}
+	}
+
+	span.mce_sub.mceIcon {
+		background-image: none !important;
+		&:before {
+			content: '\f12c'; // icon-subscript
+		}
+	}
+
+	.mceToolbar a.mceButtonActive,
+	.mceToolbar a.mceButtonSelected,
+	.mceToolbar a.mceButtonEnabled:hover {
+		border: 1px solid #86c3d0;
+		background-color: #bee3eb;
+	}
+
+}
+
+.wp_themeSkin .mceToolbarRow2 .mceSeparator {
+	display: none;
+}
+
+// Edit Attributes Pop Up
+.ui-dialog {
+	border-color: $black;
+	border-radius: 0;
+	-webkit-box-shadow:  3px 3px 3px 0px rgba(0, 0, 0, .3);
+	box-shadow:  3px 3px 3px 0px rgba(0, 0, 0, .3);
+	font-size: .9em;
+	min-width: 332px;
+	padding: 0;
+
+	.attributewindow li.attr {
+		input,textarea,select {
+			display: none;
+		}
+	}
+
+	.attributewindow li.attr.open {
+		input,textarea,select {
+			display: block;
+		}
+	}
+
+	label {
+		display: block;
+		font-size: .9em;
+	}
+
+	textarea,
+	input[type=text] {
+		margin-bottom: 10px;
+		width: 295px;
+	}
+
+	.ui-dialog-buttonpane {
+		border-top: 0;
+		padding: 0 10px 10px;
+	}
+
+	.ui-state-default.ui-button-text-only {
+		background-color: darken($mid, 15%);
+		background-image: none;
+		border: 0;
+		-webkit-border-radius: 2px;
+		border-radius: 2px;
+		-moz-box-shadow: 0 2px 0 0 darken($mid, 30%);
+		-webkit-box-shadow: 0 2px 0 0 darken($mid, 30%);
+		box-shadow: 0 2px 0 0 darken($mid, 30%);
+		color: #fff;
+		font-size: .9em;
+		text-shadow: -1px -1px 1px rgba(0, 0, 0, .3);
+	}
+
+	.ui-state-default.ui-button-text-only:hover {
+		background-color: darken($mid, 5%);
+		-moz-box-shadow: 0 2px 0 0 darken($mid, 20%);
+		-webkit-box-shadow: 0 2px 0 0 darken($mid, 20%);
+		box-shadow: 0 2px 0 0 darken($mid, 20%);
+		text-shadow: -1px -1px 1px rgba(0, 0, 0, .4);
+	}
+
+	.ui-state-default.ui-dialog-titlebar-close {
+		background-color: transparent;
+		background-image: none;
+		border: 0;
+		margin-top: -11px;
+	}
+}
+
+
+.ui-dialog-titlebar {
+	background-color: $mid;
+	background-image: none;
+	border: 0;
+	border-radius: 0;
+	color: $black;
+}
+
+.ui-widget-overlay {
+	background-color: #000;
+	background-image: none;
+	opacity: .6;
+}
+
+.ui-button-icon-only .ui-icon {
+	margin-left: -9px;
+}
+
+.attributewindow {
+	h2 {
+		font-size: .9em;
+	}
+	ul {
+		list-style: none;
+		padding-left: 0;
+	}
+	li {
+		border-bottom: 1px solid $light;
+		margin-bottom: 3px;
+		padding-bottom: 5px;
+	}
+}
+
+.textorum-optional-attributes {
+	margin-bottom: 15px;
+}
+
+.textorum-optional-attributes {
+	margin-bottom: 0;
+
+	label {
+		cursor: pointer;
+	}
+
+	label:before {
+		color: #2e5a63;
+		content: '\f067';
+		float: left;
+		font-family: FontAwesome;
+		font-size: 10px;
+		-webkit-font-smoothing: antialiased;
+		height: 10px;
+		margin-top: 4px;
+		width: 15px;
+	}
+
+	.open label:before {
+		content: '\f068';
+		float: left;
+	}
+}
